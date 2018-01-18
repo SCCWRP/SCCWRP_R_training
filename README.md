@@ -1,10 +1,5 @@
 # SCCWRP R training 2018
 
-<div style="width:100px">
-![](www/sccwrp_logo.jpg)
-</div>
-<p></p>
-
 [R](https://www.r-project.org/) is a language for statistical computing as well as a general purpose programming language. Increasingly, it has become one of the primary languages used in data science and for data analysis across many of the natural sciences. This series of workshops will provide attendees with the foundations for continued learning of R and for analysis of a range of data types. 
 
 ## Dates
