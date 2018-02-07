@@ -401,7 +401,7 @@ You will save yourself a lot of trouble with data import from Excel if you think
 
 ![](figure/excel_bad.png)
 
-Computers, although very trainable, are also very dumb.  If you have trouble interpreting the information, can you expect a computer to do so?  Most issues importing Excel spreadsheets relate to formatting of the data.  Here are few pointers to keep in mind if you are using Excel to store data:
+Computers, although very trainable, are also very dumb.  If you have trouble interpreting the information, can you expect a computer to do so?  Most issues importing Excel spreadsheets relate to format of the data.  Here are few pointers to keep in mind if you are using Excel to store data:
 
 * Use the one spreadsheet, one data frame rule (rectangular)
 * No colors or special formatting
@@ -412,13 +412,13 @@ Computers, although very trainable, are also very dumb.  If you have trouble int
 
 Following these simple guidelines will make import much, much smoother. 
 
-The `readxl` package is the most recent and by far most flexible data import package for Excel files. It comes with the `tidyverse` family of packages (more about this next training) but you can install it separately as follows:
+The `readxl` package is the most recent and by far most flexible data import package for Excel files. It comes with the `tidyverse` family of packages (more about this next training), but you can install it separately as follows:
 
 ```{r eval = F}
 install.packages('readxl')
 ```
 
-Once installed, we can load it access the import functions.
+Once installed, we can load it to access the import functions.
 
 ```{r}
 library(readxl)
@@ -487,7 +487,7 @@ It's not easy to understand how and why there are so many ways to subset data in
 
 Once we're done working with our data, we'll probably want to save it if we've made significant changes or if we want to share it with somebody. As you an imagine, there are countless ways to save the data depending on the format you want.  We could easily spend the next hour discussing best practices for data storage, but for now, I'll show you an easy approach to save your data as a flat, rectangular text file. 
 
-We can use the `write_csv` funcion from the `readr` package.  This function is very similar to `write.csv` function from base R but it handles some of the annoying quirks of `write.csv`.
+We can use the `write_csv` function from the `readr` package.  This function is very similar to `write.csv` from base R but it handles some of the annoying quirks of `write.csv`.
 
 Install `readr` if you don't have it already.
 
@@ -519,6 +519,8 @@ From here on out I hope to have the exercises build on each other. For this exer
 
 ## Retention
 
+![](figure/automation.png)
+
 Today we covered a lot of material but at this point you should have the resources to answer the following:
 
 * What is R and why should I use it?
@@ -537,6 +539,8 @@ R is not an easy language to learn (see [here](http://r4stats.com/articles/why-r
 * Do not give up!!!
 
 Next time, we'll talk about data wrangling. This is where the real fun begins...
+
+![](figure/learning_crv.png)
 
 ## Attribution
 
