@@ -10,16 +10,16 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 ## Lesson Outline
 
-- [Goals and motivation](#motivation)
-- [RStudio](#rstudio)
-- [R language fundamentals](#r-language-fundamentals)
-- [Data structures in R](#data-structures-in-r)
-- [Data I/O](#data_io)
-- [About retention...](#retention)
+- [Goals and Motivation]
+- [RStudio]
+- [R language fundamentals]
+- [Data structures in R]
+- [Data I/O]
+- [Retention]
 
 ## Lesson Exercises
-- [Exercise 1](#exercise-1)
-- [Exercise 2](#exercise-2)
+- [Exercise 1]
+- [Exercise 2]
 
 ## Goals and Motivation
 
@@ -32,8 +32,9 @@ You should be able to answer these questions at the end of this session:
 * What is R and why should I use it?
 * Why would I use RStudio projects?
 * How can I write, save, and run scripts in RStudio?
-* What are the basic data structures in R?
 * Where can I go for help?
+* What are the basic data structures in R?
+* How do I import/export data? 
 
 ### Why should I invest time in R?
 
@@ -294,7 +295,7 @@ As I mentioned earlier, there are TOO many resources to listy here and everyone 
 - [CRAN Cheatsheets](http://cran.r-project.org/doc/contrib/Short-refcard.pdf): A good cheat sheet from the official source
 - [RStudio Cheatsheets](http://www.rstudio.com/resources/cheatsheets/): Additional cheat sheets from RStudio.  I am especially fond of the data wrangling one.
 
-## R data structures
+## Data structures in R
 
 Now that you know how to get started in R and where to find resources, we can begin talking about R data structures. Simply put, a data strucure is a way for programming languages to handle storing information.
 
@@ -343,7 +344,7 @@ Coercion can sometimes create unintentional headaches so just be aware that this
 
 ### 2-dimensional data
 
-A collection of vectors represented as a single data object are often described as two-dimensional data.  The simplest case is a matrix that is simply a collection of vectors all of the same type.
+A collection of vectors represented as a single data object are often described as two-dimensional data.  The simplest case is a `matrix` that is simply a collection of vectors all of the same type.
 
 ```{r}
 # a matrix of characters
@@ -357,7 +358,7 @@ dim(mymat)
 
 Note that now the matrix has a `dim` attribute that describes the number of rows and columns in the data.  The data that a matrix contains is of course limited to one type.  This has limitations, but it can be an efficient fore storing lots of information.  You'll probably encounter matrices if you plan on doing community-level analysis, e.g., abundance data where each row represent a site and each column is a species. 
 
-A more common way of storing two-dimensional data is in a data frame (i.e., `data.frame`). As you probably guessed, these are similar to a matrix with the added bonus of combining data of different types.  Think of them like your standard spreadsheet, where each column describes a variable.  Here's a simple example:
+A more common way of storing two-dimensional data is in a data frame (i.e., `data.frame`). As you probably guessed, these are similar to a matrix with the added bonus of combining data of different types.  Think of them like your standard spreadsheet, where each column describes a variable and rows link observations between columns.  Here's a simple example:
 
 ```{r}
 ltrs <- c('a', 'b', 'c')
@@ -374,7 +375,7 @@ names(mydf)
 row.names(mydf)
 ```
 
-As you might have guessed, a requirement of a matrix or data frame is that all columns have the same number of rows.  Vectors can combined as a `list` if they have unequal length. In fact, a data frame is simply a special case of a list where all the vectors have the same length (try `as.list(mydf)`).  
+As you might have guessed, a requirement of a matrix or data frame is that all columns have the same number of rows. It's also possible to combine vectors wtih different lengths using the `list` structure. In fact, a data frame is simply a special case of a list where all the vectors have the same length (try `as.list(mydf)`).  
 
 ```{r}
 # create a simple list
@@ -384,32 +385,159 @@ myls <- list(ltrs, nums)
 myls
 ```
 
-Lists have the least constraints on the types of data that can be stored and therefore are the most flexible of the two-dimensional structures.  In fact, you can create an n-dimensional list by creating lists of lists, lists of list of lists, etc.  You will probably not use them in your early R adventures, but they are a very powerful option for data storage. 
+Lists have the least constraints on the types of data that can be stored and therefore are the most flexible of the two-dimensional structures.  In fact, you can create an n-dimensional list by creating lists of lists, lists of list of lists, etc.  List elements are also not limited to vectors and can include any kind of data object (e.g., model output).  You will probably not use them a lot in your early R adventures, but they are a very powerful option for data storage. 
 
 ## Data I/O
 
-It is the rare case when you manually enter your data in R.  Most data analysis workflows typically begin with importing a dataset into R.  Literally, this means committing a dataset to memory in R as one of it's accepted data structure format.
+### Input
 
-If you're lucky, your data are already in a flat format.  In other words, your data are pure and are stored only using standard ASCI text.  Flat data files present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files.  
+It is the rare case when you manually enter your data in R.  Most data analysis workflows typically begin with importing a dataset from an external source.  Literally, this means committing a dataset to memory (i.e., storing it as a variable) as one of R's data structure formats.
 
-More often you will probably be given an Excel spreadsheet to import.  In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure of Excel.  The tools available in R have since matured and it's now pretty painless to export a spreadsheets into R.  But "painless" comes with some caveats.  
+If you're lucky, your data are already in a flat, rectangular format.  In other words, your data are two-dimensional as standard ASCI text.  Flat data files present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files.  The base installation of R comes with some easy to use functions for importing flat files, such as `read.table()` and `read.csv`.
+
+More often you will probably have an Excel spreadsheet to import. This is not a preferred format but the reality is that most people are using this software for data storage. In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure of Excel.  The tools available in R have since matured and it's now pretty painless to export a spreadsheets into R.  But "painless" comes with some caveats.  
 
 You will save yourself a lot of trouble with data import from Excel if you think like a machine.  Consider the example below:
 
 ![](figure/excel_bad.png)
 
-Computers, although very trainable, are also very dumb.  If you have trouble interpreting the information, can you expect a computer to do so?  Here are few pointers to help the data import from Excel go smoothly:
+Computers, although very trainable, are also very dumb.  If you have trouble interpreting the information, can you expect a computer to do so?  Most issues importing Excel spreadsheets relate to formatting of the data.  Here are few pointers to keep in mind if you are using Excel to store data:
 
-* Use the one spreadsheet, one data frame rule
+* Use the one spreadsheet, one data frame rule (rectangular)
 * No colors or special formatting
 * No links between sheets
 * One data type per column
+* Use simple column names (no spaces or special characters)
 * Be explicit and consistent with missing values
 
-Assuming the data are in a format that can be easily read, we can import it using the `readr` package. 
+Following these simple guidelines will make import much, much smoother. 
 
-## About retention...
+The `readxl` package is the most recent and by far most flexible data import package for Excel files. It comes with the `tidyverse` family of packages (more about this next training) but you can install it separately as follows:
+
+```{r eval = F}
+install.packages('readxl')
+```
+
+Once installed, we can load it access the import functions.
+
+```{r}
+library(readxl)
+```
+
+We'll import the `mpg` dataset that describes fuel economy of different car models.  This dataset actually comes with R but I've saved it as a an Excel spreadsheet to demonstrate the `read_excel` import function. If you haven't downloaded the file already, grab it from the [online materials](https://github.com/SCCWRP/R_training_2018/lessons/data) and save it in your `data` folder in your project.
+
+Now we can import the file (note the **relative** path):
+
+```{r}
+dat <- read_excel('data/mpg.xlsx')
+```
+
+If you didn't get any errors or warnings, the file is now stored in your environment.
+
+```{r}
+ls()
+```
+
+Before we go on, let's look at the data class:
+
+```{r}
+class(dat)
+head(dat)
+```
+
+The data are in the `tibble` format.  A tibble is basically a data frame with some extra features, mostly related to how the data are printed in the console. You'll encounter tibbles a lot if you are using the `tidyverse` family of packages, which we'll go over next training.  There are some very good reasons to use tibbles for data wrangling but they can also cause some headaches when used with other packages.  For now, let's just `coerce` the tibble to a data frame.
+
+```{r}
+dat <- as.data.frame(dat)
+class(dat)
+```
+
+Now let's look at the data to get an idea of the structure:
+
+```{r}
+# get the dimensions
+dim(dat)
+
+# get the column names
+names(dat)
+
+# get the row names
+row.names(dat)
+
+# get the overall structure
+str(dat)
+```
+
+There are several ways to select (aka index) subsets of the data, either by rows or columns.  Here are all the ways you can get the `fl` column from `mpg`:
+
+```{r eval = F}
+dat$fl
+dat$"fl"
+dat["fl"]
+dat[,"fl"]
+dat[["fl"]]
+dat[10]
+dat[,10]
+dat[[10]]
+```
+
+It's not easy to understand how and why there are so many ways to subset data in R.  Next time, we'll focus on the `dplyr` package that uses a more logical approach to working with and manipulating data.
+
+### Output
+
+Once we're done working with our data, we'll probably want to save it if we've made significant changes or if we want to share it with somebody. As you an imagine, there are countless ways to save the data depending on the format you want.  We could easily spend the next hour discussing best practices for data storage, but for now, I'll show you an easy approach to save your data as a flat, rectangular text file. 
+
+We can use the `write_csv` funcion from the `readr` package.  This function is very similar to `write.csv` function from base R but it handles some of the annoying quirks of `write.csv`.
+
+Install `readr` if you don't have it already.
+
+```{r eval = F}
+install.packages('readr')
+```
+
+Load `readr`.
+
+```{r eval = F}
+library(readr)
+```
+
+And save the file.
+
+```{r eval = F}
+write_csv(dat, 'data/new_mpg.csv')
+```
+
+## Exercise 2
+
+From here on out I hope to have the exercises build on each other. For this exercise we are going to grab the `mpg` data, look at that data, and be able to describe some basic information about that dataset.
+
+1. We will be using a new script for the rest of our exercises.  Create this script in RStudio and name it "mpg_analysis.R"
+2. As you write the script, comment as you go. Some good examples are what we used in the first script where we provided some details on each of the exercises. Remember comments are lines that begin with `#` and you can put whatever you like after that.
+3. Add some lines to your script that imports and stores the data in your Enviroment. Remember that the data are in the data folder in your project.  The `read_excel` function is your friend here and the path is `"data/mpg.xlsx"`.  Remember to install/load the `readxl` library.  Alternatively, you can use `read_csv` (`readr` package) if you've saved a csv file from the examples above.
+5. Now run your script and make sure it doesn't throw any errors and you do in fact get a data frame (or tibble).
+6. Explore the data frame using some of the functions we covered above (e.g. `head()`,`dim()`, or `str()`).  This part does not need to be included in the script and can be done directly inthe console. It is just a quick QA step to be sure the data read in as expected.
+
+## Retention
+
+Today we covered a lot of material but at this point you should have the resources to answer the following:
+
+* What is R and why should I use it?
+* Why would I use RStudio projects?
+* How can I write, save, and run scripts in RStudio?
+* Where can I go for help?
+* What are the basic data structures in R?
+* How do I import/export data? 
+
+R is not an easy language to learn (see [here](http://r4stats.com/articles/why-r-is-hard-to-learn/)).  At the beginning, the payoff in your investment will not be obvious.  You will spend time banging your head on the wall and be tempted to revert to old habits.  Having used R for over ten years, I can tell you that the investment is absolutely worth it.  Once you're able to use R, you will have access to an almost endless repository of analytical tools.  You will also be more efficient, reproducible, and transparent.  My advice in the beginning:
+
+* Time spent frustrated is time spent learning, just because you're angry doesn't mean you're not gaining information.
+* Pick something small to begin with. Do not try to port all of your old projects to RStudio, this will come with time.
+* Use someone else's code, it's often easier to learn a complex problem by seeing someone else's approach line by line.
+* Become a savvy Googler, see the tips above.  Hard-copy books are obselete when you have all the information at your finger tips.
+* Do not give up!!!
+
+Next time, we'll talk about data wrangling. This is where the real fun begins...
 
 ## Attribution
 
-Content in this lesson was pillaged extensively from Jeffrey Hollister and the USGS-R training curriculum [here](https://github.com/USGS-R/training-curriculum).
+Content in this lesson was pillaged extensively from Jeffrey Hollister (USEPA) and the USGS-R training curriculum [here](https://github.com/USGS-R/training-curriculum).

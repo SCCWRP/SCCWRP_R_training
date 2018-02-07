@@ -126,12 +126,12 @@ $(document).ready(function () {
 <div id="lesson-outline" class="section level2">
 <h2>Lesson Outline</h2>
 <ul>
-<li><a href="#motivation">Goals and motivation</a></li>
+<li><a href="#goals-and-motivation">Goals and Motivation</a></li>
 <li><a href="#rstudio">RStudio</a></li>
 <li><a href="#r-language-fundamentals">R language fundamentals</a></li>
 <li><a href="#data-structures-in-r">Data structures in R</a></li>
-<li><a href="#data_io">Data I/O</a></li>
-<li><a href="#retention">About retention…</a></li>
+<li><a href="#data-io">Data I/O</a></li>
+<li><a href="#retention">Retention</a></li>
 </ul>
 </div>
 <div id="lesson-exercises" class="section level2">
@@ -150,8 +150,9 @@ $(document).ready(function () {
 <li>What is R and why should I use it?</li>
 <li>Why would I use RStudio projects?</li>
 <li>How can I write, save, and run scripts in RStudio?</li>
-<li>What are the basic data structures in R?</li>
 <li>Where can I go for help?</li>
+<li>What are the basic data structures in R?</li>
+<li>How do I import/export data?</li>
 </ul>
 <div id="why-should-i-invest-time-in-r" class="section level3">
 <h3>Why should I invest time in R?</h3>
@@ -159,7 +160,7 @@ $(document).ready(function () {
 <ul>
 <li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">Stack Overflow blog</a></li>
 </ul>
-<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-02-06, there are 12064 on CRAN!</p>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-02-07, there are 12072 on CRAN!</p>
 <p>Python is another popular open-source programming language. Many beginners often ask the quesiton, why R vs. Python? This is an interesting debate with no easy answer. Some things to consider:</p>
 <ul>
 <li>R has statistical roots, phython does not</li>
@@ -251,32 +252,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1]  8.728120 10.015539 11.737017 10.162760 13.277859  7.986530  9.905207
-##   [8]  9.813184 12.211896 11.224760  9.780857  9.422664  6.761873  5.694547
-##  [15]  8.697769 11.911393 11.885687  9.081456  9.444572 11.476712  9.218718
-##  [22] 11.114908  9.591197 11.213186  6.588471 10.166316  7.847035  7.740955
-##  [29] 10.689244  9.707180 11.361615  6.224984  8.791101  9.600033 12.332070
-##  [36] 10.377318 10.218443  7.572303 12.072091 10.387446 13.030299  8.081703
-##  [43] 11.541277  7.359204 11.084820 10.145215  9.980377 10.149023  9.493770
-##  [50] 11.154831  7.552413 11.229068  9.238188  7.028963 10.053793  9.011477
-##  [57]  8.832707 11.150898  9.365274  9.603735  9.227488  7.505715  9.589949
-##  [64]  8.234434 10.655075  9.092825  9.185309 10.086051 13.677415 10.793740
-##  [71] 10.489354  4.887196 12.905077 11.600356 10.637082  7.992141  7.618828
-##  [78]  6.604229  8.138423 11.097969 11.450709  7.206704  9.830902 12.153745
-##  [85]  9.093161 11.500439 10.122358  8.136106  7.887148  9.194326 10.026587
-##  [92] 10.201697  9.332257  8.903394 11.989341 11.847434  8.131976  9.457568
-##  [99]  9.482592 10.212814</code></pre>
+<pre><code>##   [1] 12.025762 12.019697  6.082262 12.140447  8.347707 13.539921 10.545284
+##   [8]  6.315241  5.268316  7.655805  9.171070  9.013240 10.817180 10.468910
+##  [15] 11.164750  8.173180 11.006194 11.561552  8.646311 11.379002 10.121626
+##  [22]  9.385718 10.151765 10.376874 10.986177 13.048186  6.558141  9.403599
+##  [29]  8.494078  8.537683 10.791314 11.344622  9.032889  6.540880  8.144865
+##  [36]  9.201628 12.083270  9.254258  7.961132  9.403196  9.615283  8.262997
+##  [43] 11.855845  8.809584 12.723756  9.507592 13.048895 11.032096  6.899303
+##  [50]  8.064429 11.374986  9.226873 10.002818 10.222308 11.267349  3.583000
+##  [57]  8.029406 11.394726  6.712932 10.167852 11.125412  6.656002 10.819863
+##  [64]  9.117220  6.053786 16.301953  7.441730 10.339809 11.539072 12.585347
+##  [71]  7.816132  7.626763 11.367423 10.452123  9.966551  9.535807 11.829412
+##  [78] 11.851892  7.888071 11.087851  9.549932  9.621796  8.721041  8.548120
+##  [85] 10.281449 12.191846 11.917730  9.246596  5.731751 12.448128  9.571559
+##  [92]  7.912903  7.584973  9.474073 10.353143  8.921631 10.073286  9.236438
+##  [99] 10.776712  6.998115</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] -0.1414692</code></pre>
+<pre><code>## [1] 0.08706847</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] 12.37144</code></pre>
+<pre><code>## [1] 3.40057</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] -1.684159</code></pre>
+<pre><code>## [1] -1.701756</code></pre>
 <p>With this, you have the very basics of how we write R code and save objects that can be used later.</p>
 <div id="a-few-side-notes" class="section level3">
 <h3>A few side notes</h3>
@@ -298,7 +299,7 @@ sum(rnorm(100))</code></pre>
 </div>
 <div id="cran" class="section level3">
 <h3>CRAN</h3>
-<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-02-06, there are 12064 on CRAN!</p>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-02-07, there are 12072 on CRAN!</p>
 </div>
 <div id="installing-packages" class="section level3">
 <h3>Installing packages</h3>
@@ -392,8 +393,8 @@ apropos(&quot;print&quot;) # Returns all available functions with &quot;print&qu
 </ul>
 </div>
 </div>
-<div id="r-data-structures" class="section level2">
-<h2>R data structures</h2>
+<div id="data-structures-in-r" class="section level2">
+<h2>Data structures in R</h2>
 <p>Now that you know how to get started in R and where to find resources, we can begin talking about R data structures. Simply put, a data strucure is a way for programming languages to handle storing information.</p>
 <p>There is a bewildering amount of formats for storing data and R is no exception. Understanding the basic building blocks that make up data types is essential. All functions in R require specific types of input data and the key to using functions is knowing how these types relate to each other.</p>
 <div id="vectors-one-dimensional-data" class="section level3">
@@ -427,7 +428,7 @@ c('a', 1)</code></pre>
 </div>
 <div id="dimensional-data" class="section level3">
 <h3>2-dimensional data</h3>
-<p>A collection of vectors represented as a single data object are often described as two-dimensional data. The simplest case is a matrix that is simply a collection of vectors all of the same type.</p>
+<p>A collection of vectors represented as a single data object are often described as two-dimensional data. The simplest case is a <code>matrix</code> that is simply a collection of vectors all of the same type.</p>
 <pre class="r"><code># a matrix of characters
 mymat &lt;- matrix(letters, ncol = 13)
 dim(mymat)</code></pre>
@@ -437,7 +438,7 @@ mymat &lt;- matrix(1:12, ncol = 4)
 dim(mymat)</code></pre>
 <pre><code>## [1] 3 4</code></pre>
 <p>Note that now the matrix has a <code>dim</code> attribute that describes the number of rows and columns in the data. The data that a matrix contains is of course limited to one type. This has limitations, but it can be an efficient fore storing lots of information. You’ll probably encounter matrices if you plan on doing community-level analysis, e.g., abundance data where each row represent a site and each column is a species.</p>
-<p>A more common way of storing two-dimensional data is in a data frame (i.e., <code>data.frame</code>). As you probably guessed, these are similar to a matrix with the added bonus of combining data of different types. Think of them like your standard spreadsheet, where each column describes a variable. Here’s a simple example:</p>
+<p>A more common way of storing two-dimensional data is in a data frame (i.e., <code>data.frame</code>). As you probably guessed, these are similar to a matrix with the added bonus of combining data of different types. Think of them like your standard spreadsheet, where each column describes a variable and rows link observations between columns. Here’s a simple example:</p>
 <pre class="r"><code>ltrs &lt;- c('a', 'b', 'c')
 nums &lt;- c(1, 2, 3)
 logs &lt;- c(T, F, T)
@@ -452,7 +453,7 @@ mydf</code></pre>
 <pre><code>## [1] &quot;ltrs&quot; &quot;nums&quot; &quot;logs&quot;</code></pre>
 <pre class="r"><code>row.names(mydf)</code></pre>
 <pre><code>## [1] &quot;1&quot; &quot;2&quot; &quot;3&quot;</code></pre>
-<p>As you might have guessed, a requirement of a matrix or data frame is that all columns have the same number of rows. Vectors can combined as a <code>list</code> if they have unequal length. In fact, a data frame is simply a special case of a list where all the vectors have the same length (try <code>as.list(mydf)</code>).</p>
+<p>As you might have guessed, a requirement of a matrix or data frame is that all columns have the same number of rows. It’s also possible to combine vectors wtih different lengths using the <code>list</code> structure. In fact, a data frame is simply a special case of a list where all the vectors have the same length (try <code>as.list(mydf)</code>).</p>
 <pre class="r"><code># create a simple list
 ltrs &lt;- c('a', 'b', 'c')
 nums &lt;- c(1, 2, 3, 4)
@@ -463,35 +464,166 @@ myls</code></pre>
 ## 
 ## [[2]]
 ## [1] 1 2 3 4</code></pre>
-<p>Lists have the least constraints on the types of data that can be stored and therefore are the most flexible of the two-dimensional structures. In fact, you can create an n-dimensional list by creating lists of lists, lists of list of lists, etc. You will probably not use them in your early R adventures, but they are a very powerful option for data storage.</p>
+<p>Lists have the least constraints on the types of data that can be stored and therefore are the most flexible of the two-dimensional structures. In fact, you can create an n-dimensional list by creating lists of lists, lists of list of lists, etc. List elements are also not limited to vectors and can include any kind of data object (e.g., model output). You will probably not use them a lot in your early R adventures, but they are a very powerful option for data storage.</p>
 </div>
 </div>
 <div id="data-io" class="section level2">
 <h2>Data I/O</h2>
-<p>It is the rare case when you manually enter your data in R. Most data analysis workflows typically begin with importing a dataset into R. Literally, this means committing a dataset to memory in R as one of it’s accepted data structure format.</p>
-<p>If you’re lucky, your data are already in a flat format. In other words, your data are pure and are stored only using standard ASCI text. Flat data files present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files.</p>
-<p>More often you will probably be given an Excel spreadsheet to import. In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure of Excel. The tools available in R have since matured and it’s now pretty painless to export a spreadsheets into R. But “painless” comes with some caveats.</p>
+<div id="input" class="section level3">
+<h3>Input</h3>
+<p>It is the rare case when you manually enter your data in R. Most data analysis workflows typically begin with importing a dataset from an external source. Literally, this means committing a dataset to memory (i.e., storing it as a variable) as one of R’s data structure formats.</p>
+<p>If you’re lucky, your data are already in a flat, rectangular format. In other words, your data are two-dimensional as standard ASCI text. Flat data files present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files. The base installation of R comes with some easy to use functions for importing flat files, such as <code>read.table()</code> and <code>read.csv</code>.</p>
+<p>More often you will probably have an Excel spreadsheet to import. This is not a preferred format but the reality is that most people are using this software for data storage. In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure of Excel. The tools available in R have since matured and it’s now pretty painless to export a spreadsheets into R. But “painless” comes with some caveats.</p>
 <p>You will save yourself a lot of trouble with data import from Excel if you think like a machine. Consider the example below:</p>
 <div class="figure">
 <img src="data:image/png;base64,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" />
 
 </div>
-<p>Computers, although very trainable, are also very dumb. If you have trouble interpreting the information, can you expect a computer to do so? Here are few pointers to help the data import from Excel go smoothly:</p>
+<p>Computers, although very trainable, are also very dumb. If you have trouble interpreting the information, can you expect a computer to do so? Most issues importing Excel spreadsheets relate to formatting of the data. Here are few pointers to keep in mind if you are using Excel to store data:</p>
 <ul>
-<li>Use the one spreadsheet, one data frame rule</li>
+<li>Use the one spreadsheet, one data frame rule (rectangular)</li>
 <li>No colors or special formatting</li>
 <li>No links between sheets</li>
 <li>One data type per column</li>
+<li>Use simple column names (no spaces or special characters)</li>
 <li>Be explicit and consistent with missing values</li>
 </ul>
-<p>Assuming the data are in a format that can be easily read, we can import it using the <code>readr</code> package.</p>
+<p>Following these simple guidelines will make import much, much smoother.</p>
+<p>The <code>readxl</code> package is the most recent and by far most flexible data import package for Excel files. It comes with the <code>tidyverse</code> family of packages (more about this next training) but you can install it separately as follows:</p>
+<pre class="r"><code>install.packages('readxl')</code></pre>
+<p>Once installed, we can load it access the import functions.</p>
+<pre class="r"><code>library(readxl)</code></pre>
+<p>We’ll import the <code>mpg</code> dataset that describes fuel economy of different car models. This dataset actually comes with R but I’ve saved it as a an Excel spreadsheet to demonstrate the <code>read_excel</code> import function. If you haven’t downloaded the file already, grab it from the <a href="https://github.com/SCCWRP/R_training_2018/lessons/data">online materials</a> and save it in your <code>data</code> folder in your project.</p>
+<p>Now we can import the file (note the <strong>relative</strong> path):</p>
+<pre class="r"><code>dat &lt;- read_excel('data/mpg.xlsx')</code></pre>
+<p>If you didn’t get any errors or warnings, the file is now stored in your environment.</p>
+<pre class="r"><code>ls()</code></pre>
+<pre><code>##  [1] &quot;chr_var&quot;       &quot;dat&quot;           &quot;dbl_var&quot;       &quot;int_var&quot;      
+##  [5] &quot;log_var&quot;       &quot;logs&quot;          &quot;ltrs&quot;          &quot;my_random_sum&quot;
+##  [9] &quot;mydf&quot;          &quot;myls&quot;          &quot;mymat&quot;         &quot;nums&quot;         
+## [13] &quot;pkgs&quot;          &quot;x&quot;</code></pre>
+<p>Before we go on, let’s look at the data class:</p>
+<pre class="r"><code>class(dat)</code></pre>
+<pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
+<pre class="r"><code>head(dat)</code></pre>
+<pre><code>## # A tibble: 6 x 11
+##   manufacturer model displ  year   cyl trans drv     cty   hwy fl    class
+##   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
+## 1 audi         a4     1.80  1999  4.00 auto~ f      18.0  29.0 p     comp~
+## 2 audi         a4     1.80  1999  4.00 manu~ f      21.0  29.0 p     comp~
+## 3 audi         a4     2.00  2008  4.00 manu~ f      20.0  31.0 p     comp~
+## 4 audi         a4     2.00  2008  4.00 auto~ f      21.0  30.0 p     comp~
+## 5 audi         a4     2.80  1999  6.00 auto~ f      16.0  26.0 p     comp~
+## 6 audi         a4     2.80  1999  6.00 manu~ f      18.0  26.0 p     comp~</code></pre>
+<p>The data are in the <code>tibble</code> format. A tibble is basically a data frame with some extra features, mostly related to how the data are printed in the console. You’ll encounter tibbles a lot if you are using the <code>tidyverse</code> family of packages, which we’ll go over next training. There are some very good reasons to use tibbles for data wrangling but they can also cause some headaches when used with other packages. For now, let’s just <code>coerce</code> the tibble to a data frame.</p>
+<pre class="r"><code>dat &lt;- as.data.frame(dat)
+class(dat)</code></pre>
+<pre><code>## [1] &quot;data.frame&quot;</code></pre>
+<p>Now let’s look at the data to get an idea of the structure:</p>
+<pre class="r"><code># get the dimensions
+dim(dat)</code></pre>
+<pre><code>## [1] 234  11</code></pre>
+<pre class="r"><code># get the column names
+names(dat)</code></pre>
+<pre><code>##  [1] &quot;manufacturer&quot; &quot;model&quot;        &quot;displ&quot;        &quot;year&quot;        
+##  [5] &quot;cyl&quot;          &quot;trans&quot;        &quot;drv&quot;          &quot;cty&quot;         
+##  [9] &quot;hwy&quot;          &quot;fl&quot;           &quot;class&quot;</code></pre>
+<pre class="r"><code># get the row names
+row.names(dat)</code></pre>
+<pre><code>##   [1] &quot;1&quot;   &quot;2&quot;   &quot;3&quot;   &quot;4&quot;   &quot;5&quot;   &quot;6&quot;   &quot;7&quot;   &quot;8&quot;   &quot;9&quot;   &quot;10&quot;  &quot;11&quot; 
+##  [12] &quot;12&quot;  &quot;13&quot;  &quot;14&quot;  &quot;15&quot;  &quot;16&quot;  &quot;17&quot;  &quot;18&quot;  &quot;19&quot;  &quot;20&quot;  &quot;21&quot;  &quot;22&quot; 
+##  [23] &quot;23&quot;  &quot;24&quot;  &quot;25&quot;  &quot;26&quot;  &quot;27&quot;  &quot;28&quot;  &quot;29&quot;  &quot;30&quot;  &quot;31&quot;  &quot;32&quot;  &quot;33&quot; 
+##  [34] &quot;34&quot;  &quot;35&quot;  &quot;36&quot;  &quot;37&quot;  &quot;38&quot;  &quot;39&quot;  &quot;40&quot;  &quot;41&quot;  &quot;42&quot;  &quot;43&quot;  &quot;44&quot; 
+##  [45] &quot;45&quot;  &quot;46&quot;  &quot;47&quot;  &quot;48&quot;  &quot;49&quot;  &quot;50&quot;  &quot;51&quot;  &quot;52&quot;  &quot;53&quot;  &quot;54&quot;  &quot;55&quot; 
+##  [56] &quot;56&quot;  &quot;57&quot;  &quot;58&quot;  &quot;59&quot;  &quot;60&quot;  &quot;61&quot;  &quot;62&quot;  &quot;63&quot;  &quot;64&quot;  &quot;65&quot;  &quot;66&quot; 
+##  [67] &quot;67&quot;  &quot;68&quot;  &quot;69&quot;  &quot;70&quot;  &quot;71&quot;  &quot;72&quot;  &quot;73&quot;  &quot;74&quot;  &quot;75&quot;  &quot;76&quot;  &quot;77&quot; 
+##  [78] &quot;78&quot;  &quot;79&quot;  &quot;80&quot;  &quot;81&quot;  &quot;82&quot;  &quot;83&quot;  &quot;84&quot;  &quot;85&quot;  &quot;86&quot;  &quot;87&quot;  &quot;88&quot; 
+##  [89] &quot;89&quot;  &quot;90&quot;  &quot;91&quot;  &quot;92&quot;  &quot;93&quot;  &quot;94&quot;  &quot;95&quot;  &quot;96&quot;  &quot;97&quot;  &quot;98&quot;  &quot;99&quot; 
+## [100] &quot;100&quot; &quot;101&quot; &quot;102&quot; &quot;103&quot; &quot;104&quot; &quot;105&quot; &quot;106&quot; &quot;107&quot; &quot;108&quot; &quot;109&quot; &quot;110&quot;
+## [111] &quot;111&quot; &quot;112&quot; &quot;113&quot; &quot;114&quot; &quot;115&quot; &quot;116&quot; &quot;117&quot; &quot;118&quot; &quot;119&quot; &quot;120&quot; &quot;121&quot;
+## [122] &quot;122&quot; &quot;123&quot; &quot;124&quot; &quot;125&quot; &quot;126&quot; &quot;127&quot; &quot;128&quot; &quot;129&quot; &quot;130&quot; &quot;131&quot; &quot;132&quot;
+## [133] &quot;133&quot; &quot;134&quot; &quot;135&quot; &quot;136&quot; &quot;137&quot; &quot;138&quot; &quot;139&quot; &quot;140&quot; &quot;141&quot; &quot;142&quot; &quot;143&quot;
+## [144] &quot;144&quot; &quot;145&quot; &quot;146&quot; &quot;147&quot; &quot;148&quot; &quot;149&quot; &quot;150&quot; &quot;151&quot; &quot;152&quot; &quot;153&quot; &quot;154&quot;
+## [155] &quot;155&quot; &quot;156&quot; &quot;157&quot; &quot;158&quot; &quot;159&quot; &quot;160&quot; &quot;161&quot; &quot;162&quot; &quot;163&quot; &quot;164&quot; &quot;165&quot;
+## [166] &quot;166&quot; &quot;167&quot; &quot;168&quot; &quot;169&quot; &quot;170&quot; &quot;171&quot; &quot;172&quot; &quot;173&quot; &quot;174&quot; &quot;175&quot; &quot;176&quot;
+## [177] &quot;177&quot; &quot;178&quot; &quot;179&quot; &quot;180&quot; &quot;181&quot; &quot;182&quot; &quot;183&quot; &quot;184&quot; &quot;185&quot; &quot;186&quot; &quot;187&quot;
+## [188] &quot;188&quot; &quot;189&quot; &quot;190&quot; &quot;191&quot; &quot;192&quot; &quot;193&quot; &quot;194&quot; &quot;195&quot; &quot;196&quot; &quot;197&quot; &quot;198&quot;
+## [199] &quot;199&quot; &quot;200&quot; &quot;201&quot; &quot;202&quot; &quot;203&quot; &quot;204&quot; &quot;205&quot; &quot;206&quot; &quot;207&quot; &quot;208&quot; &quot;209&quot;
+## [210] &quot;210&quot; &quot;211&quot; &quot;212&quot; &quot;213&quot; &quot;214&quot; &quot;215&quot; &quot;216&quot; &quot;217&quot; &quot;218&quot; &quot;219&quot; &quot;220&quot;
+## [221] &quot;221&quot; &quot;222&quot; &quot;223&quot; &quot;224&quot; &quot;225&quot; &quot;226&quot; &quot;227&quot; &quot;228&quot; &quot;229&quot; &quot;230&quot; &quot;231&quot;
+## [232] &quot;232&quot; &quot;233&quot; &quot;234&quot;</code></pre>
+<pre class="r"><code># get the overall structure
+str(dat)</code></pre>
+<pre><code>## 'data.frame':    234 obs. of  11 variables:
+##  $ manufacturer: chr  &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; ...
+##  $ model       : chr  &quot;a4&quot; &quot;a4&quot; &quot;a4&quot; &quot;a4&quot; ...
+##  $ displ       : num  1.8 1.8 2 2 2.8 2.8 3.1 1.8 1.8 2 ...
+##  $ year        : num  1999 1999 2008 2008 1999 ...
+##  $ cyl         : num  4 4 4 4 6 6 6 4 4 4 ...
+##  $ trans       : chr  &quot;auto(l5)&quot; &quot;manual(m5)&quot; &quot;manual(m6)&quot; &quot;auto(av)&quot; ...
+##  $ drv         : chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ cty         : num  18 21 20 21 16 18 18 18 16 20 ...
+##  $ hwy         : num  29 29 31 30 26 26 27 26 25 28 ...
+##  $ fl          : chr  &quot;p&quot; &quot;p&quot; &quot;p&quot; &quot;p&quot; ...
+##  $ class       : chr  &quot;compact&quot; &quot;compact&quot; &quot;compact&quot; &quot;compact&quot; ...</code></pre>
+<p>There are several ways to select (aka index) subsets of the data, either by rows or columns. Here are all the ways you can get the <code>fl</code> column from <code>mpg</code>:</p>
+<pre class="r"><code>dat$fl
+dat$&quot;fl&quot;
+dat[&quot;fl&quot;]
+dat[,&quot;fl&quot;]
+dat[[&quot;fl&quot;]]
+dat[10]
+dat[,10]
+dat[[10]]</code></pre>
+<p>It’s not easy to understand how and why there are so many ways to subset data in R. Next time, we’ll focus on the <code>dplyr</code> package that uses a more logical approach to working with and manipulating data.</p>
 </div>
-<div id="about-retention" class="section level2">
-<h2>About retention…</h2>
+<div id="output" class="section level3">
+<h3>Output</h3>
+<p>Once we’re done working with our data, we’ll probably want to save it if we’ve made significant changes or if we want to share it with somebody. As you an imagine, there are countless ways to save the data depending on the format you want. We could easily spend the next hour discussing best practices for data storage, but for now, I’ll show you an easy approach to save your data as a flat, rectangular text file.</p>
+<p>We can use the <code>write_csv</code> funcion from the <code>readr</code> package. This function is very similar to <code>write.csv</code> function from base R but it handles some of the annoying quirks of <code>write.csv</code>.</p>
+<p>Install <code>readr</code> if you don’t have it already.</p>
+<pre class="r"><code>install.packages('readr')</code></pre>
+<p>Load <code>readr</code>.</p>
+<pre class="r"><code>library(readr)</code></pre>
+<p>And save the file.</p>
+<pre class="r"><code>write_csv(dat, 'data/new_mpg.csv')</code></pre>
+</div>
+</div>
+<div id="exercise-2" class="section level2">
+<h2>Exercise 2</h2>
+<p>From here on out I hope to have the exercises build on each other. For this exercise we are going to grab the <code>mpg</code> data, look at that data, and be able to describe some basic information about that dataset.</p>
+<ol style="list-style-type: decimal">
+<li>We will be using a new script for the rest of our exercises. Create this script in RStudio and name it “mpg_analysis.R”</li>
+<li>As you write the script, comment as you go. Some good examples are what we used in the first script where we provided some details on each of the exercises. Remember comments are lines that begin with <code>#</code> and you can put whatever you like after that.</li>
+<li>Add some lines to your script that imports and stores the data in your Enviroment. Remember that the data are in the data folder in your project. The <code>read_excel</code> function is your friend here and the path is <code>&quot;data/mpg.xlsx&quot;</code>. Remember to install/load the <code>readxl</code> library. Alternatively, you can use <code>read_csv</code> (<code>readr</code> package) if you’ve saved a csv file from the examples above.</li>
+<li>Now run your script and make sure it doesn’t throw any errors and you do in fact get a data frame (or tibble).</li>
+<li>Explore the data frame using some of the functions we covered above (e.g. <code>head()</code>,<code>dim()</code>, or <code>str()</code>). This part does not need to be included in the script and can be done directly inthe console. It is just a quick QA step to be sure the data read in as expected.</li>
+</ol>
+</div>
+<div id="retention" class="section level2">
+<h2>Retention</h2>
+<p>Today we covered a lot of material but at this point you should have the resources to answer the following:</p>
+<ul>
+<li>What is R and why should I use it?</li>
+<li>Why would I use RStudio projects?</li>
+<li>How can I write, save, and run scripts in RStudio?</li>
+<li>Where can I go for help?</li>
+<li>What are the basic data structures in R?</li>
+<li>How do I import/export data?</li>
+</ul>
+<p>R is not an easy language to learn (see <a href="http://r4stats.com/articles/why-r-is-hard-to-learn/">here</a>). At the beginning, the payoff in your investment will not be obvious. You will spend time banging your head on the wall and be tempted to revert to old habits. Having used R for over ten years, I can tell you that the investment is absolutely worth it. Once you’re able to use R, you will have access to an almost endless repository of analytical tools. You will also be more efficient, reproducible, and transparent. My advice in the beginning:</p>
+<ul>
+<li>Time spent frustrated is time spent learning, just because you’re angry doesn’t mean you’re not gaining information.</li>
+<li>Pick something small to begin with. Do not try to port all of your old projects to RStudio, this will come with time.</li>
+<li>Use someone else’s code, it’s often easier to learn a complex problem by seeing someone else’s approach line by line.</li>
+<li>Become a savvy Googler, see the tips above. Hard-copy books are obselete when you have all the information at your finger tips.</li>
+<li>Do not give up!!!</li>
+</ul>
+<p>Next time, we’ll talk about data wrangling. This is where the real fun begins…</p>
 </div>
 <div id="attribution" class="section level2">
 <h2>Attribution</h2>
-<p>Content in this lesson was pillaged extensively from Jeffrey Hollister and the USGS-R training curriculum <a href="https://github.com/USGS-R/training-curriculum">here</a>.</p>
+<p>Content in this lesson was pillaged extensively from Jeffrey Hollister (USEPA) and the USGS-R training curriculum <a href="https://github.com/USGS-R/training-curriculum">here</a>.</p>
 </div>
 </div>
 
