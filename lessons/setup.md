@@ -1,6 +1,8 @@
 # Set Up
 
-Thanks for your interest in learning R.  For the workshop, we will be using [RStudio](https://www.rstudio.com/) as our interface to R.  In order to participate in this workshop you will need to make sure you have R and RStudio installed on your laptop.   Big thanks to the [USGS-R Training group](https://owi.usgs.gov/R/training.html) for making their installation materials availabe.  The instructions below are mostly theirs with some light editing and should help you get all set up for the workshop.
+Thanks for your interest in learning R.  For the workshop, we will be using [RStudio](https://www.rstudio.com/) as our interface to R.  In order to participate in this workshop you will need to make sure you have R and RStudio installed on your laptop.
+
+Big thanks to the [USGS-R Training group](https://owi.usgs.gov/R/training.html) for making their installation materials available.  The instructions below are mostly theirs with some light editing and should help you get all set up for the workshop.
 
 # Install R and RStudio
 These instructions are for Windows install. Download and install R for Mac [here](https://cran.r-project.org/bin/macosx/). 
@@ -68,13 +70,11 @@ Here is what my R version looks like.
 
 # Add packages
 
-## Install general packages
-
 Install packages available for all R users from [CRAN](https://cran.r-project.org/) by pasting the following code and hitting `ENTER`.
 
 
 ```r
-install.packages(c("dplyr","ggplot2","tidyr"))
+install.packages(c("readxl","readr"))
 ```
 
 If you see 
@@ -85,8 +85,11 @@ That's OK! There’s a dialog box hiding behind RStudio asking if you want to cr
 
 ![](figure/general_pkg_output.png#inline-img "console output")
 
+# Grab the sample dataset
 
-## Exercise 1
+We'll be working with the `mpg` dataset for many of our examples. Please download the dataset [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/mpg.xlsx) and make sure you have access to it on the day of training.  A short description of the data is [here](http://ggplot2.tidyverse.org/reference/mpg.html).
+
+# Exercise 1
 Just to make sure everything is working do the following:
 
 1. Open up RStudio.
@@ -96,8 +99,8 @@ Just to make sure everything is working do the following:
 
 
 ```r
-"dplyr" %in% installed.packages()
-"ggplot2" %in% installed.packages()
+"readxl" %in% installed.packages()
+"readr" %in% installed.packages()
 ```
 
 The end result should look something like:

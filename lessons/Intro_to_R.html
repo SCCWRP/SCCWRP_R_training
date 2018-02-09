@@ -160,7 +160,7 @@ $(document).ready(function () {
 <ul>
 <li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">Stack Overflow blog</a></li>
 </ul>
-<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-02-07, there are 12072 on CRAN!</p>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-02-09, there are 12092 on CRAN!</p>
 <p>Python is another popular open-source programming language. Many beginners often ask the quesiton, why R vs. Python? This is an interesting debate with no easy answer. Some things to consider:</p>
 <ul>
 <li>R has statistical roots, phython does not</li>
@@ -252,32 +252,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1] 11.353954  8.125608 10.836768  7.239159  9.079803  5.738445 11.022710
-##   [8] 10.069137  9.998830  9.980045  4.941968  6.989665 10.221175  9.172829
-##  [15] 11.357212  9.259158  6.012670  9.631471  6.713392 11.965988  9.199916
-##  [22]  9.393289 13.036260  9.794160  8.986897  9.935413  9.197240  6.981120
-##  [29]  9.442624 11.781300  9.596596  8.445974  8.954218  7.031651  8.823129
-##  [36]  9.778753  5.726614  8.065246  7.979775  7.252070  9.353805 11.122562
-##  [43] 13.079678  7.581232  9.154453  9.570855 10.274362 10.523694  8.959549
-##  [50]  9.280425  9.133234  9.262065 12.231883 13.257520 14.599835 11.142028
-##  [57]  7.589015  8.860469 10.546468  8.028543 13.307521  8.105270 13.765663
-##  [64]  6.481669 10.187577 10.768684  9.624655  9.894863  8.381263  8.490404
-##  [71]  9.893859  7.898080 12.932123 11.704284  9.955281 10.174240 10.527684
-##  [78]  6.711647  8.261470 10.950978 10.797335  8.714070 13.915996  9.760735
-##  [85] 13.633751  8.119354 10.932956  8.979519 11.985275  7.701970  9.788359
-##  [92] 12.740861 10.175878  6.641006  8.626613  9.539413 12.291047 13.125971
-##  [99] 11.569479  6.421763</code></pre>
+<pre><code>##   [1] 14.412368  8.084384  9.547583  7.692964  8.884108 10.688567 11.232689
+##   [8] 12.111216  9.259733 11.193688  8.150557 12.189593 12.281461  8.070356
+##  [15] 12.869231 12.832298  5.373189  9.082656 11.701132  7.145857 12.317498
+##  [22] 12.307556  9.911333 13.020166  6.718080 10.934572 10.682335  8.212848
+##  [29]  7.423782 12.705182  7.556354 11.891144 10.709614  5.550273  9.478650
+##  [36]  9.569829  8.501521  8.114632  7.113250 10.145146  8.568045  8.010136
+##  [43]  8.260249  9.361334  8.595382  9.275740  8.013372  9.048915  9.475572
+##  [50] 11.785870  8.112329  9.599424 10.762228 10.499028 10.201380  7.941259
+##  [57] 10.032342  9.712260 12.836468 10.497290 11.062452  9.521603 10.170778
+##  [64] 11.249214 10.879520  9.536163  8.210898 10.209542 10.130318  7.500525
+##  [71]  9.578623 11.206793  9.092006 10.998216 10.783821 10.755521  7.718678
+##  [78]  9.835184  7.884269  7.195254 10.690660  8.101018  4.753569 10.199673
+##  [85] 10.221647  7.725163  9.781049 12.705148  8.034341 12.594617 11.995743
+##  [92] 11.482038  7.806180  8.846565  8.448437  7.430404  7.846410  8.972143
+##  [99] 10.000323  8.066401</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] 0.009859499</code></pre>
+<pre><code>## [1] -0.009348314</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] 17.2575</code></pre>
+<pre><code>## [1] 2.26866</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] -5.969483</code></pre>
+<pre><code>## [1] 3.999051</code></pre>
 <p>With this, you have the very basics of how we write R code and save objects that can be used later.</p>
 <div id="a-few-side-notes" class="section level3">
 <h3>A few side notes</h3>
@@ -299,7 +299,7 @@ sum(rnorm(100))</code></pre>
 </div>
 <div id="cran" class="section level3">
 <h3>CRAN</h3>
-<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-02-07, there are 12072 on CRAN!</p>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-02-09, there are 12092 on CRAN!</p>
 </div>
 <div id="installing-packages" class="section level3">
 <h3>Installing packages</h3>
@@ -395,7 +395,7 @@ apropos(&quot;print&quot;) # Returns all available functions with &quot;print&qu
 </div>
 <div id="data-structures-in-r" class="section level2">
 <h2>Data structures in R</h2>
-<p>Now that you know how to get started in R and where to find resources, we can begin talking about R data structures. Simply put, a data strucure is a way for programming languages to handle storing information.</p>
+<p>Now that you know how to get started in R and where to find resources, we can begin talking about R data structures. Simply put, a data structure is a way for programming languages to handle information storage.</p>
 <p>There is a bewildering amount of formats for storing data and R is no exception. Understanding the basic building blocks that make up data types is essential. All functions in R require specific types of input data and the key to using functions is knowing how these types relate to each other.</p>
 <div id="vectors-one-dimensional-data" class="section level3">
 <h3>Vectors (one-dimensional data)</h3>
@@ -404,7 +404,7 @@ apropos(&quot;print&quot;) # Returns all available functions with &quot;print&qu
 int_var &lt;- c(1L, 6L, 10L)
 log_var &lt;- c(TRUE, FALSE, T, F)
 chr_var &lt;- c(&quot;a&quot;, &quot;b&quot;, &quot;c&quot;)</code></pre>
-<p>The four types of atomic vectors (think ‘atoms’ make up a molecule) are <code>double</code> (or numeric), <code>integer</code>, <code>logical</code>, and <code>character</code>. For most purposes you can ignore the <code>integer</code> class, so there are basically three types. Each type has some useful properties:</p>
+<p>The four types of atomic vectors (think atoms that make up a molecule aka vector) are <code>double</code> (or numeric), <code>integer</code>, <code>logical</code>, and <code>character</code>. For most purposes you can ignore the <code>integer</code> class, so there are basically three types. Each type has some useful properties:</p>
 <pre class="r"><code>class(dbl_var)</code></pre>
 <pre><code>## [1] &quot;numeric&quot;</code></pre>
 <pre class="r"><code>length(log_var)</code></pre>
@@ -453,7 +453,7 @@ mydf</code></pre>
 <pre><code>## [1] &quot;ltrs&quot; &quot;nums&quot; &quot;logs&quot;</code></pre>
 <pre class="r"><code>row.names(mydf)</code></pre>
 <pre><code>## [1] &quot;1&quot; &quot;2&quot; &quot;3&quot;</code></pre>
-<p>As you might have guessed, a requirement of a matrix or data frame is that all columns have the same number of rows. It’s also possible to combine vectors wtih different lengths using the <code>list</code> structure. In fact, a data frame is simply a special case of a list where all the vectors have the same length (try <code>as.list(mydf)</code>).</p>
+<p>As you might have guessed, a requirement of a matrix or data frame is that all columns have the same number of rows. You can combine vectors wtih different lengths using the <code>list</code> structure. In fact, a data frame is simply a special case of a list where all the vectors have the same length (try <code>as.list(mydf)</code>).</p>
 <pre class="r"><code># create a simple list
 ltrs &lt;- c('a', 'b', 'c')
 nums &lt;- c(1, 2, 3, 4)

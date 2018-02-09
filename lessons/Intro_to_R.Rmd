@@ -297,7 +297,7 @@ As I mentioned earlier, there are TOO many resources to listy here and everyone 
 
 ## Data structures in R
 
-Now that you know how to get started in R and where to find resources, we can begin talking about R data structures. Simply put, a data strucure is a way for programming languages to handle storing information.
+Now that you know how to get started in R and where to find resources, we can begin talking about R data structures. Simply put, a data structure is a way for programming languages to handle information storage.
 
 There is a bewildering amount of formats for storing data and R is no exception. Understanding the basic building blocks that make up data types is essential.  All functions in R require specific types of input data and the key to using functions is knowing how these types relate to each other.  
 
@@ -312,7 +312,7 @@ log_var <- c(TRUE, FALSE, T, F)
 chr_var <- c("a", "b", "c")
 ```
 
-The four types of atomic vectors (think 'atoms' make up a molecule) are `double` (or numeric), `integer`, `logical`, and `character`.  For most purposes you can ignore the `integer` class, so there are basically three types.  Each type has some useful properties:
+The four types of atomic vectors (think atoms that make up a molecule aka vector) are `double` (or numeric), `integer`, `logical`, and `character`.  For most purposes you can ignore the `integer` class, so there are basically three types.  Each type has some useful properties:
 
 ```{r}
 class(dbl_var)
@@ -375,7 +375,7 @@ names(mydf)
 row.names(mydf)
 ```
 
-As you might have guessed, a requirement of a matrix or data frame is that all columns have the same number of rows. It's also possible to combine vectors wtih different lengths using the `list` structure. In fact, a data frame is simply a special case of a list where all the vectors have the same length (try `as.list(mydf)`).  
+As you might have guessed, a requirement of a matrix or data frame is that all columns have the same number of rows. You can combine vectors wtih different lengths using the `list` structure. In fact, a data frame is simply a special case of a list where all the vectors have the same length (try `as.list(mydf)`).  
 
 ```{r}
 # create a simple list
