@@ -30,7 +30,7 @@ We only have two hours to introduce basic concepts in R. I's an unrealistic expe
 You should be able to answer these questions at the end of this session:
 
 * What is R and why should I use it?
-* Why would I use RStudio projects?
+* Why would I use RStudio and RStudio projects?
 * How can I write, save, and run scripts in RStudio?
 * Where can I go for help?
 * What are the basic data structures in R?
@@ -93,7 +93,7 @@ It's ofen hard to determine the scope of a project. When should a new project be
 
 In most cases, you will not enter and execute code directly in the console.  Code can be created in a script and then sent directly to the console when you're ready to run it.  The key difference here is that a script can saved and shared.
 
-Open a new script from teh File menu...
+Open a new script from the File menu...
 
 ![](figure/rstudio_script.jpg)
 
@@ -524,7 +524,7 @@ From here on out I hope to have the exercises build on each other. For this exer
 Today we covered a lot of material but at this point you should have the resources to answer the following:
 
 * What is R and why should I use it?
-* Why would I use RStudio projects?
+* Why would I use RStudio and RStudio projects?
 * How can I write, save, and run scripts in RStudio?
 * Where can I go for help?
 * What are the basic data structures in R?
