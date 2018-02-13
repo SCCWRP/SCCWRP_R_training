@@ -40,7 +40,7 @@ You should be able to answer these questions at the end of this session:
 
 There are many programming languages available and each has it's specific benefits. R was originally created as a statistical programming language but now it is largely viewed as a 'data science' language. Why would you invest time in learning R compared to other languages?  
 
-* The growth of R as explained in the [Stack Overflow blog](https://stackoverflow.blog/2017/10/10/impressive-growth-r/)
+* The growth of R as explained in the [Stack Overflow blog](https://stackoverflow.blog/2017/10/10/impressive-growth-r/), [IEEE rating](http://blog.revolutionanalytics.com/2016/07/r-moves-up-to-5th-place-in-ieee-language-rankings.html)
 
 R is also an open-source programming language - not only is it free, but this means anybody can contribute to it's development. As of `r format(Sys.time(), "%Y-%m-%d")`, there are `r nrow(available.packages())` on CRAN!   
 
@@ -58,7 +58,7 @@ Some cool things you can do with R:
 
 ## RStudio
 
-In the old days, the only way to use R was directly from the Console - this is a bare bones way of running R only with direct input of commands. Now, RStudio is the go-to Interactive Development Environment (IDE) for R. Think of it like a car that is built around an engine. It is integrated with the console and includes many other features such as version control, debugging, dynamic documents, package manager and creation, and code highlighting adn completion. 
+In the old days, the only way to use R was directly from the Console - this is a bare bones way of running R only with direct input of commands. Now, RStudio is the go-to Interactive Development Environment (IDE) for R. Think of it like a car that is built around an engine. It is integrated with the console and includes many other features such as version control, debugging, dynamic documents, package manager and creation, and code highlighting and completion. 
 
 Let's get familiar with RStudio before we go on.  
 
@@ -69,6 +69,7 @@ Find the RStudio shortcut and fire it up (just watch for now).  You should see s
 ![](figure/rstudio.png)
 
 There are four panes in RStudio: 
+
 * Source
 * console
 * Environment, History, etc.
@@ -91,7 +92,7 @@ It's ofen hard to determine the scope of a project. When should a new project be
 
 ### Scripting
 
-In most cases, you will not enter and execute code directly in the console.  Code can be created in a script and then sent directly to the console when you're ready to run it.  The key difference here is that a script can saved and shared.
+In most cases, you will not enter and execute code directly in the console.  Code can be created in a script and then sent directly to the console when you're ready to run it.  The key difference here is that a script can be saved and shared.
 
 Open a new script from the File menu...
 
@@ -123,11 +124,11 @@ This exercise will make sure R and RStudio are working and that you can get arou
 
 5. Add a single line to this script with the following text: `ls()`.  This is an R function that lists objects in your current environment.  Use the various ways we showed to send this command to the R Console.  Also, try typing this directly into the R Console and hit `Enter` to run it.  
 
-6. Lastly, we need to get this project set up with some example data for our upcoming exercises.  You should have downloaded this already, but if not, the data are available from <https://sccwrp.github.io/R_training_2018/data.zip>.  Copy this zip file into your project and unzip into a folder named `data`.  
+6. Lastly, we need to get this project set up with some example data for our upcoming exercises.  You should have downloaded this already, but if not, the data are available from <https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/mpg.xlsx>.  Create a folder in your new project named `data` and copy this file into this location.  
 
 ## R language fundamentals
 
-The basic syntax of function follows the form: `function_name(arg1, arg2, ...)`.  
+The basic syntax of a function follows the form: `function_name(arg1, arg2, ...)`.  
 
 With the base install, you will gain access to many (`r pkgs <- search(); pkgs <- pkgs[grep("package:",pkgs)]; length(unlist(sapply(pkgs,lsf.str)))` functions, to be exact). 
 Some examples:
@@ -171,7 +172,7 @@ Sometimes you might see a variable assignment using the `=` sign:
 my_random_sum = sum(rnorm(100))
 ```
 
-While technically this is the same as `<-`, it's generally considered poor practice in code writing.  The `=` sign in R is typically eserved for arguments within functions:
+While technically this is the same as `<-`, it's generally considered poor practice in code writing.  The `=` sign in R is typically reserved for arguments within functions:
 
 ```{r, eval = F}
 rnorm(100, mean = 10, sd = 1)
@@ -183,6 +184,7 @@ You might also see these guys in R code:
 * `()` These will almost always be used with functions.
 * `[]` These are used for indexing values from a stored variable, e.g., I want to see the fifth value in a variable that is 100 numbers long.
 * `{}` These are used to create your own function or when a chunk of code is meant to be run together.  
+* `"` or `'` are used to identify characters in R, they mean the same thing but they do not mix!
 
 ### Packages
 
@@ -269,7 +271,7 @@ apropos("print") # Returns all available functions with "print" in the name
 In addition to help from within R itself, CRAN and the R-Project have many resources available for support.  Two of the most notable are the mailing lists and the [task views](http://cran.r-project.org/web/views/).
 
 - [R Help Mailing List](https://stat.ethz.ch/mailman/listinfo/r-help): The main mailing list for R help.  Can be a bit daunting and some (although not most) senior folks can be, um, curmudgeonly...
-- [R-sig-ecology](https://stat.ethz.ch/mailman/listinfo/r-sig-ecology): A special interest group for use of R in ecology.  Less daunting the the main help with participation from some big names in ecological modelling and statistics (e.g., Ben Bolker, Gavin Simpson, and Phil Dixon).
+- [R-sig-ecology](https://stat.ethz.ch/mailman/listinfo/r-sig-ecology): A special interest group for use of R in ecology.  Less daunting than the main help with participation from some big names in ecological modelling and statistics (e.g., Ben Bolker, Gavin Simpson, and Phil Dixon).
 - [Environmetrics Task View](http://cran.r-project.org/web/views/Environmetrics.html): Task views are great in that they provide an annotated list of packages relevant to a particular field.  This one is maintained by Gavin Simpson and has great info on packages relevant to much of the work at EPA.
 - [Spatial Analysis Task View](http://cran.r-project.org/web/views/Spatial.html): One I use a lot that lists all the relevant packages for spatial analysis, GIS, and Remote Sensing in R. 
 
@@ -285,10 +287,9 @@ Blind googling can require a bit of strategy to get the info you want.  Some poi
 * When in doubt, search with the exact error message
 
 One specific resource that I use quite a bit is [StackOverflow with the 'r' tag](http://stackoverflow.com/questions/tagged/r).  StackOverflow is a discussion forum for all things related to programming.  You can then use this tag and the search functions in StackOverflow and find answers to almost anything you can think of. However, these forums are also very strict and I typically use them to find answers not to ask questions.  
-
 ### Other Resources
 
-As I mentioned earlier, there are TOO many resources to listy here and everyone has their favorites.  Below are just a few that I like.
+As I mentioned earlier, there are TOO many resources to list here and everyone has their favorites.  Below are just a few that I like.
 
 - [R For Cats](http://rforcats.net/): Basic introduction site, meant to be a gentle and light-hearted introduction
 - [Advanced R](http://adv-r.had.co.nz/): Web home of Hadley Wickham's new book.  Gets into more advanced topics, but also covers the basics in a great way.
@@ -395,7 +396,7 @@ It is the rare case when you manually enter your data in R.  Most data analysis 
 
 If you're lucky, your data are already in a flat, rectangular format.  In other words, your data are two-dimensional as standard ASCI text.  Flat data files present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files.  The base installation of R comes with some easy to use functions for importing flat files, such as `read.table()` and `read.csv`.
 
-More often you will probably have an Excel spreadsheet to import. This is not a preferred format but the reality is that most people are using this software for data storage. In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure of Excel.  The tools available in R have since matured and it's now pretty painless to export a spreadsheets into R.  But "painless" comes with some caveats.  
+More often you will probably have an Excel spreadsheet to import. This is not a preferred format but the reality is that most people are using this software for data storage. In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure of Excel.  The tools available in R have since matured and it's now pretty painless to import a spreadsheet.  But "painless" comes with some caveats.  
 
 You will save yourself a lot of trouble with data import from Excel if you think like a machine.  Consider the example below:
 
@@ -513,7 +514,7 @@ From here on out I hope to have the exercises build on each other. For this exer
 
 1. We will be using a new script for the rest of our exercises.  Create this script in RStudio and name it "mpg_analysis.R"
 2. As you write the script, comment as you go. Some good examples are what we used in the first script where we provided some details on each of the exercises. Remember comments are lines that begin with `#` and you can put whatever you like after that.
-3. Add some lines to your script that imports and stores the data in your Enviroment. Remember that the data are in the data folder in your project.  The `read_excel` function is your friend here and the path is `"data/mpg.xlsx"`.  Remember to install/load the `readxl` library.  Alternatively, you can use `read_csv` (`readr` package) if you've saved a csv file from the examples above.
+3. Add some lines to your script to import and store the data in your Enviroment. Remember that the data should be in your `data` folder in your project.  The `read_excel` function is your friend here and the path is `"data/mpg.xlsx"`.  Remember to install/load the `readxl` library.  Alternatively, you can use `read_csv` (`readr` package) if you've saved a csv file from the examples above.
 5. Now run your script and make sure it doesn't throw any errors and you do in fact get a data frame (or tibble).
 6. Explore the data frame using some of the functions we covered above (e.g. `head()`,`dim()`, or `str()`).  This part does not need to be included in the script and can be done directly inthe console. It is just a quick QA step to be sure the data read in as expected.
 
@@ -530,11 +531,11 @@ Today we covered a lot of material but at this point you should have the resourc
 * What are the basic data structures in R?
 * How do I import/export data? 
 
-R is not an easy language to learn (see [here](http://r4stats.com/articles/why-r-is-hard-to-learn/)).  At the beginning, the payoff in your investment will not be obvious.  You will spend time banging your head on the wall and be tempted to revert to old habits.  Having used R for over ten years, I can tell you that the investment is absolutely worth it.  Once you're able to use R, you will have access to an almost endless repository of analytical tools.  You will also be more efficient, reproducible, and transparent.  My advice in the beginning:
+R is not an easy language to learn (see [here](http://r4stats.com/articles/why-r-is-hard-to-learn/)).  At the beginning, the payoff in your investment will not be obvious.  You will spend time banging your head on the wall and be tempted to revert to old habits.  Having used R for over ten years, I can tell you that the investment is absolutely worth it.  Once you're able to use R, you will have access to an almost endless repository of analytical tools.  You will also be more efficient, reproducible, and transparent with your workflows.  My advice in the beginning:
 
-* Time spent frustrated is time spent learning, just because you're angry doesn't mean you're not gaining information.
+* Time spent frustrated is time spent learning. Just because you're angry doesn't mean you're not gaining information.
 * Pick something small to begin with. Do not try to port all of your old projects to RStudio, this will come with time.
-* Use someone else's code, it's often easier to learn a complex problem by seeing someone else's approach line by line.
+* Use someone else's code. It's often easier to learn a complex problem by seeing someone else's approach line by line.
 * Become a savvy Googler, see the tips above.  Hard-copy books are obselete when you have all the information at your finger tips.
 * Do not give up!!!
 
