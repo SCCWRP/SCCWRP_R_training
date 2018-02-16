@@ -6,14 +6,6 @@ x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ```
 
-* best practices - start with project creation data import
-* more than one way to skin a cat - loops v apply v group/summarize
-* More interaction with audience
-* Less material to cover
-* Use Bight example data
-* Why would you manipulate, change data?
-* Pipes v nesting v reassignment
-
 # Data Wrangling Pt. 1
 
 ## Lesson Outline
@@ -22,14 +14,14 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 * [The tidyverse]
 * [Data wrangling with `dplyr`]
 * [Piping]
-* [Joining data with `tidyr`]
-* [Tidy data]
+* [Combining data]
 
 ## Lesson Exercises
 
 * [Exercise 1]
 * [Exercise 2]
 * [Exercise 3]
+* [Exercise 4]
 
 ## Today's goals
 
@@ -44,7 +36,6 @@ Today you should be able to answer (or be able to find answers to) the following
 * What can you do with dplyr?
 * What is piping?
 * How are data joined?
-* What is tidy data?  
 
 ## Exercise 1
 
@@ -58,9 +49,9 @@ As a refresher and to get our brains working, we're going to repeat the exercise
 
 4. Add in a comment line to separate this section.  It should look something like: `# Exercise 1: Scripting for data wrangling part 1`.
 
-5. We need to get this project set up with some example data for our upcoming exercises.  You should have downloaded this already, but if not, download the Bight dataset from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx).  If not already created, make a folder in your new project named `data` and copy this file into this location.  
+5. We need to get this project set up with some example data for our upcoming exercises.  You should have downloaded this already, but if not, download the Bight dataset from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx). Also download some metadata about the Bight stations from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx). If not already created, make a folder in your new project named `data` and copy these files into this location.  
 
-6. Add some lines to your script to import and store the data in your Enviroment. Remember that the data should be in your `data` folder in your project.  The `read_excel` function is your friend here and the path is `"data/bight.xlsx"`.  Remember to install/load the `readxl` library and to assign the data to a variable (`<-`)
+6. Add some lines to your script to import and store the data in your Enviroment. Remember that the data should be in your `data` folder in your project.  The `read_excel` function is your friend here and the path is `"data/B13 Chem data.xlsx"`.  Remember to install/load the `readxl` library and to assign the data to a variable (`<-`)
 
 7. Now run your script and make sure it doesn't throw any errors and you do in fact get a data frame (or tibble).
 
@@ -119,12 +110,13 @@ As you'll soon learn using R, there are often several ways to achieve the same g
 ![](figure/data-science-wrangle.png)
 
 As the graphic implies, the data wrangling process includes data import, tidying, and transformation.  The process directly feeds into, and is not mutually exclusive, with the *understanding* or modelling side of data exploration.  More generally, I consider data wrangling as the manipulation or combination of datasets for the purpose of analysis.  
+
 Wrangling begins with import and ends with an output of some kind, such as a plot or a model.  In a perfect world, the wrangling process is linear with no need for back-tracking.  In reality, we often uncover more information about a dataset, either through wrangling or modeling, that warrants re-evaluation or even gathering more data.  Data also come in many forms and the form you need for analysis is rarely the form of the input data.  For these reasons, data wrangling will consume most of your time in data exploration. 
 
 All wrangling is based on a purpose.  No one wrangles for the sake of wrangling (usually), so the process always begins by answering the following two questions:
 
 * What do my input data look like?
-* What should my input data look given what I want to do?
+* What should my input data look like given what I want to do?
 
 At the most basic level, going from what your data looks like to what it should look like will require a few key operations.  Some common examples:
 
@@ -135,7 +127,7 @@ At the most basic level, going from what your data looks like to what it should 
 * Arranging rows by a variable
 * etc.
 
-The `dplyr` package provides easy tools for these common data manipulation tasks. It is built to work directly with data frames and this is one of the foundational packages in what is now known as the tidyverse. The philosophy if dplyr is that one function does one thing and the name of the function says what it does. This is where the tidyverse philosophy departs from other packages and even base R.  It is meant to be easy, logical, and intuitive.  There is a lot of great info on dplyr. If you have an interest, I’d encourage you to look more. The vignettes are particularly good.
+The `dplyr` package provides easy tools for these common data manipulation tasks. It is built to work directly with data frames and this is one of the foundational packages in what is now known as the tidyverse. The philosophy of dplyr is that one function does one thing and the name of the function says what it does. This is where the tidyverse generally departs from other packages and even base R.  It is meant to be easy, logical, and intuitive.  There is a lot of great info on dplyr. If you have an interest, I’d encourage you to look more. The vignettes are particularly good.
 
 * [`dplyr` GitHub repo](https://github.com/hadley/dplyr)
 * [CRAN page: vignettes here](http://cran.rstudio.com/web/packages/dplyr/)
@@ -143,7 +135,7 @@ The `dplyr` package provides easy tools for these common data manipulation tasks
 I'll demonstrate the examples with the `mpg` dataset from last time. This dataset describes fuel economy of different vehicles and it comes with the tidyverse. Let's get a feel for the data.
 
 ```{r}
-# conver to data frame, just cause
+# convert to data frame, just cause
 mpg <- as.data.frame(mpg)
 
 # see first six rows
@@ -159,23 +151,73 @@ names(mpg)
 str(mpg)
 ```
 
+### Selecting
+
 Let's begin using dplyr. Don't forget to load the tidyverse if you haven't done so already. 
 
 ```{r}
 # first, select some columns
-dplyr_sel <- select(mpg, manufacturer, model, cty, hwy)
-head(dplyr_sel)
+dplyr_sel1 <- select(mpg, manufacturer, model, cty, hwy)
+head(dplyr_sel1)
 
+# select everything but class and drv
+dplyr_sel2 <- select(mpg, -drv, -class)
+head(dplyr_sel2)
+
+# select columns that contain the letter c
+dplyr_sel3 <- select(mpg, matches('c'))
+head(dplyr_sel3)
+```
+
+### Filtering
+
+After selecting columns, you'll probably want to remove observations that don't fit some criteria.  For example, maybe you want to remove all cars from the dataset that have low mileage on the highway.  Maybe you want to look at only six cylinder cars.
+
+```{r}
 # now select (filter) some observations
 dplyr_good_fuel <- filter(mpg, hwy > 25)
 head(dplyr_good_fuel)
 
 # now select observations for only six cylinder vehicles
-dplyr_four_cyl <- filter(mpg, cyl == 6)
-head(dplyr_four_cyl)
+dplyr_six_cyl <- filter(mpg, cyl == 6)
+head(dplyr_six_cyl)
 ```
 
-Now we have seen how to filter observations and select columns within a data frame. Now I want to add a new column. In dplyr, `mutate` allows us to add new columns. These can be vectors you are adding or based on expressions applied to existing columns. For instance, we have a column of highway mileage and maybe we want to convert to km/l (Google says the conversion factor is 0.425).
+Filtering can take a bit of time to master because there are several ways to tell R what you want. Within the filter function, the working part is a *logical selection* of `TRUE` and `FALSE` values that are used to selected rows (`TRUE` means I want that row, `FALSE` mean remove).  Every selection within the filter function, no matter how complicated, will always be a T/F vector.  This is similar to running queries on a database.
+
+To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: `>`, `>=`, `<`, `<=`, `!=` (not equal), and `==` (equal). When you're starting out with R, the easiest mistake to make is to use `=` instead of `==` when testing for equality. 
+
+Multiple arguments to `filter()` are combined with "and": every expression must be true in order for a row to be included in the output. For other types of combinations, you'll need to use Boolean operators yourself: `&` is "and", `|` is "or", and `!` is "not". This is the complete set of Boolean operations.
+
+![](figure/transform-logical.png)
+
+Let's start combining filtering operations.
+
+```{r}
+# get cars with city mileage betwen 18 and 22
+filt1 <- filter(mpg, cty > 18 & cty < 22)
+head(filt1)
+
+# get four cylinder or compact cars
+filt2 <- filter(mpg, cyl == 4 | class == 'compact')
+head(filt2)
+
+# get four cylinder and compact cars
+filt3 <- filter(mpg, cyl == 4 & class == 'compact')
+head(filt3)
+
+# get cars manufactured by ford or toyota
+filt4 <- filter(mpg, manufacturer == 'ford' | manufacturer == 'toyota')
+head(filt4)
+
+# an alternative way to get ford and toyota 
+filt5 <- filter(mpg, manufacturer %in% c('ford', 'toyota'))
+head(filt5)
+```
+
+### Mutating
+
+Now that we've seen how to filter observations and select columns of a data frame, maybe we want to add a new column. In dplyr, `mutate` allows us to add new columns. These can be vectors you are adding or based on expressions applied to existing columns. For instance, we have a column of highway mileage and maybe we want to convert to km/l (Google says the conversion factor is 0.425).
 
 ```{r}
 # add a column for km/L
@@ -203,29 +245,154 @@ There are many more functions in `dplyr` but the one's above are by far the most
 
 ## Exercise 2
 
-Now that you know the basic functions in `dplyr` and how to use them, let's apply them to a more realistic dataset.  We're going to import a sediment chemistry dataset from Bight13.  For this exercise, let's pretend we need to get a subset of the data that we're interested in. We'll be getting all of the observations for chlorophyll (`Total_CHL`) and getting rid of everything else. 
+Now that you know the basic functions in `dplyr` and how to use them, let's apply them to a more realistic dataset.  We're going to import the sediment chemistry dataset from Bight13 and subset of some data that we want. We'll be getting all of the observations for chlorophyll (`Total_CHL`) and organic carbon (`Total Organic Carbon`).  We'll remove everything else in the data that we don't need.
 
 1. Import the Bight chemistry data using the `read_excel` function from the readxl package. The data should be in your `data` folder. Make sure to store it as an object in your workspace (use `<-`).
 
-2. Get a feel for the data.  What are the dimensions (`dim`)? What are the column names (`names`)? What are the types of data in each column (`str`)?
+2. Now we need to think about what variables we need to get the chlorophyll data.  Select the `StationID`, `Parameter`, and `Result` columns and assing it as a new object in your environment.
 
-3. Now we need to think about what variables we need to get the chlorophyll data.  Select the `StationID`, `Parameter`, and `Result` columns and save it as a new object.
+3. Using the new object, let's filter the observations (i.e., the `Parameter` column) to get only chorophyll (`Total_CHL`) and organic carbon (`Total Organic Carbon`). Again, assign the new object to your environment.
 
-4. Let's filter the observations (i.e., `Parameter`) to get only chorophyll (`Total_CHL`). Use the object you saved from the last step to filter.  Again, save the new object when you've successfully filtered the data.
-
-5. Now that we've filtered, we don't need the Parameter column.  Select only the `StationID` and `Result` columns, save it as a new object. 
-
-6. Finally, let's change the names of the columns to something simple and more informative. Rename `Result` to `chl`.
-
-7. When you're happy with the result, have a look at the data.  Did you get what you wanted?  How many observations do you have compared to the original data file? Save the new file to your data folder using `write_csv`.
-
-
+4. When you're happy with the result, have a look at the data.  Did you get what you wanted?  How many observations do you have compared to the original data file? Did you succesfully filter the right parameters (hint: `table(dat$Parameter)`? Save the new file to your data folder using `write_csv` and call it `Bight_wrangle.csv`.
 
 ## Piping
 
-## Joining data with `tidyr`
+A complete data wrangling exercise will always include multiple steps to go from the raw data to the output you need. Here's a terrible wrangling example using functions from base R:
 
-## Tidy data
+```{r base, eval=FALSE}
+cropdat <- rawdat[1:28]
+savecols <- data.frame(cropdat$Party, cropdat$`Last Inventory Year (2015)`)
+names(savecols) <- c('Party','2015')
+savecols$rank2015 <- rank(-savecols$`2015`)
+top10df <- savecols[savecols$rank2015 <= 10,]
+basedat <- cropdat[cropdat$Party %in% top10df$Party,]
+```
+
+Although you do get the answer you want, there are a couple issues that can lead to problems down the line. First, the flow of functions to manipulate the data is not obvious and this makes your code very hard to read. Second, lots of unecessary intermediates have been created in your workspace.  Anything that adds to clutter should be avoided because R is fundamentally based on object assignments.  The less you assign the easier it will be to navigate complex scripts. 
+
+The good news is that you now know how to use the dplyr functions to wrangle data.  The function names in dplyr were chosen specifically to be descriptive.  This will make your code much more readable than if you were using base R counterparts.  The bad news is that I haven't told you how to easily link the functions.  Fortunately, there's an easy fix to this problem.
+
+The `magrittr` package (comes with tidyverse) provides a very useful method called *piping* that will make wrangling a whole lot easier.  The idea is simple: a pipe (`%>%`) is used to chain functions together.  The output from one function becomes the input to the next function in the pipe. This avoids the need to create intermediate objects and creates a logical progression of steps that demystify the wrangling process.
+
+Consider the simple example:
+
+```{r}
+# not using pipes, select a column, filter rows
+bad_ex <- select(mpg, manufacturer, hwy)
+bad_ex2 <- filter(bad_ex, hwy >25)
+```
+
+With pipes, it looks like this:
+
+```{r}
+# with pipes, select a column, filter rows
+good_ex <- select(mpg, manufacturer, hwy) %>% 
+  filter(hwy > 25)
+```
+
+Now we've created only one new object in our environment and we can clearly see that we select, then filter.  The only real coding difference is now the filter function only includes the selection argument.  You do not need to specify a data object as input to a function if you're using piping. The pipe will assume that the input comes from above. Using the pipe, you can link together as many functions as you like. 
+
+```{r}
+# a complete piping example
+all_pipes <- mpg %>% 
+  select(manufacturer, year, hwy, cty) %>% 
+  filter(year == 2008 & hwy <= 25) %>% 
+  rename(
+    make = manufacturer, 
+    hmiles = hwy, 
+    cmiles = cty
+    ) %>% 
+  arrange(-hmiles)
+head(all_pipes)
+```
+
+A couple comments about piping:
+
+* I find it very annoying to type the pipe operator (six key strokes!).  RStudio has a nice keyboard shortcut: `Crtl + Shift + M` for Windows (use `Cmd + Shift + M` on a mac).
+* It's convention to start a new function on the next line after a pipe operator.  This makes the code easier to read and you can also comment out a single step in a long pipe. 
+* Don't make your pipes too long, limit them to a particular data object or task.
+
+## Exercise 3
+
+Now that we know how to pipe functions, let's repeat exercise 2 with the Bight data.  You should already have code to import, select, and filter the data.  
+
+1. Using your code from exercise two, try to replicate the steps using pipes.  The steps we used in exercise two were:
+     * Import the raw data with `read_excel`
+     * Select the columns `StationID`, `Parameter`, and `Result`
+     * Filter parameter to get only `Total_CHL` and `Total Organic Carbon` (hint: use `%in%`)
+     * If you like try addign other functions such as `rename` or `arrange`
+     * Save the output using `write_csv`, name it something different than the first file you saved.
+     
+2. In theory, you could do this all with a single continuous pipe.  That's a bit excessive so try to do this by creating only two objects in your workspace. Make one object the raw data and the second object the wrangled data.  
+
+## Combining data
+
+Combining data is another common task of data wrangling.  Perhaps we want to combine information between two datasets that share a common identifier.  As a real world example, our Bight data contain information about sediment chemistry but no metadata about the stations (e.g., depth, lat, lon, etc.).  We would need to (and we will) combine data if this information is in two different places.  
+
+All joins require that each of the tables can be linked by shared identifiers.  These are called 'keys' and are usually represented as a separate column that acts as a sort of master variable for the observations.  The "Station ID" is a common key, but remember that a key might need to be unique for each row.  It doesn't make sense to join two tables by station ID if multiple site visits were made. In that case, your key should include some information about the site visit **and** station ID.  However, it's perfectly okay to join data using a station ID as key if site visit doesn't matter, e.g., joining a lat/lon table with environmental data.  
+
+The challenge with joins is that the two datasets may not represent the same observations for a given key.  For example, you might have one table with all observations for every key, another with only some observations, or two tables with only a few shared keys.  What you get back from a join will depend on what's shared between tables, in addition to the type of join you use. 
+
+We can demonstrate types of joins with simple graphics. The first is an inner join.
+
+![](figure/join-inner.png)
+
+The second is an outer-join, and comes in three flavors: left, right, and full.
+
+![](figure/join-outer.png)
+
+If all keys are shared between two data objects, then left, right, and full joins will give you the same result.  I typically only use left_join just because it's intuitive to me.  This assumes that there is never any more information in the second table - it has the same or less keys as the original table. 
+
+I've made a new data frame (tibble to be specific) of the origin of car manufacturers (domestic, foreign).
+
+```{r}
+# car origin by manufacturer
+origin <- tibble(
+  manufacturer = c('audi', 'chevrolet', 'dodge', 'ford', 'honda', 'hyundai', 'jeep', 'land rover', 'lincoln', 'mercury', 'nissan', 'pontiac', 'subaru', 'toyota', 'volkswagen'), 
+  origin = c('for', 'dom', 'dom', 'dom', 'for', 'for', 'dom', 'for', 'dom', 'dom', 'for', 'dom', 'for', 'for', 'for')
+)
+head(origin)
+```
+
+We want to join this with our `mpg` dataset.
+
+```{r}
+# join with mpg
+mpg <- left_join(mpg, origin, by = 'manufacturer')
+head(mpg)
+```
+
+There you have it.  As a side note, this is also a one-to-many join (i.e., there were many keys in the first table that corresponded to only one key in the second table).
+
+## Exercise 4
+
+Our last exercise for the day is to join two datasets from Bight13.  We're going to import the wrangled dataset we created in exercise 2, import a metadata table with lat/lon, and join the two by StationID.  We'll have to do a bit of wrangling with the metadata.   
+
+1. Import the `Bight_wrangle.csv` dataset from exercise 2.  Use `read_csv` and save it as an object in your environment. No need to import if you already have these data in your environment (check with `ls()` or see the Environment tab on the top right) .
+
+2. Import the `Master Data - Station Info.xlsx` file with `read_excel`.  Save it as an object in your workspace. 
+
+3. Select only the `StationID`, `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns from the master data. 
+
+4. Rename the `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns as `depth`, `lat`, and `lon`.
+
+5. Use `left_join` to combine the chemistry data with the metadata.  Use the `StationID` column as the key. Save it as a new object in your environment.  
+
+6. Check the dimensions of the new table.  How many rows do we have compared to the original chemistry data? How many columns?  
+
+7. When you're done, save the data to your `data` folder as `Bight_join.csv` using `write_csv`.
+
+## Next time 
+
+Now you should be able to answer (or be able to find answers to) the following:
+
+* Why do we need to manipulate data?
+* What is the tidyverse? 
+* What can you do with dplyr?
+* What is piping?
+* How are data joined?
+
+Next time we'll continue with data wrangling. 
 
 ## Attribution
 
