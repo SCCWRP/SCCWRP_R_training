@@ -28,12 +28,14 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ## Lesson Exercises
 
 * [Exercise 1]
+* [Exercise 2]
+* [Exercise 3]
 
 ## Today's goals
 
-Data wrangling (manipulation, ninjery, cleaning, etc.) is the part of any data analysis that will take the most time. While it may not necessarily be fun, it is foundational to all the work that follows. I often argue that mastering these skills can have more value than mastering a particular analysis.  
+Data wrangling (manipulation, ninjery, cleaning, etc.) is the part of any data analysis that will take the most time. While it may not necessarily be fun, it is foundational to all the work that follows. I strongly believe that mastering these skills has more value than mastering a particular analysis.  Check out [this article](https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html) if you don't believe me.
 
-As before, we only have two hours to cover the basics of data wrangling. It’s an unrealistic expectation that you will be competent after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.
+As before, we only have two hours to cover the basics of data wrangling. It’s an unrealistic expectation that you will be ninja wrangler after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.
 
 Today you should be able to answer (or be able to find answers to) the following:
 
@@ -56,7 +58,7 @@ As a refresher and to get our brains working, we're going to repeat the exercise
 
 4. Add in a comment line to separate this section.  It should look something like: `# Exercise 1: Scripting for data wrangling part 1`.
 
-5. We need to get this project set up with some example data for our upcoming exercises.  You should have downloaded this already, but if not, download the Bight dataset from here: <https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/bight.xlsx>.  If not already created, make a folder in your new project named `data` and copy this file into this location.  
+5. We need to get this project set up with some example data for our upcoming exercises.  You should have downloaded this already, but if not, download the Bight dataset from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx).  If not already created, make a folder in your new project named `data` and copy this file into this location.  
 
 6. Add some lines to your script to import and store the data in your Enviroment. Remember that the data should be in your `data` folder in your project.  The `read_excel` function is your friend here and the path is `"data/bight.xlsx"`.  Remember to install/load the `readxl` library and to assign the data to a variable (`<-`)
 
@@ -117,7 +119,6 @@ As you'll soon learn using R, there are often several ways to achieve the same g
 ![](figure/data-science-wrangle.png)
 
 As the graphic implies, the data wrangling process includes data import, tidying, and transformation.  The process directly feeds into, and is not mutually exclusive, with the *understanding* or modelling side of data exploration.  More generally, I consider data wrangling as the manipulation or combination of datasets for the purpose of analysis.  
-
 Wrangling begins with import and ends with an output of some kind, such as a plot or a model.  In a perfect world, the wrangling process is linear with no need for back-tracking.  In reality, we often uncover more information about a dataset, either through wrangling or modeling, that warrants re-evaluation or even gathering more data.  Data also come in many forms and the form you need for analysis is rarely the form of the input data.  For these reasons, data wrangling will consume most of your time in data exploration. 
 
 All wrangling is based on a purpose.  No one wrangles for the sake of wrangling (usually), so the process always begins by answering the following two questions:
@@ -134,12 +135,91 @@ At the most basic level, going from what your data looks like to what it should 
 * Arranging rows by a variable
 * etc.
 
-The `dplyr` package tries to provide easy tools for these common data manipulation tasks. It is built to work directly with data frames and this is one of the foundational packages in what is now known as the tidyverse. The philosophy if dplyr is that one function does one thing and the name of the function says what it does. This is where the tidyverse philosophy departs from other packages and even base R.  It is meant to be easy, logical, and intuitive.  There is a lot of great info on dplyr. If you have an interest, I’d encourage you to look more. The vignettes are particularly good.
+The `dplyr` package provides easy tools for these common data manipulation tasks. It is built to work directly with data frames and this is one of the foundational packages in what is now known as the tidyverse. The philosophy if dplyr is that one function does one thing and the name of the function says what it does. This is where the tidyverse philosophy departs from other packages and even base R.  It is meant to be easy, logical, and intuitive.  There is a lot of great info on dplyr. If you have an interest, I’d encourage you to look more. The vignettes are particularly good.
 
 * [`dplyr` GitHub repo](https://github.com/hadley/dplyr)
 * [CRAN page: vignettes here](http://cran.rstudio.com/web/packages/dplyr/)
 
-Let's begin using dplyr.
+I'll demonstrate the examples with the `mpg` dataset from last time. This dataset describes fuel economy of different vehicles and it comes with the tidyverse. Let's get a feel for the data.
+
+```{r}
+# conver to data frame, just cause
+mpg <- as.data.frame(mpg)
+
+# see first six rows
+head(mpg)
+
+# dimensions
+dim(mpg)
+
+# column names
+names(mpg)
+
+# structure 
+str(mpg)
+```
+
+Let's begin using dplyr. Don't forget to load the tidyverse if you haven't done so already. 
+
+```{r}
+# first, select some columns
+dplyr_sel <- select(mpg, manufacturer, model, cty, hwy)
+head(dplyr_sel)
+
+# now select (filter) some observations
+dplyr_good_fuel <- filter(mpg, hwy > 25)
+head(dplyr_good_fuel)
+
+# now select observations for only six cylinder vehicles
+dplyr_four_cyl <- filter(mpg, cyl == 6)
+head(dplyr_four_cyl)
+```
+
+Now we have seen how to filter observations and select columns within a data frame. Now I want to add a new column. In dplyr, `mutate` allows us to add new columns. These can be vectors you are adding or based on expressions applied to existing columns. For instance, we have a column of highway mileage and maybe we want to convert to km/l (Google says the conversion factor is 0.425).
+
+```{r}
+# add a column for km/L
+dplyr_mut <- mutate(mpg, hwy_kml = hwy * 0.425)
+head(dplyr_mut)
+
+# add a column for lo/hi fuel economy
+dplyr_mut2 <- mutate(mpg, hwy_cat = ifelse(hwy < 25, 'hi', 'lo'))
+head(dplyr_mut2)
+```
+
+Some other useful dplyr functions include `arrange` to sort the observations (rows) by a column and `rename` to (you guessed it) rename a column.
+
+```{r}
+# arrange by highway economy
+dplyr_arr <- arrange(mpg, hwy)
+head(dplyr_arr)
+
+# rename some columns
+dplyr_rnm <- rename(mpg, make = manufacturer)
+head(dplyr_rnm)
+```
+
+There are many more functions in `dplyr` but the one's above are by far the most used.  As you can imagine, they are most effective when used to together because there is never only one step in the data wrangling process.  After the exercise, we'll talk about how we can efficiently *pipe* the functions in dplyr to create a new data object.  
+
+## Exercise 2
+
+Now that you know the basic functions in `dplyr` and how to use them, let's apply them to a more realistic dataset.  We're going to import a sediment chemistry dataset from Bight13.  For this exercise, let's pretend we need to get a subset of the data that we're interested in. We'll be getting all of the observations for chlorophyll (`Total_CHL`) and getting rid of everything else. 
+
+1. Import the Bight chemistry data using the `read_excel` function from the readxl package. The data should be in your `data` folder. Make sure to store it as an object in your workspace (use `<-`).
+
+2. Get a feel for the data.  What are the dimensions (`dim`)? What are the column names (`names`)? What are the types of data in each column (`str`)?
+
+3. Now we need to think about what variables we need to get the chlorophyll data.  Select the `StationID`, `Parameter`, and `Result` columns and save it as a new object.
+
+4. Let's filter the observations (i.e., `Parameter`) to get only chorophyll (`Total_CHL`). Use the object you saved from the last step to filter.  Again, save the new object when you've successfully filtered the data.
+
+5. Now that we've filtered, we don't need the Parameter column.  Select only the `StationID` and `Result` columns, save it as a new object. 
+
+6. Finally, let's change the names of the columns to something simple and more informative. Rename `Result` to `chl`.
+
+7. When you're happy with the result, have a look at the data.  Did you get what you wanted?  How many observations do you have compared to the original data file? Save the new file to your data folder using `write_csv`.
+
+
 
 ## Piping
 

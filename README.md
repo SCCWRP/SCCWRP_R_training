@@ -13,6 +13,7 @@ All trainings will be in the medium conference room from **1 - 3 pm**.  Attendan
      * [feedback](https://goo.gl/forms/nQbBvZHr99qkPlme2)
 2) **2/20** Data wrangling I 
      * [RSVP](https://goo.gl/forms/cyxbrMUZfYOB3Z9C3)
+     * [content](https://SCCWRP.github.io/R_training_2018/lessons/Data_Wrangling_1.html)
 3) **3/7** Data wrangling II 
      * [RSVP](https://goo.gl/forms/7qgFwmGo4QBz4R7v1)
 4) **3/14** Visualization and graphics 
