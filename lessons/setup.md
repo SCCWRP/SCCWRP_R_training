@@ -87,7 +87,7 @@ That's OK! There’s a dialog box hiding behind RStudio asking if you want to cr
 
 # Grab the sample datasets
 
-We'll be working with a chemistry dataset and metadata from the Bight for many of our examples. Please download the chemistry dataset [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx) and the metadata [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx).  Make sure you have access to these data on the day of training.
+We'll be working with a chemistry dataset and metadata from the Bight for many of our examples. Please download the chemistry dataset [here](http://bit.ly/2Gpgzil) and the metadata [here](http://bit.ly/2sCBtbV).  Make sure you have access to these data on the day of training.
 
 # Exercise 1
 Just to make sure everything is working do the following:
