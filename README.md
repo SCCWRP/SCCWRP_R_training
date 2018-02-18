@@ -14,6 +14,11 @@ All trainings will be in the medium conference room from **1 - 3 pm**.  Attendan
 2) **2/20** Data wrangling I 
      * [RSVP](https://goo.gl/forms/cyxbrMUZfYOB3Z9C3)
      * [content](https://SCCWRP.github.io/R_training_2018/lessons/Data_Wrangling_1.html)
+     * Bight data
+          * [chemistry](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx)
+          * [metadata](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx)
+     * [sign in](https://goo.gl/forms/Du0yABfP41A43Lzq2)
+     * [feedback](https://goo.gl/forms/uo7G8wkYF5KfxVdW2)
 3) **3/7** Data wrangling II 
      * [RSVP](https://goo.gl/forms/7qgFwmGo4QBz4R7v1)
 4) **3/14** Visualization and graphics 

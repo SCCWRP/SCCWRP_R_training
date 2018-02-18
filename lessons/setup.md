@@ -74,7 +74,7 @@ Install packages available for all R users from [CRAN](https://cran.r-project.or
 
 
 ```r
-install.packages(c("readxl","readr"))
+install.packages("tidyverse")
 ```
 
 If you see 
@@ -85,9 +85,9 @@ That's OK! There’s a dialog box hiding behind RStudio asking if you want to cr
 
 ![](figure/general_pkg_output.png#inline-img "console output")
 
-# Grab the sample dataset
+# Grab the sample datasets
 
-We'll be working with the `mpg` dataset for many of our examples. Please download the dataset [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/mpg.xlsx) and make sure you have access to it on the day of training.  A short description of the data is [here](http://ggplot2.tidyverse.org/reference/mpg.html).
+We'll be working with a chemistry dataset and metadata from the Bight for many of our examples. Please download the chemistry dataset [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx) and the metadata [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx).  Make sure you have access to these data on the day of training.
 
 # Exercise 1
 Just to make sure everything is working do the following:
@@ -99,8 +99,7 @@ Just to make sure everything is working do the following:
 
 
 ```r
-"readxl" %in% installed.packages()
-"readr" %in% installed.packages()
+"tidyverse" %in% installed.packages()
 ```
 
 The end result should look something like:
