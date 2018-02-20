@@ -8,7 +8,7 @@ All trainings will be in the medium conference room from **1 - 3 pm**.  Attendan
 
 1) **2/13** Intro to R 
      * [RSVP](https://goo.gl/forms/CUhmhcsrle7a8Buf1)
-     * [content](https://SCCWRP.github.io/R_training_2018/lessons/Intro_to_R.html)
+     * [content](https://SCCWRP.github.io/R_training_2018/lessons/Intro_to_R.html), [recording](https://s3-us-west-1.amazonaws.com/sccwrpdat/2018-02-13_12.59_Intro_to_R.mp4)
      * [sign in](https://goo.gl/forms/ZvvteoDTJ1qlsRge2)
      * [feedback](https://goo.gl/forms/nQbBvZHr99qkPlme2)
 2) **2/20** Data wrangling I 
