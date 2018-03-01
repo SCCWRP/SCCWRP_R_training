@@ -1,0 +1,298 @@
+---
+output:
+  html_document:
+    css: css/styles.css
+---
+
+```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
+options(repos = "http://cran.rstudio.com/")
+pkgs <- c("dplyr", "knitr")
+x<-lapply(pkgs, library, character.only = TRUE)
+opts_chunk$set(tidy = FALSE, message = F, warning = F)
+```
+
+<script src="js/hideoutput.js"></script>
+
+# Data Wrangling Pt. 2
+
+## Lesson Outline
+
+* [Combining data]
+* [Tidy data]
+
+## Lesson Exercises
+
+* [Exercise 1]
+* [Exercise 2]
+* [Exercise 3]
+
+## Today's goals
+
+Today we'll continue our discussion of data wrangling with the tidyverse. Data wrangling is the manipulation or combination of datasets for the purpose of analysis.  It fits within the broader scheme of **data exploration**, described as the art of looking at your data, rapidly generating hypotheses, quickly testing them, then repeating again and again and again (from [R for Data Science](http://r4ds.had.co.nz/)). 
+
+![](figure/data-science-wrangle.png)
+
+We learned the following functions from the `dplyr` package (cheatsheet [here](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)):
+
+* Selecting specific variables with `select`
+* Filtering observations by some criteria with `filter`
+* Adding or modifying existing variables with `mutate`
+* Renaming variables with `rename`
+* Arranging rows by a variable with `arrange`
+
+Always remember that **wrangling is based on a purpose.** The process always begins by answering the following two questions:
+
+* What do my input data look like?
+* What should my input data look like given what I want to do?
+
+You define what steps to take to get your data from input to where you want to go.
+
+As before, we only have two hours to cover the basics of data wrangling. It’s an unrealistic expectation that you will be a ninja wrangler after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.
+
+Today you should be able to answer (or be able to find answers to) the following:
+
+* How are data joined?
+* What is tidy data?
+* How do I summarize a dataset?
+
+You should already have the tidyverse installed, but let's give it a go if you haven't done this part yet:
+
+```{r eval = F}
+# install 
+install.packages('tidyverse')
+```
+
+After installation, we can load the package:
+```{r message = T}
+# load
+library(tidyverse)
+```
+
+## Exercise 1
+
+As a refresher and to get our brains working, we're going to repeat the final exercise from our training last week.  In this exercise, we'll make a new project in RStudio and create a script for importing and working with these data today.  Alternatively, you can use an existing project from last time.
+
+1. Create a new project in RStudio or use an existing project from last time. If creating a new project, name it "wrangling_workshop_pt2" or something similar.
+
+2. Create a new "R Script" in the Source (scripting) Pane, save that file into your project and name it "data_wrangling2.R".
+
+3. Add in a comment line at the top stating the purpose. It should look something like: `# Exercise 1: Scripting for data wrangling part 2`.
+
+4. Make a folder in your project called `data`. You should have downloaded this already, but if not, download the Bight dataset from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx). Also download some metadata about the Bight stations from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx). Copy these files into the `data` folder in your project.
+
+5. Add some lines to your script to import and store the chemistry data in your Enviroment. Remember that the data should be in your `data` folder in your project.  The `read_excel` function from the `readxl` package is your friend here and the path is `"data/B13 Chem data.xlsx"`.  Remember to install/load the `readxl` library and to assign the data to a variable (`<-`)
+
+6. Load the `tidyverse` and use functions from the `dplyr` package to subset the data.  If you can, try to use pipes to link your functions.
+     * Select the columns `StationID`, `Parameter`, and `Result`
+     * Filter the parameter column to get only `Total_ChL` and `Total Organic Carbon` (hint: use `Parameter %in% c('Total_Chl', 'Total Organic Carbon')`)
+
+<div class="fold s o">
+```{r}
+# import libraries (use install.packages function if not found)
+library(tidyverse)
+library(readxl)
+
+# import chemistry data, select columns, filter Parameter column
+chemdat <- read_excel('data/B13 Chem data.xlsx') %>% 
+  select(StationID, Parameter, Result) %>% 
+  filter(Parameter %in% c('Total_Chl', 'Total Organic Carbon'))
+```
+</div>
+
+## Combining data
+
+Combining data is a common task of data wrangling.  Perhaps we want to combine information between two datasets that share a common identifier.  As a real world example, our Bight data contain information about sediment chemistry and we also want to include metadata about the stations (e.g., depth, lat, lon, etc.).  We would need to (and we will) combine data if this information is in two different places.  Combining data with dplyr is called joining.  
+
+All joins require that each of the tables can be linked by shared identifiers.  These are called 'keys' and are usually represented as a separate column that acts as a unique variable for the observations.  The "Station ID" is a common key, but remember that a key might need to be unique for each row.  It doesn't make sense to join two tables by station ID if multiple site visits were made. In that case, your key should include some information about the site visit **and** station ID.
+
+### Types of joins
+
+The challenge with joins is that the two datasets may not represent the same observations for a given key.  For example, you might have one table with all observations for every key, another with only some observations, or two tables with only a few shared keys.  What you get back from a join will depend on what's shared between tables, in addition to the type of join you use. 
+
+We can demonstrate types of joins with simple graphics. The first is an **inner-join**.
+
+![](figure/join-inner.png)
+
+The second is an **outer-join**, and comes in three flavors: left, right, and full.
+
+![](figure/join-outer.png)
+
+If all keys are shared between two data objects, then left, right, and full joins will give you the same result.  I typically only use left_join just because it's intuitive to me.  This assumes that there is never any more information in the second table - it has the same or less keys as the original table. 
+
+Remember our mpg dataset?
+
+```{r}
+head(mpg)
+```
+
+I've made a new data frame (tibble to be specific) of the origin of car manufacturers (domestic, foreign).
+
+```{r}
+# car origin by manufacturer
+origin <- tibble(
+  manufacturer = c('audi', 'chevrolet', 'dodge', 'ford', 'honda', 'hyundai', 'jeep', 'land rover', 'lincoln', 'mercury', 'nissan', 'pontiac', 'subaru', 'toyota', 'volkswagen'), 
+  origin = c('for', 'dom', 'dom', 'dom', 'for', 'for', 'dom', 'for', 'dom', 'dom', 'for', 'dom', 'for', 'for', 'for')
+)
+head(origin)
+```
+
+We want to join this with our `mpg` dataset.
+
+```{r}
+# join with mpg
+mpg <- left_join(mpg, origin, by = 'manufacturer')
+head(mpg)
+```
+
+There you have it.  As a side note, this is also a one-to-many join (i.e., there were many keys in the first table that corresponded to only one key in the second table).
+
+## Exercise 2
+
+For this exercise we'll two datasets from Bight13.  We're going to use the wrangled dataset we created in exercise 1, import a metadata table with lat/lon, and join the two by StationID.  We'll have to do a bit of wrangling with the metadata.   
+
+1. Make sure you have the wrangled chemistry data in your environment from exercise 1 (check with `ls()` or the Environment pane in RStudio).  If not, run the code in the answer box above. 
+
+2. Import the `Master Data - Station Info.xlsx` file in your data folder with `read_excel`.  Save it as an object in your workspace. 
+
+3. Select only the `StationID`, `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns from the master data. 
+
+4. Rename the `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns as `depth`, `lat`, and `lon`.
+
+5. Use `left_join` to combine the metadata with the chemistry data you created in exercise one.  Use the `StationID` column as the key. Save it as a new object in your environment.  
+
+6. Check the dimensions of the new table.  How many rows do we have compared to the original chemistry data? How many columns?  
+
+<div class="fold s o">
+```{r results = 'hide'}
+# import metadata, select and rename columns
+metadat <- read_excel('data/Master Data - Station Info.xlsx') %>% 
+  select(StationID, StationWaterDepth, SampleLatitude, SampleLongitude) %>%
+  rename(
+    depth = StationWaterDepth,
+    lat = SampleLatitude, 
+    lon = SampleLongitude
+  )
+
+# dimensions of metadat, chemdat
+dim(metadat)
+dim(chemdat)
+
+# join chemdat with metadat, check dimensions
+alldat <- left_join(chemdat, metadat, by = 'StationID')
+dim(alldat)
+```
+</div>
+
+## Tidy data
+
+The opposite of a tidy dataset is a messy dataset.  You should always strive to create a tidy data set as an outcome of the wrangling process.  Tidy data are easy to work with and will make downstream analysis much simplier.  This will become apparent when we start summarizing and plotting our data.  
+
+You can represent the same underlying data in multiple ways. The example below shows the same data organised in four different ways. Each dataset shows the same values of four variables *country*, *year*, *population*, and *cases*, but each dataset organises the values in a different way. Only one of these examples is tidy.
+
+```{r}
+table1
+table2
+table3
+
+# Spread across two tibbles
+table4a  # cases
+table4b  # population
+```
+
+These are all representations of the same underlying data but they are not equally easy to work with.  The tidy dataset is much easier to work with inside the tidyverse.  
+
+There are three inter-correlated rules which make a dataset tidy:
+
+1.  Each variable must have its own column.
+1.  Each observation must have its own row.
+1.  Each value must have its own cell.
+
+![](figure/tidy-1.png)
+
+There are some very real reasons why you would encounter untidy data:
+
+1.  Most people aren't familiar with the principles of tidy data, and it's hard
+    to derive them yourself unless you spend a _lot_ of time working with data.
+    
+1.  Data is often organised to facilitate some use other than analysis. For 
+    example, data is often organised to make entry as easy as possible.
+    
+This means for most real analyses, you'll need to do some tidying. The first step is always to figure out what the variables and observations are. The second step is to resolve one of two common problems:
+
+1. One variable might be spread across multiple columns.
+
+1. One observation might be scattered across multiple rows.
+
+To fix these problems, you'll need the two most important functions in tidyr: `gather()` and `spread()`.
+
+### Gathering
+
+A common problem is a dataset where some of the column names are not names of variables, but _values_ of a variable. Take `table4a`: the column names `1999` and `2000` represent values of the `year` variable, and each row represents two observations, not one.
+
+```{r}
+table4a
+```
+
+To tidy a dataset like this, we need to __gather__ those columns into a new pair of variables. To describe that operation we need three parameters:
+
+* The set of columns that represent values, not variables. In this example, 
+  those are the columns `1999` and `2000`.
+
+* The name of the variable whose values form the column names. I call that
+  the `key`, and here it is `year`.
+
+* The name of the variable whose values are spread over the cells. I call 
+  that `value`, and here it's the number of `cases`.
+  
+Together those parameters generate the call to `gather()`:
+
+```{r}
+table4a %>% 
+  gather(`1999`, `2000`, key = "year", value = "cases")
+```
+
+Gathering can be graphically demonstrated:
+
+![](figure/tidy-8.png)
+
+### Spreading
+
+Spreading is the opposite of gathering. You use it when an observation is scattered across multiple rows. For example, take `table2`: an observation is a country in a year, but each observation is spread across two rows.
+
+```{r}
+table2
+```
+
+To tidy this up, we first analyse the representation in similar way to `gather()`. This time, however, we only need two parameters:
+
+* The column that contains variable names, the `key` column. Here, it's 
+  `type`.
+
+* The column that contains values forms multiple variables, the `value`
+  column. Here it's `count`.
+
+Once we've figured that out, we can use `spread()`, as shown programmatically below.
+
+```{r}
+spread(table2, key = type, value = count)
+```
+ 
+Spreading can be graphically demonstrated:
+
+![](figure/tidy-8.png)
+
+## Exercise 3
+
+
+
+## Next time 
+
+Now you should be able to answer (or be able to find answers to) the following:
+
+* How are data joined?
+
+Next time we'll learn about data visualization and graphics. 
+
+## Attribution
+
+Content in this lesson was pillaged extensively from the USGS-R training curriculum [here](https://github.com/USGS-R/training-curriculum) and [R for data Science](https://github.com/hadley/r4ds).

@@ -14,14 +14,12 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 * [The tidyverse]
 * [Data wrangling with `dplyr`]
 * [Piping]
-* [Combining data]
 
 ## Lesson Exercises
 
 * [Exercise 1]
 * [Exercise 2]
 * [Exercise 3]
-* [Exercise 4]
 
 ## Today's goals
 
@@ -35,7 +33,6 @@ Today you should be able to answer (or be able to find answers to) the following
 * What is the tidyverse? 
 * What can you do with dplyr?
 * What is piping?
-* How are data joined?
 
 ## Exercise 1
 
@@ -328,65 +325,6 @@ Now that we know how to pipe functions, let's repeat exercise 2 with the Bight d
 
 2. When you're done, you should have a data object that's exactly the same as the one you created in exercise two. Try to verify this with the `identical` function from base R (check the help file with `?identical` if you don't know how to use this function).
 
-## Combining data
-
-Combining data is another common task of data wrangling.  Perhaps we want to combine information between two datasets that share a common identifier.  As a real world example, our Bight data contain information about sediment chemistry and we also want to include metadata about the stations (e.g., depth, lat, lon, etc.).  We would need to (and we will) combine data if this information is in two different places.  Combining data with dplyr is called joining.  
-
-All joins require that each of the tables can be linked by shared identifiers.  These are called 'keys' and are usually represented as a separate column that acts as a sort of master variable for the observations.  The "Station ID" is a common key, but remember that a key might need to be unique for each row.  It doesn't make sense to join two tables by station ID if multiple site visits were made. In that case, your key should include some information about the site visit **and** station ID.
-
-### Types of joins
-
-The challenge with joins is that the two datasets may not represent the same observations for a given key.  For example, you might have one table with all observations for every key, another with only some observations, or two tables with only a few shared keys.  What you get back from a join will depend on what's shared between tables, in addition to the type of join you use. 
-
-We can demonstrate types of joins with simple graphics. The first is an **inner-join**.
-
-![](figure/join-inner.png)
-
-The second is an **outer-join**, and comes in three flavors: left, right, and full.
-
-![](figure/join-outer.png)
-
-If all keys are shared between two data objects, then left, right, and full joins will give you the same result.  I typically only use left_join just because it's intuitive to me.  This assumes that there is never any more information in the second table - it has the same or less keys as the original table. 
-
-I've made a new data frame (tibble to be specific) of the origin of car manufacturers (domestic, foreign).
-
-```{r}
-# car origin by manufacturer
-origin <- tibble(
-  manufacturer = c('audi', 'chevrolet', 'dodge', 'ford', 'honda', 'hyundai', 'jeep', 'land rover', 'lincoln', 'mercury', 'nissan', 'pontiac', 'subaru', 'toyota', 'volkswagen'), 
-  origin = c('for', 'dom', 'dom', 'dom', 'for', 'for', 'dom', 'for', 'dom', 'dom', 'for', 'dom', 'for', 'for', 'for')
-)
-head(origin)
-```
-
-We want to join this with our `mpg` dataset.
-
-```{r}
-# join with mpg
-mpg <- left_join(mpg, origin, by = 'manufacturer')
-head(mpg)
-```
-
-There you have it.  As a side note, this is also a one-to-many join (i.e., there were many keys in the first table that corresponded to only one key in the second table).
-
-## Exercise 4
-
-Our last exercise for the day is to join two datasets from Bight13.  We're going to import the wrangled dataset we created in exercise 2, import a metadata table with lat/lon, and join the two by StationID.  We'll have to do a bit of wrangling with the metadata.   
-
-1. Import the `Bight_wrangle.csv` dataset from exercise 2.  Use `read_csv` and save it as an object in your environment. No need to import if you already have these data in your environment (check with `ls()` or see the Environment tab on the top right) .
-
-2. Import the `Master Data - Station Info.xlsx` file in your data folder with `read_excel`.  Save it as an object in your workspace. 
-
-3. Select only the `StationID`, `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns from the master data. 
-
-4. Rename the `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns as `depth`, `lat`, and `lon`.
-
-5. Use `left_join` to combine the chemistry data with the metadata.  Use the `StationID` column as the key. Save it as a new object in your environment.  
-
-6. Check the dimensions of the new table.  How many rows do we have compared to the original chemistry data? How many columns?  
-
-7. When you're done, save the data to your `data` folder as `Bight_join.csv` using `write_csv`.
-
 ## Next time 
 
 Now you should be able to answer (or be able to find answers to) the following:
@@ -395,7 +333,6 @@ Now you should be able to answer (or be able to find answers to) the following:
 * What is the tidyverse? 
 * What can you do with dplyr?
 * What is piping?
-* How are data joined?
 
 Next time we'll continue with data wrangling. 
 
