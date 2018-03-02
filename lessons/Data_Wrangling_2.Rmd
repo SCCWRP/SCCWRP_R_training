@@ -19,12 +19,14 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 * [Combining data]
 * [Tidy data]
+* [Group by and summarize]
 
 ## Lesson Exercises
 
 * [Exercise 1]
 * [Exercise 2]
 * [Exercise 3]
+* [Exercise 4]
 
 ## Today's goals
 
@@ -74,17 +76,17 @@ As a refresher and to get our brains working, we're going to repeat the final ex
 
 1. Create a new project in RStudio or use an existing project from last time. If creating a new project, name it "wrangling_workshop_pt2" or something similar.
 
-2. Create a new "R Script" in the Source (scripting) Pane, save that file into your project and name it "data_wrangling2.R".
+1. Create a new "R Script" in the Source (scripting) Pane, save that file into your project and name it "data_wrangling2.R".
 
-3. Add in a comment line at the top stating the purpose. It should look something like: `# Exercise 1: Scripting for data wrangling part 2`.
+1. Add in a comment line at the top stating the purpose. It should look something like: `# Exercise 1: Scripting for data wrangling part 2`.
 
-4. Make a folder in your project called `data`. You should have downloaded this already, but if not, download the Bight dataset from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx). Also download some metadata about the Bight stations from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx). Copy these files into the `data` folder in your project.
+1. Make a folder in your project called `data`. You should have downloaded this already, but if not, download the Bight dataset from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx). Also download some metadata about the Bight stations from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx). Copy these files into the `data` folder in your project.
 
-5. Add some lines to your script to import and store the chemistry data in your Enviroment. Remember that the data should be in your `data` folder in your project.  The `read_excel` function from the `readxl` package is your friend here and the path is `"data/B13 Chem data.xlsx"`.  Remember to install/load the `readxl` library and to assign the data to a variable (`<-`)
+1. Add some lines to your script to import and store the chemistry data in your Enviroment. Remember that the data should be in your `data` folder in your project.  The `read_excel` function from the `readxl` package is your friend here and the path is `"data/B13 Chem data.xlsx"`.  Remember to install/load the `readxl` library and to assign the data to a variable (`<-`)
 
-6. Load the `tidyverse` and use functions from the `dplyr` package to subset the data.  If you can, try to use pipes to link your functions.
+1. Load the `tidyverse` and use functions from the `dplyr` package to subset the data.  If you can, try to use pipes to link your functions.
      * Select the columns `StationID`, `Parameter`, and `Result`
-     * Filter the parameter column to get only `Total_ChL` and `Total Organic Carbon` (hint: use `Parameter %in% c('Total_Chl', 'Total Organic Carbon')`)
+     * Filter the parameter column to get only `Total_CHL` and `Total Organic Carbon` (hint: use `Parameter %in% c('Total_CHL', 'Total Organic Carbon')`)
 
 <div class="fold s o">
 ```{r}
@@ -95,7 +97,7 @@ library(readxl)
 # import chemistry data, select columns, filter Parameter column
 chemdat <- read_excel('data/B13 Chem data.xlsx') %>% 
   select(StationID, Parameter, Result) %>% 
-  filter(Parameter %in% c('Total_Chl', 'Total Organic Carbon'))
+  filter(Parameter %in% c('Total_CHL', 'Total Organic Carbon'))
 ```
 </div>
 
@@ -152,15 +154,15 @@ For this exercise we'll two datasets from Bight13.  We're going to use the wrang
 
 1. Make sure you have the wrangled chemistry data in your environment from exercise 1 (check with `ls()` or the Environment pane in RStudio).  If not, run the code in the answer box above. 
 
-2. Import the `Master Data - Station Info.xlsx` file in your data folder with `read_excel`.  Save it as an object in your workspace. 
+1. Import the `Master Data - Station Info.xlsx` file in your data folder with `read_excel`.  Save it as an object in your workspace. 
 
-3. Select only the `StationID`, `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns from the master data. 
+1. Select only the `StationID`, `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns from the master data. 
 
-4. Rename the `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns as `depth`, `lat`, and `lon`.
+1. Rename the `StationWaterDepth`, `SampleLatitude`, and `SampleLongitude` columns as `depth`, `lat`, and `lon`.
 
-5. Use `left_join` to combine the metadata with the chemistry data you created in exercise one.  Use the `StationID` column as the key. Save it as a new object in your environment.  
+1. Use `left_join` to combine the metadata with the chemistry data you created in exercise one.  Use the `StationID` column as the key. Save it as a new object in your environment.  
 
-6. Check the dimensions of the new table.  How many rows do we have compared to the original chemistry data? How many columns?  
+1. Check the dimensions of the new table.  How many rows do we have compared to the original chemistry data? How many columns?  
 
 <div class="fold s o">
 ```{r results = 'hide'}
@@ -253,7 +255,7 @@ table4a %>%
 
 Gathering can be graphically demonstrated:
 
-![](figure/tidy-8.png)
+![](figure/tidy-9.png)
 
 ### Spreading
 
@@ -283,13 +285,199 @@ Spreading can be graphically demonstrated:
 
 ## Exercise 3
 
+Let's take a look at our combined dataset we created in exercise 2.  Are these tidy data?  What rules do they violate?  We can use the functions in the `tidyr` package from the tidyverse to make these data tidy.  
 
+1. Inspect the combined dataset you created in exercise 2.  What are the dimensions (hint: `dim`)?  What are the names and column types (hint: `str`)?  
+
+1. We need to make these data tidy. Which column is your key?  Which column is the value?  
+
+1. Use the `spread` function to make the data tidy.  Assign the new tidy dataset to a variable in your environment. 
+
+1. Check the dimensions and structure of your new dataset. What's different?
+
+1. Rename the `Total Organic Carbon` column to `TOC`.  You can use the `rename` function but you have to enclose the old column name with backticks (the second symbol on the tilde key).  Any variable with spaces or non-standard characters can be referenced by enclosing it with backticks (see [here](http://adv-r.had.co.nz/Environments.html#binding)).
+
+<div class = "fold o s">
+```{r, results = 'hide'}
+# check dimensions, structure 
+dim(alldat)
+str(alldat)
+
+# tidy alldat
+tidydat <- alldat %>% 
+  spread(key = 'Parameter', value = 'Result')
+
+# check dimensions, structure
+dim(tidydat)
+str(tidydat)
+
+# rename to TOC
+tidydat <- tidydat %>% 
+  rename(
+    TOC = `Total Organic Carbon`
+  )
+```
+</div>
+
+## Group by and summarize
+
+The last tool we're going to learn about in `dplyr` is the `summarize` function.  As the name implies, this function lets you summarize columns in a dataset.  Think of it as a way to condense rows using a summary method of your choice, e.g., what's the average of the values in a column? 
+
+The summarize function is most useful with the `group_by` function.  This function lets you define a column that serves as a grouping variable for developing separate summaries, as compared to summarizing the entire dataset.  The `group_by` function works with any `dplyr` function so it can be quite powerful.
+
+Let's return to our `mpg` dataset.  
+
+```{r}
+head(mpg)
+```
+
+This is not a terribly interesting dataset until we start to evaluate some of the differences.  It's also setup in a way to let us easily group by different variables.  We could ask a simple question: how does highway mileage differ by manufacturer?
+
+First we can use `group_by`. Notice the new information at the top of the output.
+```{r}
+by_make <- group_by(mpg, manufacturer)
+by_make
+```
+
+We can then `summarize` to get the average mileage by group.
+```{r}
+by_make <- summarize(by_make, ave_hwy = mean(hwy))
+by_make
+```
+
+Of course, this can also (and should) be done with pipes:
+```{r}
+by_make <- mpg %>% 
+  group_by(manufacturer) %>% 
+  summarize(ave_hwy = mean(hwy))
+by_make
+```
+
+We can group the dataset by more than one column to get summarizes with multiple groups. Here we can look at mileage by each unique combination of year and drive-traing (forward, rear, all)
+```{r}
+by_yr_drv <- mpg %>% 
+  group_by(year, drv) %>% 
+  summarize(ave_hwy = mean(hwy))
+by_yr_drv
+```
+
+We can also get more than one summary at a time.  The summary function can use any function that operates on a vector.  Some common examples include `min`, `max`, `sd`, `var`, `median`, `mean`, and `n`.  It's usually good practice to include a summary of how many observations were in each group, so get used to including the `n` function.
+```{r}
+more_sums <- mpg %>% 
+  group_by(manufacturer) %>% 
+  summarize(
+    n = n(), 
+    min_hwy = min(hwy), 
+    max_hwy = max(hwy),
+    ave_hwy = mean(hwy)
+  )
+more_sums
+```
+
+The `group_by` function can work with both categorical and numeric variables.  In most cases, summarizing by a numeric variable will not be very informative because of many unique observations that define a "group".  We can categorize a continuous variable to make the summary more informative.  For example, maybe we want to summarize some data based on observations that are "low" or "high" for a continous variable.  We can make a new categorical variable and use the tricks we just learned to sumarize by the new grouping.
+
+Let's look at the displacement variable in the mpg dataset.  This is a measure of engine size.
+```{r}
+mean(mpg$displ)
+range(mpg$displ)
+```
+
+Maybe we want to summarize mileage for engines that are small or large. Let's replace the original displacement column with one that categorizes engine size using the average value as the breakpoint.
+```{r}
+displ_cat <- mpg %>% 
+  mutate(
+    displ = ifelse(displ < 3.47, 'small', 'large')
+  )
+displ_cat
+```
+
+Now we can group and summarize.
+```{r}
+displ_cat <- displ_cat %>% 
+  group_by(displ) %>% 
+  summarize(
+    n = n(), 
+    sd_hwy = sd(hwy),
+    ave_hwy = mean(hwy)
+  )
+displ_cat
+```
+
+The `ifelse` function works fine for a simple case but what if we want to create more than two categories?  You can accomplish this with repeated `ifelse` statements but this gets messy.  For multiple categories, you can use the `cut` function from base R.  
+
+The two important arguments in cut are the `breaks` and `labels` that define the cut points and the respective labels for the groups.  The labels should always have one less value than breaks.  For example, cutting a numeric vector at two points requires four values: absolute minimum, cut point one, cut point two, and absolute maximum.  This ensure that the breaks completely describe three groups
+
+Let's cut the displacement columns into three groups for small, medium, and large engines.  The cut points are up to us but for this example we'll use the 33rd and 66th percentile.
+
+```{r}
+quantile(mpg$displ, probs = c(0.33, 0.66))
+```
+
+We'll use cut with the quantiles above and summarize highway mileage by the new groups.
+```{r}
+displ_cat <- mpg %>% 
+  mutate(
+    displ = cut(displ, breaks = c(-Inf, 2.5, 4, Inf), labels = c('small', 'medium', 'large'))
+    ) %>% 
+  group_by(displ) %>% 
+  summarize(
+    n = n(),
+    std_hwy = sd(hwy), 
+    ave_hwy = mean(hwy)
+  )
+displ_cat
+```
+
+Finally, many of the summary functions we've used (e.g., `mean`, `quantile`, `sd`) will not work correctly if there are missing observations in your data.  You'll see these as `NA` entries in a cell.  You have to use the argument `na.rm = T` to explicitly tell R how to handle the missing values.  
+```{r}
+x <- c(1, 2, NA, 4)
+mean(x)
+mean(x, na.rm = T)
+```
+
+A quick check for missing values can be done with `anyNA`. This works on vectors and data frames.
+```{r}
+anyNA(x)
+```
+
+## Exercise 4
+
+Now we have access to a several tools in the tidyverse to help us wrangle more effectively.  For the final exercise, we're going to get some summary data on our Bight dataset.  We're going to summarize by depth, which will require us to create a categorical variable.  One this is done we'll see how chlorophyll varies with shallow and deep depths. Don't forget that you'll have to use the optional argument `na.rm = T` if you have missing values (hint `anyNA(tidydat$Total_CHL)`. 
+
+1. Using the tidy data we created in exercise 3, take a look at the range of values in the depth column (hint `range(tidydat$depth)` or look at quantiles with `quantile`). 
+
+1. Pick some cut points for the depth column to define the difference between shallow and deep depths. Use the `cut` function with `mutate` to create a new categorical column for depth.  Call this new column `depth_cat`.
+
+1. Group the dataset by the new depth variable using `group_by`. 
+
+1. Get some summaries of chlorophyll using `summarize`. Try to get the number of samples, average, median, and variance of observations (hint: `n`, `mean`, `median`, `var`). Don't forget to use `na.rm = T` if there are missing observations. Did you get the summaries you wanted?
+
+1. Repeat the exercise but create more categories for depth (e.g., shallow, mid, deep).  Do you still see the same patterns?
+
+<div class = 'fold o s'>
+```{r results = 'hide'}
+sumdat <- tidydat %>% 
+  mutate(
+    depth_cat = cut(depth, breaks = c(-Inf, 15, 150, Inf), labels = c('shallow', 'mid', 'deep'))
+  ) %>% 
+  group_by(depth_cat) %>% 
+  summarize(
+    n = n(), 
+    ave_chl = mean(Total_CHL, na.rm = T),
+    med_chl = median(Total_CHL, na.rm = T),
+    var_chl = var(Total_CHL, na.rm = T)
+  )
+sumdat
+```
+</div>
 
 ## Next time 
 
 Now you should be able to answer (or be able to find answers to) the following:
 
 * How are data joined?
+* What is tidy data?
+* How do I summarize a dataset?
 
 Next time we'll learn about data visualization and graphics. 
 
