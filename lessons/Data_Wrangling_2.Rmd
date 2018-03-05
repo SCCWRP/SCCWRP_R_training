@@ -30,11 +30,11 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 ## Today's goals
 
-Today we'll continue our discussion of data wrangling with the tidyverse. Data wrangling is the manipulation or combination of datasets for the purpose of analysis.  It fits within the broader scheme of **data exploration**, described as the art of looking at your data, rapidly generating hypotheses, quickly testing them, then repeating again and again and again (from [R for Data Science](http://r4ds.had.co.nz/)). 
+Today we'll continue our discussion of data wrangling with the tidyverse. Data wrangling is the manipulation or combination of datasets for the purpose of understanding.  It fits within the broader scheme of **data exploration**, described as the art of looking at your data, rapidly generating hypotheses, quickly testing them, then repeating again and again and again (from [R for Data Science](http://r4ds.had.co.nz/), as is most of today's content). 
 
 ![](figure/data-science-wrangle.png)
 
-We learned the following functions from the `dplyr` package (cheatsheet [here](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)):
+Last time we learned the following functions from the `dplyr` package (cheatsheet [here](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)):
 
 * Selecting specific variables with `select`
 * Filtering observations by some criteria with `filter`
@@ -57,7 +57,7 @@ Today you should be able to answer (or be able to find answers to) the following
 * What is tidy data?
 * How do I summarize a dataset?
 
-You should already have the tidyverse installed, but let's give it a go if you haven't done this part yet:
+You should already have the tidyverse and read_exel packages installed, but let's give it a go if you haven't done this part yet:
 
 ```{r eval = F}
 # install 
@@ -66,8 +66,9 @@ install.packages('tidyverse')
 
 After installation, we can load the package:
 ```{r message = T}
-# load
+# load, readxl has to be loaded explicitly
 library(tidyverse)
+library(readxl)
 ```
 
 ## Exercise 1
@@ -82,7 +83,7 @@ As a refresher and to get our brains working, we're going to repeat the final ex
 
 1. Make a folder in your project called `data`. You should have downloaded this already, but if not, download the Bight dataset from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx). Also download some metadata about the Bight stations from here: [https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx). Copy these files into the `data` folder in your project.
 
-1. Add some lines to your script to import and store the chemistry data in your Enviroment. Remember that the data should be in your `data` folder in your project.  The `read_excel` function from the `readxl` package is your friend here and the path is `"data/B13 Chem data.xlsx"`.  Remember to install/load the `readxl` library and to assign the data to a variable (`<-`)
+1. Add some lines to your script to import and store the chemistry data in your Enviroment. The `read_excel` function from the `readxl` package is your friend here and the path is `"data/B13 Chem data.xlsx"`.  Remember to load `readxl` and assign the data to a variable (`<-`)
 
 1. Load the `tidyverse` and use functions from the `dplyr` package to subset the data.  If you can, try to use pipes to link your functions.
      * Select the columns `StationID`, `Parameter`, and `Result`
@@ -150,7 +151,7 @@ There you have it.  As a side note, this is also a one-to-many join (i.e., there
 
 ## Exercise 2
 
-For this exercise we'll two datasets from Bight13.  We're going to use the wrangled dataset we created in exercise 1, import a metadata table with lat/lon, and join the two by StationID.  We'll have to do a bit of wrangling with the metadata.   
+For this exercise we'll use two datasets from Bight13.  We're going to use the wrangled dataset we created in exercise 1, import a metadata table with lat/lon, and join the two by StationID.  We'll have to do a bit of wrangling with the metadata.   
 
 1. Make sure you have the wrangled chemistry data in your environment from exercise 1 (check with `ls()` or the Environment pane in RStudio).  If not, run the code in the answer box above. 
 
@@ -187,9 +188,9 @@ dim(alldat)
 
 ## Tidy data
 
-The opposite of a tidy dataset is a messy dataset.  You should always strive to create a tidy data set as an outcome of the wrangling process.  Tidy data are easy to work with and will make downstream analysis much simplier.  This will become apparent when we start summarizing and plotting our data.  
+The opposite of a tidy dataset is a messy dataset.  You should always strive to create a tidy data set as an outcome of the wrangling process.  Tidy data are easy to work with and will make downstream analysis much simpler.  This will become apparent when we start summarizing and plotting our data.  
 
-You can represent the same underlying data in multiple ways. The example below shows the same data organised in four different ways. Each dataset shows the same values of four variables *country*, *year*, *population*, and *cases*, but each dataset organises the values in a different way. Only one of these examples is tidy.
+To help understand tidy data, it's useful to look at alternative ways of represenging data. The example below shows the same data organised in four different ways. Each dataset shows the same values of four variables *country*, *year*, *population*, and *cases*, but each dataset organises the values in a different way. Only one of these examples is tidy.
 
 ```{r}
 table1
@@ -442,7 +443,7 @@ anyNA(x)
 
 ## Exercise 4
 
-Now we have access to a several tools in the tidyverse to help us wrangle more effectively.  For the final exercise, we're going to get some summary data on our Bight dataset.  We're going to summarize by depth, which will require us to create a categorical variable.  One this is done we'll see how chlorophyll varies with shallow and deep depths. Don't forget that you'll have to use the optional argument `na.rm = T` if you have missing values (hint `anyNA(tidydat$Total_CHL)`. 
+Now we have access to a several tools in the tidyverse to help us wrangle more effectively.  For the final exercise, we're going to get some summary data on our Bight dataset.  We're going to summarize by depth, which will require us to create a categorical variable.  One this is done we'll see how chlorophyll varies with shallow and deep depths. Don't forget that you'll have to use the optional argument `na.rm = T` if you have missing values (hint `anyNA(tidydat$Total_CHL)` to check). 
 
 1. Using the tidy data we created in exercise 3, take a look at the range of values in the depth column (hint `range(tidydat$depth)` or look at quantiles with `quantile`). 
 
