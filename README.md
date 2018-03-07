@@ -23,6 +23,7 @@ All trainings will be in the medium conference room from **1 - 3 pm**.  Attendan
           * [chemistry](http://bit.ly/2Gpgzil)
           * [metadata](http://bit.ly/2sCBtbV)
      * [sign in](https://goo.gl/forms/dvr3JmP8ijppzMDh1)
+     * [feedback](https://goo.gl/forms/89CUTgLBHr3fHXmS2)
 4) **3/14** Visualization and graphics 
 
 ## Software requirements

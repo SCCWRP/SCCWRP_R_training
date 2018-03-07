@@ -34,20 +34,20 @@ Today we'll continue our discussion of data wrangling with the tidyverse. Data w
 
 ![](figure/data-science-wrangle.png)
 
-Last time we learned the following functions from the `dplyr` package (cheatsheet [here](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)):
-
-* Selecting specific variables with `select`
-* Filtering observations by some criteria with `filter`
-* Adding or modifying existing variables with `mutate`
-* Renaming variables with `rename`
-* Arranging rows by a variable with `arrange`
-
 Always remember that **wrangling is based on a purpose.** The process always begins by answering the following two questions:
 
 * What do my input data look like?
 * What should my input data look like given what I want to do?
 
 You define what steps to take to get your data from input to where you want to go.
+
+Last time we learned the following functions from the `dplyr` package (cheatsheet [here](https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf)):
+
+* Selecting variables with `select`
+* Filtering observations by some criteria with `filter`
+* Adding or modifying existing variables with `mutate`
+* Renaming variables with `rename`
+* Arranging rows by a variable with `arrange`
 
 As before, we only have two hours to cover the basics of data wrangling. It’s an unrealistic expectation that you will be a ninja wrangler after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.
 
@@ -57,7 +57,7 @@ Today you should be able to answer (or be able to find answers to) the following
 * What is tidy data?
 * How do I summarize a dataset?
 
-You should already have the tidyverse and read_exel packages installed, but let's give it a go if you haven't done this part yet:
+You should already have the tidyverse and readxl packages installed, but let's give it a go if you haven't done this part yet:
 
 ```{r eval = F}
 # install 
@@ -73,7 +73,7 @@ library(readxl)
 
 ## Exercise 1
 
-As a refresher and to get our brains working, we're going to repeat the final exercise from our training last week.  In this exercise, we'll make a new project in RStudio and create a script for importing and working with these data today.  Alternatively, you can use an existing project from last time.
+As a refresher and to get our brains working, we're going to repeat the final exercise from our training last week.  In this exercise, we'll make a new project in RStudio and create a script for importing and working with some Bight data today.  Alternatively, you can use an existing project from last time.
 
 1. Create a new project in RStudio or use an existing project from last time. If creating a new project, name it "wrangling_workshop_pt2" or something similar.
 
@@ -190,7 +190,7 @@ dim(alldat)
 
 The opposite of a tidy dataset is a messy dataset.  You should always strive to create a tidy data set as an outcome of the wrangling process.  Tidy data are easy to work with and will make downstream analysis much simpler.  This will become apparent when we start summarizing and plotting our data.  
 
-To help understand tidy data, it's useful to look at alternative ways of represenging data. The example below shows the same data organised in four different ways. Each dataset shows the same values of four variables *country*, *year*, *population*, and *cases*, but each dataset organises the values in a different way. Only one of these examples is tidy.
+To help understand tidy data, it's useful to look at alternative ways of representing data. The example below shows the same data organised in four different ways. Each dataset shows the same values of four variables *country*, *year*, *population*, and *cases*, but each dataset organises the values in a different way. Only one of these examples is tidy.
 
 ```{r}
 table1
@@ -346,7 +346,7 @@ by_make <- summarize(by_make, ave_hwy = mean(hwy))
 by_make
 ```
 
-Of course, this can also (and should) be done with pipes:
+Of course, this can (and should) be done with pipes:
 ```{r}
 by_make <- mpg %>% 
   group_by(manufacturer) %>% 
@@ -354,7 +354,7 @@ by_make <- mpg %>%
 by_make
 ```
 
-We can group the dataset by more than one column to get summarizes with multiple groups. Here we can look at mileage by each unique combination of year and drive-traing (forward, rear, all)
+We can group the dataset by more than one column to get summaries with multiple groups. Here we can look at mileage by each unique combination of year and drive-train (forward, rear, all)
 ```{r}
 by_yr_drv <- mpg %>% 
   group_by(year, drv) %>% 
@@ -375,7 +375,7 @@ more_sums <- mpg %>%
 more_sums
 ```
 
-The `group_by` function can work with both categorical and numeric variables.  In most cases, summarizing by a numeric variable will not be very informative because of many unique observations that define a "group".  We can categorize a continuous variable to make the summary more informative.  For example, maybe we want to summarize some data based on observations that are "low" or "high" for a continous variable.  We can make a new categorical variable and use the tricks we just learned to sumarize by the new grouping.
+The `group_by` function can work with both categorical and numeric variables.  In most cases, summarizing by a numeric variable will not be very informative because of many unique observations that define a "group".  We can categorize a continuous variable to make the summary more informative.  For example, maybe we want to summarize some data based on observations that are "low" or "high" for a continous variable.  We can make a new categorical variable and use the tricks we just learned to summarize by the new grouping.
 
 Let's look at the displacement variable in the mpg dataset.  This is a measure of engine size.
 ```{r}
@@ -406,15 +406,15 @@ displ_cat
 
 The `ifelse` function works fine for a simple case but what if we want to create more than two categories?  You can accomplish this with repeated `ifelse` statements but this gets messy.  For multiple categories, you can use the `cut` function from base R.  
 
-The two important arguments in cut are the `breaks` and `labels` that define the cut points and the respective labels for the groups.  The labels should always have one less value than breaks.  For example, cutting a numeric vector at two points requires four values: absolute minimum, cut point one, cut point two, and absolute maximum.  This ensure that the breaks completely describe three groups
+The two important arguments in cut are the `breaks` and `labels` that define the cut points and the respective labels for the groups.  The labels should always have one less value than breaks.  For example, cutting a numeric vector at two points requires four values: absolute minimum, cut point one, cut point two, and absolute maximum.  This ensures that the breaks completely describe three groups.
 
-Let's cut the displacement columns into three groups for small, medium, and large engines.  The cut points are up to us but for this example we'll use the 33rd and 66th percentile.
+Let's cut the displacement column into three groups for small, medium, and large engines.  The cut points are up to us but for this example we'll use the 33rd and 66th percentile.
 
 ```{r}
 quantile(mpg$displ, probs = c(0.33, 0.66))
 ```
 
-We'll use cut with the quantiles above and summarize highway mileage by the new groups.
+We'll use cut with the quantiles above (with min/max bounds) and summarize highway mileage by the new groups.
 ```{r}
 displ_cat <- mpg %>% 
   mutate(
@@ -429,7 +429,7 @@ displ_cat <- mpg %>%
 displ_cat
 ```
 
-Finally, many of the summary functions we've used (e.g., `mean`, `quantile`, `sd`) will not work correctly if there are missing observations in your data.  You'll see these as `NA` entries in a cell.  You have to use the argument `na.rm = T` to explicitly tell R how to handle the missing values.  
+Finally, many of the summary functions we've used (e.g., `mean`, `quantile`, `sd`) will not work correctly if there are missing observations in your data.  You'll see these as `NA` (or sometimes `NaN`) entries.  You have to use the argument `na.rm = T` to explicitly tell R how to handle the missing values.  
 ```{r}
 x <- c(1, 2, NA, 4)
 mean(x)
@@ -443,11 +443,11 @@ anyNA(x)
 
 ## Exercise 4
 
-Now we have access to a several tools in the tidyverse to help us wrangle more effectively.  For the final exercise, we're going to get some summary data on our Bight dataset.  We're going to summarize by depth, which will require us to create a categorical variable.  One this is done we'll see how chlorophyll varies with shallow and deep depths. Don't forget that you'll have to use the optional argument `na.rm = T` if you have missing values (hint `anyNA(tidydat$Total_CHL)` to check). 
+Now we have access to a several tools in the tidyverse to help us wrangle more effectively.  For the final exercise, we're going to get some summary data on our Bight dataset.  We're going to summarize by depth, which will require us to create a categorical variable.  Once this is done we'll see how chlorophyll varies with shallow and deep depths. Don't forget that you'll have to use the optional argument `na.rm = T` if you have missing values (hint `anyNA(tidydat$Total_CHL)` to check). 
 
 1. Using the tidy data we created in exercise 3, take a look at the range of values in the depth column (hint `range(tidydat$depth)` or look at quantiles with `quantile`). 
 
-1. Pick some cut points for the depth column to define the difference between shallow and deep depths. Use the `cut` function with `mutate` to create a new categorical column for depth.  Call this new column `depth_cat`.
+1. Pick some cut points for the depth column to define the difference between shallow and deep depths. Use the `cut` function with `mutate` to create a new categorical column for depth.  Call this new column `depth_cat` (hint: `newdat <- mutate(newdat, depth_cat = cut(...))`)
 
 1. Group the dataset by the new depth variable using `group_by`. 
 
