@@ -375,7 +375,7 @@ more_sums <- mpg %>%
 more_sums
 ```
 
-The `group_by` function can work with both categorical and numeric variables.  In most cases, summarizing by a numeric variable will not be very informative because of many unique observations that define a "group".  We can categorize a continuous variable to make the summary more informative.  For example, maybe we want to summarize some data based on observations that are "low" or "high" for a continous variable.  We can make a new categorical variable and use the tricks we just learned to summarize by the new grouping.
+The `group_by` function can work with both categorical and numeric variables.  In most cases, summarizing by a numeric variable will not be very informative because of many unique observations that define a "group".  We can categorize a continuous variable to make the summary more informative.  For example, maybe we want to summarize some data based on observations that are "low" or "high" for a continuous variable.  We can make a new categorical variable and use the tricks we just learned to summarize by the new grouping.
 
 Let's look at the displacement variable in the mpg dataset.  This is a measure of engine size.
 ```{r}

@@ -1,0 +1,82 @@
+---
+output:
+  html_document:
+    css: css/styles.css
+---
+
+```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
+options(repos = "http://cran.rstudio.com/")
+pkgs <- c("dplyr", "knitr")
+x<-lapply(pkgs, library, character.only = TRUE)
+opts_chunk$set(tidy = FALSE, message = F, warning = F)
+```
+
+<script src="js/hideoutput.js"></script>
+
+# Visualization and Graphics
+
+## Lesson Outline
+
+* [Base R graphics]
+* [GGplot2]
+* [Saving your plots]
+
+## Lesson Exercises
+
+* [Exercise 1]
+* [Exercise 2]
+* [Exercise 3]
+* [Exercise 4]
+
+# Today's goals
+
+Our final workshop will introduce you to concepts of data visualization and graphics in R.  The entire workflow of data exploration is enhanced through looking at your data, whether you're creating publication-ready figures or you're exploring a dataset for the first time. Viewing your data provides insight into patterns that can help you explore different hypotheses.  No analysis is complete without a nice graphic.  
+
+![](figure/data-science.png)
+
+Graphics capabilities in R have improved tremendously in the last ten years. The de facto plotting library is `ggplot2` as part of the `tidyverse`, but there are many other packages available that enhance or build on existing functionality.  The base R installation comes with it's own set of plotting functions.  These are useful for quick and dirty exploration but you'll quickly find that these methods are tedious.  We'll start the lesson today with a cursory look at some of the base R plotting functions.  Most of what we'll discuss today will focus on ggplot2.
+
+As before, we only have two hours to cover the basics of graphiing in R. It’s an unrealistic expectation that you will be a graphics ninja after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.
+
+Today you should be able to answer (or be able to find answers to) the following:
+
+* What can I do with base R plots?
+* What are the four requirements of every ggplot?
+* What are geoms?
+* What are facets?
+* What are themes?
+* How do I save a plot?
+
+## Exercise 1
+
+Once again, we're going to start the workshop by setting up a script in a new or existing RStudio project. We're going to work with the fully wrangled dataset we created at the end of the last training.  In the interest of time, you can download the formatted data [here]().  
+
+1. Creat
+
+## Base R graphics
+
+
+## Exercise 2
+
+## GGplot2
+
+## Exercise 3
+
+## Exercise 4
+
+## Saving your plots
+
+## Next time 
+
+Now you should be able to answer (or be able to find answers to) the following:
+
+* What can I do with base R plots?
+* What are the four requirements of every ggplot?
+* What are geoms?
+* What are facets?
+* What are themes?
+* How do I save a plot? 
+
+## Attribution
+
+Content in this lesson was pillaged extensively from the USGS-R training curriculum [here](https://github.com/USGS-R/training-curriculum) and [R for data Science](https://github.com/hadley/r4ds).
