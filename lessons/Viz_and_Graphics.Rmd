@@ -319,7 +319,117 @@ ggplot(chemdat, aes(x = TOC, y = Total_CHL, colour = depth_cat)) +
 
 ### Modifying plot components
 
-## Exercise 4
+There are countless we can modify a ggplot, either by manipulating the appearance or adding information that improves our understanding of what we see. 
+
+* Modifying the appearance can be done using the `theme` function for individual parts or by using a pre-packaged theme that modifies many parts at once. 
+* Adding statistical summaries with `stat_smooth`or making multi-panel plots with `facet_wrap` or `facet_grid`.
+
+First I'll show you how to modify the appearance to your liking. Individual components can be modified with `theme`.  Here the legend is moved to the top, the minor grid lines between axis ticks are removed,and the panel background is changed form gray to white. Check the help file for `theme` to see all the options.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme(
+    legend.position = 'top',
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = 'white')
+  )
+```
+
+Changing plot elements with theme can take some practice because there's lots to modify. In some respects, this is how `ggplot` is similar to base R.  Fortunately, there are several pre-packaged themes that modify several components at once.  See [here](http://ggplot2.tidyverse.org/reference/ggtheme.html) for the full documentation.  There are also additional packages available that supplement the existing themes in`ggplot` (see [here](https://github.com/jrnold/ggthemes).
+
+Black and white:
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme_bw()
+```
+
+Minimal:
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme_minimal()
+```
+
+Classic:
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme_classic()
+```
+
+The pre-packaged themes with ggplot have the added benefit of easily changing the global font types and sizes in the plot. These are modified by including the arguments `base_family` and `base_size`.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme_bw(base_family = 'serif', base_size = 16)
+```
+
+In addition to it's functional syntax, the real power of `ggplot` is to easily add components to the plot to quickly evaluate relationships or trends in the data.  Statistical relationships can be added with `stat_smooth`. 
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  stat_smooth()
+```
+
+Notice that we get one smooth for each type of drive train. This is because we've mapped colour to the drive train. Both the `geom_smooth` and `stat_smooth` functions use colour as an aesthetic so the global `aes` function applies to both.  We can change this behavior by moving the location of the `colour` aesthetic. 
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point(aes(colour = drv)) + 
+  stat_smooth()
+```
+
+By default the `stat_smooth` function uses a non-linear smooth, either a locally estimated polynomial or generalized additive model depending on size of the dataset.  We can change this using the `method` argument, as for a linear model. 
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  stat_smooth(method = 'lm')
+```
+
+Finally, `ggplot` provides some simple functions to create multi-panelled plots.  This is useful for viewing different groups of the data as they relate to a variable in the dataset. The `facet_wrap` function is one of two functions in ggplot that can be used for multi-panel plots.  This function does not recognize the aesthetics so you have to specify which variable you're using to facet. The `ncol` and `nrow` arguments also indicate how many columns or rows in the multi-panel to create.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  stat_smooth(method = 'lm') + 
+  facet_wrap(~ drv, ncol = 3)
+```
+
+The `scales` argument is also a useful part of `facet_wrap`.  By default, the x and y axes are fixed between the panels.  You can change this behavior by using `scales = "free".  Be careful using this feature because it can cause inaccurate interpretations of the magnitude of trends between groups.
+
+```{r}
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  stat_smooth(method = 'lm') + 
+  facet_wrap(~ drv, ncol = 3,scales = 'free')
+```
+
+## Execise 4
+
+Let's modify the scatterplot we created in exercise 3 by adding a theme, a statistical summary, and facets. We'll map the `stat_smooth` function to depth category and also use this variable to create a three-panel plot.  
+
+1. Setup the initial plot as before. Map the x variable to `TOC`, the y variable to `Total_CHL`, and the colour variable to `depth_cat`. Add the `geom_point` geom and the `scale_y_continuous` scale with `trans = "log10"` to transform chlorophyll.
+
+1. Add one of the pre-packaged themes to the plot: `theme_bw()`, `theme_classic()`, or `theme_minimal()`.  You can also use any of the other themes from the tidyverse (see [here](http://ggplot2.tidyverse.org/reference/ggtheme.html)) or use one from the `ggthemes` package (see [here](https://github.com/jrnold/ggthemes)). You'll have to install and load the `ggthemes` package if using the latter.
+
+1. Add the `stat_smooth` function with the argument `method = "lm"` to add linear smooths between chlorophyll and TOC for each depth group. 
+
+1. Use `facet_wrap` to create a three-panel plot by depth category (hint: `facet_wrap(~ depth_cat, ncol = 3)`).  Try using the argument `scales = "free"`. How does this change the interpretation?  
+
+<div class="fold s o">
+```{r eval = F}
+ggplot(chemdat, aes(x = TOC, y = Total_CHL, colour = depth_cat)) +
+  geom_point() + 
+  scale_y_continuous('log-chl', trans = 'log10') + 
+  theme_minimal() + 
+  stat_smooth(method = 'lm') + 
+  facet_wrap(~ depth_cat, ncol = 3, scales = 'free')
+```
+</div>
 
 ## Saving your plots
 
