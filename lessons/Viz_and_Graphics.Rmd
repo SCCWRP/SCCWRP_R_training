@@ -19,6 +19,8 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 * [Base R graphics]
 * [GGplot2]
+     * [Basics]
+     * [Modifying plot components]
 * [Saving your plots]
 
 ## Lesson Exercises
@@ -94,14 +96,14 @@ My most frequent use for base R graphics inlude
 * Simple scatterplots to see how two variables are related
 * Histograms to explore the distribution of a variable
 
-We'll explore some of these simple tools in base R with the `mpg` dataset. The workhorse plotting function is `plot`.  Let's make a simple plot of highway vs city mileage.
+We'll explore some of these simple tools in base R with the `mpg` dataset. The workhorse plotting function is `plot`.  Let's make a simple plot of highway vs engine size.
 ```{r}
-plot(hwy ~ cty, data = mpg)
+plot(hwy ~ displ, data = mpg)
 ```
 
 We created this plot using the `formula` notation.  We can also create the plot by calling the columns directly.
 ```{r}
-plot(mpg$cty, mpg$hwy)
+plot(mpg$displ, mpg$hwy)
 ```
 
 Confusing right? Let's have a look at the help file for `plot`.
@@ -112,8 +114,8 @@ Confusing right? Let's have a look at the help file for `plot`.
 
 This help file lays out some of the basics of plot formatting. We can change the type of plot `type` argument (here, we can only use points), give it a title with `main`, change labels on the x and y axes with `xlab` and `ylab`, and change the aspect ratio with `asp`. 
 ```{r}
-plot(hwy ~ cty, data = mpg, main = 'Highway by city mileage', 
-     xlab = 'city (mpg)', ylab = 'highway (mpg)')
+plot(hwy ~ displ, data = mpg, main = 'Highway mileage by engine size', 
+     xlab = 'engine size (l)', ylab = 'highway (mpg)')
 ```
 
 The help file for the plot function also has this ambiguous `...` argument.  You'll see this argument for many functions in the help files.  This basically means that the function accepts arguments from other functions.  In this case, the plot function accepts arguments from the `par` function which is is used for setting graphical parameters in base R.  Let's look at the help file for `par`.
@@ -122,18 +124,18 @@ The help file for the plot function also has this ambiguous `...` argument.  You
 ?par
 ```
 ![](figure/par_help.png)
-The most useful section in this help file is the description of the actual graphical parameters you can set. Some useful ones are the `cex` family of arguments for sizing, `col` family of arguments for color, the `pch` argument for point types, and the `family` argument for font.  All of these arguments can be passed directly to the `plot` function or as separately with the `par` function. The effect of these arguments on the plot is different depending on how they're used.
+The most useful section in this help file is the description of the actual graphical parameters you can set. Some useful ones are the `cex` family of arguments for sizing, `col` family of arguments for color, the `pch` argument for point types, and the `family` argument for font.  All of these arguments can be passed directly to the `plot` function or separately with the `par` function. The effect of these arguments on the plot is different depending on how they're used.
 ```{r}
-plot(hwy ~ cty, data = mpg, main = 'Highway by city mileage', 
-     xlab = 'city (mpg)', ylab = 'highway (mpg)', 
+plot(hwy ~ displ, data = mpg, main = 'Highway mileage by engine size', 
+     xlab = 'engine size (l)', ylab = 'highway (mpg)', 
      col = 'blue', pch = 18, cex = 0.75, family = 'serif')
 ```
 
 Or like this...
 ```{r}
 par(col = 'blue', pch = 18, cex = 0.75, family = 'serif')
-plot(hwy ~ cty, data = mpg, main = 'Highway by city mileage', 
-     xlab = 'city (mpg)', ylab = 'highway (mpg)')
+plot(hwy ~ displ, data = mpg, main = 'Highway mileage by engine size', 
+     xlab = 'engine size (l)', ylab = 'highway (mpg)')
 ```
 
 Notice how the plots are different depending on where the additional arguments are used. Confusing, right?  You'll waste a lot of time trying to tweak the base graphics.  
@@ -150,7 +152,7 @@ hist(mpg$hwy, breaks = 20)
 
 ## Exercise 2
 
-Let's make some simple exploratory graphics of our chemistry dataset using base R.  We'll make a histogram of chlorophyll using the `hist` function, then make a scatterplot of chlorophyll versus total organic carbon using the `plot` function.  We'll also add some axis labels and titles to the plots to make it slightly more palatable.  
+Let's make some simple exploratory graphics of our chemistry dataset using base R.  We'll make a histogram of chlorophyll using the `hist` function, then make a scatterplot of chlorophyll versus total organic carbon using the `plot` function.  We'll also add a title and better axis labels to the plots to make it slightly more palatable.  
 
 1. Make a histogram of `TotalCHL` using the `hist` function.  What's the approximate range of chlorophyll?  What's the most commonly observed value?  Try changing the `breaks` argument.  
 
@@ -189,7 +191,133 @@ plot(Total_CHL ~ TOC, data = chemdat, main = 'Chlorophyll vs TOC for Bight08',
 
 ## GGplot2
 
+### Basics
+
+The `ggplot2` package is a huge improvement over base R because it was developed following a strict philosophy known as the *grammar of graphics*.  This philosophy was designed to make thinking, reasoning, and communicating about graphs easier by following a few simple rules.  Like building a sentence (aka grammar), all graphs start with a foundational component that is used for building other graph pieces.  
+
+With ggplot2, you begin a plot with the function `ggplot()`. `ggplot()` creates a coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So `ggplot(data = mpg)` creates an empty graph.
+
+You complete your graph by adding one or more layers (aka `geoms`) to `ggplot()`. The function `geom_point()` adds a layer of points to your plot, which creates a scatterplot. ggplot2 comes with many geom functions that each add a different type of layer to a plot.
+
+Each geom function in ggplot2 takes a `mapping` argument. This defines how variables in your dataset are mapped to visual properties. The `mapping` argument is always paired with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. ggplot2 looks for the mapped variable in the `data` argument, in this case, `mpg`
+
+Just remember these requirements:
+
+* All ggplot plots start with the `ggplot` function
+* It will need two pieces of information, the **data** and how the data are **mapped** to the plot **aesthetics**
+* This says, make a `ggplot` object for the iris **data**, where the variables disp and mpg are **mapped** to the x and y **aesthetics**
+
+The core unit of every ggplot looks like this:
+
+```{r eval = FALSE}
+ggplot(data = <DATA>) + 
+  <GEOM_FUNCTION>(mapping = aes(<MAPPINGS>))
+```
+
+Applied to the data:
+
+```{r}
+ggplot(data = mpg) + 
+  geom_point(aes(x = displ, y = hwy))
+```
+
+More commonly, the `aes` function that defines the mapping is included in the initial call to `ggplot`.  This will globally define the mapping to all geoms in a plot, instead of for only one geom. 
+
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_point()
+```
+
+Why the need for this complicated structure? The syntax of mapping aesthetics to a dataset lets you easily modify components of an existing plot.  Additional datasets and geoms can easily be added to the plot with `+`.  
+
+Let's explore some of the other geoms. 
+
+As lines...
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_line()
+```
+
+As counts...
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_count()
+```
+
+As density...
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_density2d()
+```
+
+As a line range...
+```{r eval = F}
+ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_linerange()
+```
+```
+Error: geom_linerange requires the following missing aesthetics: ymin, ymax
+Execution halted
+```
+Oh snap, what happened? This error is telling us that the geom we just tried is missing some required aesthetics in the plot.  Here we've only used the `x` and `y` aesthetics but it looks like it requires `ymin` and `ymax`.  Lets look at the help file for `geom_linerange`.
+
+```{r eval = F}
+?geom_linerange
+```
+![](figure/aesreq.png)
+
+Looks like we don't have the required aeshetics, nor does it make sense to use this geom.  What about the requirements for `geom_point`?
+
+```{r eval = F}
+?geom_point
+```
+![](figure/aesreq2.png)
+
+We've got the required aesthetics in our plot. Let's add some others that we can use with `geom_point`.
+
+Changing the color:
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point()
+```
+
+Changing the size:
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, size = displ)) + 
+  geom_point()
+```
+
+Changing the shapes:
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy, shape = drv)) + 
+  geom_point()
+```
+
+In all of the above examples we've mapped an aesthetic to a variable in our dataset. We can just as easily modify the plot without mapping it to a variable (i.e., just change a part of the plot independent of the data).  For example, maybe we want to change the color of the points using a single color.
+```{r}
+ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+  geom_point(colour = 'red')
+```
+
 ## Exercise 3
+
+Let's reproduce the scatterplot we created in exercise 2 using ggplot. This requires us to map the `TOC` and `TotalCHL` variables to the x and y aesthetics for `geom_point`. 
+
+1. Setup your initial plot with `ggplot`.  Map the x variable to `TOC`, the y variable to `Total_CHL`, and the colour variable to `depth_cat`.  The setup should look like this: `ggplot(chemdat, ases(x = TOC, y = TotalCHL, colour = depth_cat))`).  What happens if you run only this code?
+
+1. Add the `geom_point` geom to your plot using the `+` operator. Remember the correct placement, it never occurs at the start of a line.
+
+1. Chlorophyll follows a log-normal distribution.  We can easily transform the y-axis by adding a scale. Add the following after `geom_point` (remember to put a `+` after `geom_point`): `scale_y_continuous('log-chl`, trans = 'log10')`. 
+
+<div class="fold s o">
+```{r eval = F}
+ggplot(chemdat, aes(x = TOC, y = Total_CHL, colour = depth_cat)) +
+  geom_point() + 
+  scale_y_continuous('log-chl', trans = 'log10')
+```
+</div>
+
+### Modifying plot components
 
 ## Exercise 4
 
