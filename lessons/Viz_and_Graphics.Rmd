@@ -49,9 +49,41 @@ Today you should be able to answer (or be able to find answers to) the following
 
 ## Exercise 1
 
-Once again, we're going to start the workshop by setting up a script in a new or existing RStudio project. We're going to work with the fully wrangled dataset we created at the end of the last training.  In the interest of time, you can download the formatted data [here]().  
+Once again, we're going to start the workshop by setting up a script in a new or existing RStudio project. We're going to work with the fully wrangled dataset we created at the end of the last training.  In the interest of time, you can download the formatted data [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx).  This dataset is the joined sediment chemistry and station data for Bight08. We've already selected and renamed the columns we need from the chemistry data, filtered the data to get the parameters we want, and joined it with the station data to include latitude, longitude, and depth.  As a final step, we'll create a new categorical column for depth using the `cut` function.  
 
-1. Creat
+1. Create a new project in RStudio or use an existing project from last time. If creating a new project, name it "viz_workshop" or something similar.
+
+1. Create a new "R Script" in the Source (scripting) Panel, save that file into your project and name it "graphics_and_viz.R".
+
+1. Add in a comment line at the top stating the purpose. It should look something like: `# Graphics and vizualization in R`.  At the top of this script, add some code to load the `tidyverse` and `readxl` packages.
+
+1. Make a folder in your project called `data` if don't have one already. If you haven't done so, download the formatted data from last time [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx). Copy these files into the `data` folder in your project.
+
+1. Add some lines to your script to import and store the formatted data in your Enviroment. Use the `read_excel` function to import `"data/formatted_data.csv"`. 
+
+1. Use the `cut` function with `mutate` to create a new categorical column for depth. Name it `depth_cat` and cut it at 15 and 150 meters.  Remember that `cut` has two arguments for the `breaks` and `labels`.  The `breaks` argument will look like `breaks = c(-Inf, 15, 150, Inf)` and the `labels` argument will look like `labels= c('shallow', 'mid', 'deep')`.  
+
+1. Check the data when you're done with `View` or `head`.  Also see how many values you have in each category in `depth_cat` (hint: `table(chemdat$depth_cat)`).
+
+<div class="fold s o">
+```{r results = 'hide'}
+# Graphics and vizualization in R
+
+# import libraries (use install.packages function if not found)
+library(tidyverse)
+library(readxl)
+
+# import formatted data
+# mutate depth to create a new categorical depth column
+chemdat <- read_excel('data/formatted_data.xlsx') %>% 
+  mutate(depth_cat = cut(depth, breaks = c(-Inf, 15, 150, Inf), labels = c('shallow', 'mid', 'deep')))
+
+# check data
+head(chemdat)
+View(chemdat)
+table(chemdat$depth_cat)
+```
+</div>
 
 ## Base R graphics
 
