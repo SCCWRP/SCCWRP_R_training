@@ -87,8 +87,105 @@ table(chemdat$depth_cat)
 
 ## Base R graphics
 
+In theory, all of your plotting needs can be accomplished with functions in base R.  However, they are not easy to customize and are very tedious for creating publication-quality graphics.  For these reasons, base R graphics are rarely taught but I believe they still serve a purpose in the data exploration workflow. Base R graphics are extremely fast and simple to use for exploring data. I caution you in using these functions for anything beyond simple exploration.
+
+My most frequent use for base R graphics inlude
+
+* Simple scatterplots to see how two variables are related
+* Histograms to explore the distribution of a variable
+
+We'll explore some of these simple tools in base R with the `mpg` dataset. The workhorse plotting function is `plot`.  Let's make a simple plot of highway vs city mileage.
+```{r}
+plot(hwy ~ cty, data = mpg)
+```
+
+We created this plot using the `formula` notation.  We can also create the plot by calling the columns directly.
+```{r}
+plot(mpg$cty, mpg$hwy)
+```
+
+Confusing right? Let's have a look at the help file for `plot`.
+```{r eval = F}
+?plot
+```
+![](figure/plot_help.PNG)
+
+This help file lays out some of the basics of plot formatting. We can change the type of plot `type` argument (here, we can only use points), give it a title with `main`, change labels on the x and y axes with `xlab` and `ylab`, and change the aspect ratio with `asp`. 
+```{r}
+plot(hwy ~ cty, data = mpg, main = 'Highway by city mileage', 
+     xlab = 'city (mpg)', ylab = 'highway (mpg)')
+```
+
+The help file for the plot function also has this ambiguous `...` argument.  You'll see this argument for many functions in the help files.  This basically means that the function accepts arguments from other functions.  In this case, the plot function accepts arguments from the `par` function which is is used for setting graphical parameters in base R.  Let's look at the help file for `par`.
+
+```{r eval = F}
+?par
+```
+![](figure/par_help.png)
+The most useful section in this help file is the description of the actual graphical parameters you can set. Some useful ones are the `cex` family of arguments for sizing, `col` family of arguments for color, the `pch` argument for point types, and the `family` argument for font.  All of these arguments can be passed directly to the `plot` function or as separately with the `par` function. The effect of these arguments on the plot is different depending on how they're used.
+```{r}
+plot(hwy ~ cty, data = mpg, main = 'Highway by city mileage', 
+     xlab = 'city (mpg)', ylab = 'highway (mpg)', 
+     col = 'blue', pch = 18, cex = 0.75, family = 'serif')
+```
+
+Or like this...
+```{r}
+par(col = 'blue', pch = 18, cex = 0.75, family = 'serif')
+plot(hwy ~ cty, data = mpg, main = 'Highway by city mileage', 
+     xlab = 'city (mpg)', ylab = 'highway (mpg)')
+```
+
+Notice how the plots are different depending on where the additional arguments are used. Confusing, right?  You'll waste a lot of time trying to tweak the base graphics.  
+
+The `hist` (histogram) function is the only other plotting function from base R that is worth showing.  This gets you info on the basic distribution of a variable and is a graphical way of assessing the spread and central tendency (e.g., mean) of a variable.  
+```{r}
+hist(mpg$hwy)
+```
+
+The only useful argument in `hist` is `breaks` that controls the number of bins. 
+```{r}
+hist(mpg$hwy, breaks = 20)
+```
 
 ## Exercise 2
+
+Let's make some simple exploratory graphics of our chemistry dataset using base R.  We'll make a histogram of chlorophyll using the `hist` function, then make a scatterplot of chlorophyll versus total organic carbon using the `plot` function.  We'll also add some axis labels and titles to the plots to make it slightly more palatable.  
+
+1. Make a histogram of `TotalCHL` using the `hist` function.  What's the approximate range of chlorophyll?  What's the most commonly observed value?  Try changing the `breaks` argument.  
+
+1. Make a scatterplot of `TotalCHl` versus `TOC`with the `plot` function.  Try creating the plot using the `formula` notation (hint: `TotalCHL ~ TOC`).  Remember you have to use the `data` argument when you're using the formula. 
+
+1. Give the plot an informative title using the `main`argument directly in the plot function, something like `main = "Chlorophyll vs TOC for Bight08"`.
+
+1. Change the axis labels to include the units, something like `xlab = "Chl (ug/L)", ylab = "TOC (%)"`.
+
+1. Use `par` before the `plot` function to change the font to `serif`, (hint: `par(family = "serif"))`).
+
+<div class="fold s o">
+```{r eval = F}
+# histogram
+hist(chemdat$Total_CHL)
+
+# histogram, change breaks
+hist(chemdat$Total_CHL, breaks = 20)
+
+# scatterplot
+plot(Total_CHL ~ TOC, data = chemdat)
+
+# scatterplot with title
+plot(Total_CHL ~ TOC, data = chemdat, main = 'Chlorophyll vs TOC for Bight08')
+
+# scatterplot with title and better axis labels
+plot(Total_CHL ~ TOC, data = chemdat, main = 'Chlorophyll vs TOC for Bight08',
+     xlab = 'TOC (%)', ylab = 'Chl (ug/L)')
+
+# change the font with par
+par(family = 'serif')
+plot(Total_CHL ~ TOC, data = chemdat, main = 'Chlorophyll vs TOC for Bight08',
+     xlab = 'TOC (%)', ylab = 'Chl (ug/L)')
+```
+</div>
 
 ## GGplot2
 
