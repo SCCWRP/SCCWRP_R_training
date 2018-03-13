@@ -38,12 +38,12 @@ Our final workshop will introduce you to concepts of data visualization and grap
 
 Graphics capabilities in R have improved tremendously in the last ten years. The de facto plotting library is `ggplot2` as part of the `tidyverse`, but there are many other packages available that enhance or build on existing functionality.  The base R installation comes with it's own set of plotting functions.  These are useful for quick and dirty exploration but you'll quickly find that these methods are tedious.  We'll start the lesson today with a cursory look at some of the base R plotting functions.  Most of what we'll discuss today will focus on ggplot2.
 
-As before, we only have two hours to cover the basics of graphiing in R. It’s an unrealistic expectation that you will be a graphics ninja after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.
+As before, we only have two hours to cover the basics of graphing in R. It’s an unrealistic expectation that you will be a graphics ninja after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.
 
 Today you should be able to answer (or be able to find answers to) the following:
 
 * What can I do with base R plots?
-* What are the four requirements of every ggplot?
+* What are the requirements of every ggplot?
 * What are geoms?
 * What are facets?
 * What are themes?
@@ -205,7 +205,6 @@ Just remember these requirements:
 
 * All ggplot plots start with the `ggplot` function
 * It will need two pieces of information, the **data** and how the data are **mapped** to the plot **aesthetics**
-* This says, make a `ggplot` object for the iris **data**, where the variables disp and mpg are **mapped** to the x and y **aesthetics**
 
 The core unit of every ggplot looks like this:
 
@@ -408,7 +407,7 @@ ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) +
   facet_wrap(~ drv, ncol = 3,scales = 'free')
 ```
 
-## Execise 4
+## Exercise 4
 
 Let's modify the scatterplot we created in exercise 3 by adding a theme, a statistical summary, and facets. We'll map the `stat_smooth` function to depth category and also use this variable to create a three-panel plot.  
 
@@ -433,12 +432,33 @@ ggplot(chemdat, aes(x = TOC, y = Total_CHL, colour = depth_cat)) +
 
 ## Saving your plots
 
+A quality plot deserves to be saved and shared.  As you can imagine, there are several ways to save a plot in RStudio.  The easiest way (which I don't recommend) is to use the export feature from the plot viewing pane.
+
+While this is convenient, you don't have fine control over many options that can really make your graphic pop.  I recommend using either the `ggsave` function that comes with the tidyverse, or preferably, one of the available graphics devices from base R (`bmp`, `jpeg`, `png`, `tiff`, `eps`, `ps`, `tex`, `svg`, `wmf`, and my favorite, `pdf`).
+
+The `ggsave` function works only with ggplot objects.  You can contol where the plot is saved, the file type, plotting dimensions, resolution, and a few other minor options.  By default, it will save the last ggplot that you made.
+
+```{r, eval = F}
+ggsave('lessons/figure/myfig.jpg', device = 'jpeg', width = 5, height = 4, units = 'in', dpi = 300)
+```
+
+The `ggsave` functions uses the graphics devices from base R behind the scenes.  You can always use these directly to save any type of plot (ggplot, base, etc.).  These work a bit differently from regular functions.  First, you "open" a graphics device by executing the function (e.g., `png()`, `jpeg()`, etc.) at the command line.  Then you execute your plot command and finish by "closing"" the device with `dev.off()`.  In a script, it will look something like this.
+
+```{r, eval = F}
+# save a plot as png file
+png('lessons/figure/myfig.jpg', width = 5, height = 4, units = 'in', res = 300, compression = 'lzw')
+plot
+dev.off()
+```
+
+The value of this approach is the ability to fine tune the output for your graphics.  You can save as many figures as you like when the graphics device is open, just make sure to use `dev.off()` when you're done.
+
 ## Next time 
 
 Now you should be able to answer (or be able to find answers to) the following:
 
 * What can I do with base R plots?
-* What are the four requirements of every ggplot?
+* What are the requirements of every ggplot?
 * What are geoms?
 * What are facets?
 * What are themes?

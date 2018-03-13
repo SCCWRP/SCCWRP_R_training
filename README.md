@@ -25,6 +25,11 @@ All trainings will be in the medium conference room from **1 - 3 pm**.  Attendan
      * [sign in](https://goo.gl/forms/dvr3JmP8ijppzMDh1)
      * [feedback](https://goo.gl/forms/89CUTgLBHr3fHXmS2)
 4) **3/14** Visualization and graphics 
+     * [content](https://SCCWRP.github.io/R_training_2018/lessons/Viz_and_Graphics.html)
+     * [exercise data](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx)
+     * [sign in](https://goo.gl/forms/dhPN22keoCP2oPTR2)
+     * [feedback](https://goo.gl/forms/CANQN3aopySufdhI2)
+     
 
 ## Software requirements
 
