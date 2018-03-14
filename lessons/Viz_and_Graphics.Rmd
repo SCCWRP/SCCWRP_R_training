@@ -466,7 +466,7 @@ The `ggsave` functions uses the graphics devices from base R behind the scenes. 
 
 ```{r, eval = F}
 # save a plot as png file
-png('lessons/figure/myfig.jpg', width = 5, height = 4, units = 'in', res = 300, compression = 'lzw')
+png('lessons/figure/myfig.png', width = 5, height = 4, units = 'in', res = 300)
 plot
 dev.off()
 ```

@@ -463,7 +463,7 @@ Execution halted</code></pre>
 <pre class="r"><code>ggsave('lessons/figure/myfig.jpg', device = 'jpeg', width = 5, height = 4, units = 'in', dpi = 300)</code></pre>
 <p>The <code>ggsave</code> functions uses the graphics devices from base R behind the scenes. You can always use these directly to save any type of plot (ggplot, base, etc.). These work a bit differently from regular functions. First, you “open” a graphics device by executing the function (e.g., <code>png()</code>, <code>jpeg()</code>, etc.) at the command line. Then you execute your plot command and finish by “closing” the device with <code>dev.off()</code>. In a script, it will look something like this.</p>
 <pre class="r"><code># save a plot as png file
-png('lessons/figure/myfig.jpg', width = 5, height = 4, units = 'in', res = 300, compression = 'lzw')
+png('lessons/figure/myfig.png', width = 5, height = 4, units = 'in', res = 300)
 plot
 dev.off()</code></pre>
 <p>The value of this approach is the ability to fine tune the output for your graphics. You can save as many figures as you like when the graphics device is open, just make sure to use <code>dev.off()</code> when you’re done.</p>
