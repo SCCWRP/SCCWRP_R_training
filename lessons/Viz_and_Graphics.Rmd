@@ -51,7 +51,7 @@ Today you should be able to answer (or be able to find answers to) the following
 
 ## Exercise 1
 
-Once again, we're going to start the workshop by setting up a script in a new or existing RStudio project. We're going to work with the fully wrangled dataset we created at the end of the last training.  In the interest of time, you can download the formatted data [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx).  This dataset is the joined sediment chemistry and station data for Bight08. We've already selected and renamed the columns we need from the chemistry data, filtered the data to get the parameters we want, and joined it with the station data to include latitude, longitude, and depth.  As a final step, we'll create a new categorical column for depth using the `cut` function.  
+We're going to start the workshop by setting up a script in a new or existing RStudio project. We're going to work with the fully wrangled dataset we created at the end of the last training.  In the interest of time, you can download the formatted data [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx).  This dataset is the joined sediment chemistry and station data for Bight08. We've already selected and renamed the columns we need from the chemistry data, filtered to get the parameters we want, and joined it with the station data to include latitude, longitude, and depth.  As a final step, we'll create a new categorical column for depth using the `cut` function.  
 
 1. Create a new project in RStudio or use an existing project from last time. If creating a new project, name it "viz_workshop" or something similar.
 
@@ -59,9 +59,9 @@ Once again, we're going to start the workshop by setting up a script in a new or
 
 1. Add in a comment line at the top stating the purpose. It should look something like: `# Graphics and vizualization in R`.  At the top of this script, add some code to load the `tidyverse` and `readxl` packages.
 
-1. Make a folder in your project called `data` if don't have one already. Place the formatted data ([download](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx)) into this folder.
+1. Make a folder in your project called `data` if you don't have one already. Place the formatted data ([download](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx)) into this folder.
 
-1. Add some lines to your script to import and store the formatted data in your Enviroment. Use the `read_excel` function to import `"data/formatted_data.csv"`. 
+1. Add some lines to your script to import and store the formatted data in your Enviroment. Use the `read_excel` function to import `"data/formatted_data.csv"`.  Assign it to a variable named "chemdat". 
 
 1. Use the the `mutate` function with `cut` to create a new categorical column for depth. Name it `depth_cat` and cut it at 15 and 150 meters.  Remember that `cut` has two arguments for the `breaks` and `labels`.  The `breaks` argument will look like `breaks = c(-Inf, 15, 150, Inf)` and the `labels` argument will look like `labels= c('shallow', 'mid', 'deep')`.  
 
@@ -89,7 +89,7 @@ table(chemdat$depth_cat)
 
 ## Base R graphics
 
-In theory, all of your plotting needs can be accomplished with functions in base R.  However, they are not easy to customize and are very tedious for creating publication-quality graphics.  For these reasons, base R graphics are rarely taught but I believe they still serve a purpose in the data exploration workflow. Base R graphics are extremely fast and simple to use for exploring data. I caution you in using these functions for anything beyond simple exploration.
+In theory, all of your plotting needs can be accomplished with functions in base R.  However, these graphics are not easy to customize and it's very tedious to create publication-quality graphics.  For these reasons, base R graphics are rarely taught but I believe they still serve a purpose in the data exploration workflow. Base R graphics are extremely fast and simple to use for exploring data. I caution you in using these functions for anything beyond simple exploration.
 
 My most frequent use for base R graphics inlude:
 
@@ -144,9 +144,21 @@ plot(hwy ~ displ, data = mpg, main = 'Highway mileage by engine size',
 
 Notice how the plots are different depending on where the additional arguments are used. Confusing, right?  You'll waste a lot of time trying to tweak the base graphics.  
 
+The `hist` (histogram) function is the only other plotting function from base R that is worth showing.  This gets you info on the basic distribution of a variable and is a graphical way of assessing the spread and central tendency (e.g., mean) of a variable.  
+```{r}
+hist(mpg$hwy)
+```
+
+The only useful argument in `hist` is `breaks` that controls the number of bins. 
+```{r}
+hist(mpg$hwy, breaks = 20)
+```
+
 ## Exercise 2
 
-Let's make some simple graphics of our chemistry dataset using base R.  We'll make a scatterplot of chlorophyll versus total organic carbon using the `plot` function.  We'll also add a title and better axis labels to the plots to make them slightly more palatable.  
+Let's make some simple graphics of our chemistry dataset using base R.  We'll make a histogram of chlorophyll and a scatterplot of chlorophyll versus total organic carbon using the `plot` function.  We'll also add a title and better axis labels to the plots to make them slightly more palatable.  
+
+1. Make a histogram of `TotalCHL` using the `hist` function.  What's the approximate range of chlorophyll?  What's the most commonly observed value?  Try changing the `breaks` argument.  
 
 1. Make a scatterplot of `TotalCHl` versus `TOC`with the `plot` function.  Try creating the plot using the `formula` notation (hint: `TotalCHL ~ TOC`).  Remember you have to use the `data` argument when you're using the formula (i.e., `data = chemdat`). 
 
@@ -158,6 +170,9 @@ Let's make some simple graphics of our chemistry dataset using base R.  We'll ma
 
 <div class="fold s o">
 ```{r eval = F}
+# histogram
+hist(chemdat$Total_CHL)
+
 # scatterplot
 plot(Total_CHL ~ TOC, data = chemdat)
 
@@ -181,16 +196,30 @@ plot(Total_CHL ~ TOC, data = chemdat, main = 'Chlorophyll vs TOC for Bight08',
 
 The `ggplot2` package (full [reference](http://ggplot2.tidyverse.org/index.html)) is a huge improvement over base R because it was developed following a strict philosophy known as the *grammar of graphics*.  This philosophy was designed to make thinking, reasoning, and communicating about graphs easier by following a few simple rules.  Like building a sentence in speech (aka grammar), all graphs start with a foundational component that is used for building other graph pieces.  
 
-With ggplot2, you begin a plot with the function `ggplot()`. `ggplot()` creates a coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So `ggplot(data = mpg)` creates an base graph.
+With ggplot2, you begin a plot with the function `ggplot()`. `ggplot()` creates a coordinate system that you can add layers to. The first argument of `ggplot()` is the dataset to use in the graph. So `ggplot(data = mpg)` creates an empty base graph.
 
-You complete your graph by adding one or more layers (aka `geoms`) to `ggplot()`. The function `geom_point()` adds a layer of points to your plot, which creates a scatterplot. ggplot2 comes with many geom functions that each add a different type of layer to a plot.
+```{r, eval = F}
+ggplot(data = mpg)
+```
 
-Each geom function in ggplot2 takes a `mapping` argument. This defines how variables in your dataset are mapped to visual properties. The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. ggplot2 looks for the mapped variable in the `data` argument, in this case, `mpg`
+You complete your graph by adding one or more layers (aka `geoms`) to `ggplot()`. The function `geom_point()` adds a layer of points to your plot, which creates a scatterplot. Ggplot2 comes with many geom functions that each add a different type of layer to a plot.
+
+```{r, eval = F}
+ggplot(data = mpg) +
+  geom_point()
+```
+
+Each geom function in ggplot2 takes a `mapping` argument. This defines how variables in your dataset are mapped to visual properties. The `mapping` argument is defined with `aes()`, and the `x` and `y` arguments of `aes()` specify which variables to map to the x and y axes. ggplot2 looks for the mapped variable in the `data` argument, in this case, `mpg`.
+
+```{r, eval = F}
+ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))
+```
 
 Just remember these requirements:
 
 * All ggplot plots start with the `ggplot` function
-* It will need two pieces of information, the **data** and how the data are **mapped** to the plot **aesthetics**
+* It will need three pieces of information: the **data**, how the data are **mapped** to the plot **aesthetics**, and a **geom** layer
 
 The core unit of every ggplot looks like this:
 
@@ -203,13 +232,13 @@ Applied to the data:
 
 ```{r}
 ggplot(data = mpg) + 
-  geom_point(aes(x = displ, y = hwy))
+  geom_point(mapping = aes(x = displ, y = hwy))
 ```
 
-More commonly, the `aes` function that defines the mapping is included in the initial call to `ggplot`.  This will globally define the mapping to all geoms in a plot, instead of for only one geom. There are reasons to globally apply the aesthetics or separately for each geom.   
+More commonly, the `aes` function that defines the mapping is included in the initial call to `ggplot`.  This will globally define the mapping to all geoms in a plot, instead of for only one geom. There may be different reasons to globally apply the aesthetics or separately for each geom depending on the data.   
 
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
   geom_point()
 ```
 
@@ -219,25 +248,25 @@ Let's explore some of the other geoms.
 
 As lines...
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+ggplot(mpg, aes(x = displ, y = hwy)) + 
   geom_line()
 ```
 
 As counts...
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+ggplot(mpg, aes(x = displ, y = hwy)) + 
   geom_count()
 ```
 
 As density...
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+ggplot(mpg, aes(x = displ, y = hwy)) + 
   geom_density2d()
 ```
 
 As a line range...
 ```{r eval = F}
-ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+ggplot(mpg, aes(x = displ, y = hwy)) + 
   geom_linerange()
 ```
 ```
@@ -262,25 +291,25 @@ We've got the required aesthetics in our plot. Let's add some others that we can
 
 Changing the color:
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy, colour = drv)) + 
+ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
   geom_point()
 ```
 
 Changing the size:
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy, size = displ)) + 
+ggplot(mpg, aes(x = displ, y = hwy, size = displ)) + 
   geom_point()
 ```
 
 Changing the shapes:
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy, shape = drv)) + 
+ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
   geom_point()
 ```
 
-In all of the above examples we've mapped an aesthetic to a variable in our dataset. We can just as easily modify the plot without mapping it to a variable (i.e., just change a part of the plot independent of the data).  For example, maybe we want to change the color of the points using a single color.  Notice the placement of `colour` outside of the `aes` mapping function.
+In all of the above examples we've mapped an aesthetic to a variable in our dataset. We can just as easily modify the plot without mapping it to a variable (i.e., changing a part of the plot independent of the data).  For example, maybe we want to change the color of the points using a single color for everything.  Notice the placement of `colour` outside of the `aes` mapping function.
 ```{r}
-ggplot(data = mpg, aes(x = displ, y = hwy)) + 
+ggplot(mpg, aes(x = displ, y = hwy)) + 
   geom_point(colour = 'red')
 ```
 
@@ -290,9 +319,9 @@ Let's reproduce the scatterplot we created in exercise 2 using ggplot. This requ
 
 1. Setup your initial plot with `ggplot`.  Map the x variable to `TOC`, the y variable to `Total_CHL`, and the colour variable to `depth_cat`.  The setup should look like this: `ggplot(chemdat, aes(x = TOC, y = TotalCHL, colour = depth_cat))`).  What happens if you run only this code?
 
-1. Add the `geom_point` geom to your plot using the `+` operator. Remember the correct placement of `+`, it always occurs in the line preceding the layer that is being added to the plot.
+1. Add the `geom_point()` geom to your plot using the `+` operator. Remember the correct placement of `+`, it always occurs in the line preceding the layer that is being added to the plot.
 
-1. Chlorophyll follows a log-normal distribution.  We can easily transform the y-axis by adding a scale. GGplot has multiple scale functions that accomplish different tasks, all of which relate to setting limits or characteristics of measured variables in your data.  Add the following after `geom_point` (remember to put a `+` after `geom_point`): `scale_y_continuous('log-chl', trans = 'log10')`.  How does the plot look now?
+1. Chlorophyll follows a log-normal distribution.  We can easily transform the y-axis by adding a scale. GGplot has multiple scale functions that accomplish different tasks, all of which relate to setting limits or characteristics of measured variables in your data.  Add the following after `geom_point()` (remember to put a `+` after `geom_point()`): `scale_y_continuous('log-chl', trans = 'log10')`.  How does the plot look now?
 
 <div class="fold s o">
 ```{r eval = F}
@@ -304,13 +333,13 @@ ggplot(chemdat, aes(x = TOC, y = Total_CHL, colour = depth_cat)) +
 
 ### Modifying plot components
 
-There are countless ways we can modify a ggplot, either by manipulating the appearance or adding information that improves our understanding of what we see.  In the previous exercise, we used a scale to transform an axis.  In this next section we'll cover two additional ways to modify a plot:
+There are countless ways we can modify a ggplot, either by manipulating the appearance or adding information that improves our understanding of what we see.  In the previous exercise, we used a scale to transform an axis.  In this next section we'll cover three additional ways to modify a plot:
 
 * Modifying the appearance of the plot as a whole can be done using the `theme` function for individual parts or by using a pre-packaged theme that modifies many parts at once. 
 * Adding statistical summaries with `stat_smooth`
 * Making multi-panel plots with `facet_wrap` or `facet_grid`.
 
-First I'll show you how to modify the appearance to your liking. Individual components can be modified with `theme`.  Here the legend is moved to the top, the minor grid lines between axis ticks are removed,and the panel background is changed from gray to white. Check the help file for `theme` to see all the options.
+First I'll show you how to modify the appearance to your liking. Individual components can be modified with `theme`.  Here the legend is moved to the top, the minor grid lines between axis ticks are removed, and the gray panel background is changed to light blue. Check the help file for `theme` to see all the options.
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
@@ -318,7 +347,7 @@ ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) +
   theme(
     legend.position = 'top',
     panel.grid.minor = element_blank(),
-    panel.background = element_rect(fill = 'white')
+    panel.background = element_rect(fill = 'lightblue')
   )
 ```
 
@@ -353,7 +382,7 @@ ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) +
   theme_bw(base_family = 'serif', base_size = 16)
 ```
 
-In addition to it's functional syntax, the real power of `ggplot` is to easily add components to the plot to quickly evaluate relationships or trends in the data.  Statistical relationships can be added with `stat_smooth`. 
+In addition to it's functional syntax, the real power of `ggplot` is the ability to add components to the plot that let you quickly evaluate relationships or trends in the data.  Statistical relationships can be added with `stat_smooth`. 
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
@@ -376,7 +405,7 @@ ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) +
   stat_smooth(method = 'lm')
 ```
 
-Finally, `ggplot` provides some simple functions to create multi-panelled plots.  This is useful for viewing different groups of the data as they relate to a variable in the dataset. The `facet_wrap` function is one of two functions in ggplot that can be used for multi-panel plots (the other being `facet_grid`, which is similar but different).  To create facets, we have to specify which variable you're using that acts as a grouping variable for each subplot. This is defined using the `~` sign followed by the variable name.  The `ncol` and `nrow` arguments also indicate how many columns or rows in the multi-panel to create.
+Finally, `ggplot` provides some simple functions to create multi-panelled plots.  This is useful for viewing different groups of the data as they relate to a variable in the dataset. The `facet_wrap` function is one of two functions in ggplot that can be used for multi-panel plots (the other being `facet_grid`, which is similar but different).  To create facets, we have to specify which variable you're using that acts as a grouping variable for each subplot. This is defined using the `~` sign followed by the variable name within `facet_wrap`.  The `ncol` (or `nrow`) argument also indicates how many columns (or rows) in the multi-panel to create.
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
@@ -385,7 +414,7 @@ ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) +
   facet_wrap(~ drv, ncol = 3)
 ```
 
-The `scales` argument is also a useful part of `facet_wrap`.  By default, the x and y axes are fixed between the panels.  You can change this behavior by using `scales = "free".  Be careful using this feature because it can cause inaccurate interpretations of the magnitude of trends between groups.
+The `scales` argument is also a useful part of `facet_wrap`.  By default, the x and y axes are fixed between the panels.  You can change this behavior by using `scales = "free"`.  Be careful using this feature because it can lead to different interpretations of the magnitude of trends.
 
 ```{r}
 ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
@@ -433,7 +462,7 @@ The `ggsave` function works only with ggplot objects.  You can contol where the 
 ggsave('lessons/figure/myfig.jpg', device = 'jpeg', width = 5, height = 4, units = 'in', dpi = 300)
 ```
 
-The `ggsave` functions uses the graphics devices from base R behind the scenes.  You can always use these directly to save any type of plot (ggplot, base, etc.).  These work a bit differently from regular functions.  First, you "open" a graphics device by executing the function (e.g., `png()`, `jpeg()`, etc.) at the command line.  Then you execute your plot command and finish by "closing"" the device with `dev.off()`.  In a script, it will look something like this.
+The `ggsave` functions uses the graphics devices from base R behind the scenes.  You can always use these directly to save any type of plot (ggplot, base, etc.).  These work a bit differently from regular functions.  First, you "open" a graphics device by executing the function (e.g., `png()`, `jpeg()`, etc.) at the command line.  Then you execute your plot command and finish by "closing" the device with `dev.off()`.  In a script, it will look something like this.
 
 ```{r, eval = F}
 # save a plot as png file
