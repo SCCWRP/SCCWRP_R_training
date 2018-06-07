@@ -6,7 +6,7 @@
 
 All trainings will be in the medium conference room.  Prep material will also be circulated prior to each session.  Topics are tentative and may change.  
 
-Early training dates:
+__Early training dates:__
 
 1) **2/13** Intro to R 
      * [content](Intro_to_R.html), [recording](https://s3-us-west-1.amazonaws.com/sccwrpdat/2018-02-13_12.59_Intro_to_R.mp4)
@@ -28,16 +28,27 @@ Early training dates:
      * [exercise data](https://github.com/SCCWRP/SCCWRP_R_training/raw/master/lessons/data/formatted_data.xlsx)
      * [feedback](https://goo.gl/forms/CANQN3aopySufdhI2)
      
+__R luncheons:__
+
 R luncheons are a more informal approach to teaching you about R.  The intent is to encourage retention and continued learning from the previous lessons.  These will be short sessions (~ 1 hr) where we focus on one specific problem, e.g., creating a summary plot of data starting with a spreadsheet, formatting a dataset for an analysis, etc.  Lunch will follow each session.  
 
-5) **7/11** [R luncheon 1](R_luncheon_1.html)
-6) **8/8** [R luncheon 2](R_luncheon_2.html)
-7) **9/5** [R luncheon 3](R_luncheon_3.html)
-8) **10/3** [R luncheon 4](R_luncheon_4.html)
+1) **7/11** R luncheon 1
+      * [content](R_luncheon_1.html)
+      * [RSVP](https://goo.gl/forms/s858rTtqcyeLt4it1)
+2) **8/8** R luncheon 2
+      * [content](R_luncheon_2.html)
+3) **9/5** R luncheon 3
+      * [content](R_luncheon_3.html)
+4) **10/3** R luncheon 4
+      * [content](R_luncheon_4.html)
 
 ## Software requirements
 
 Please bring a laptop with the latest version of RStudio and R installed.  The [setup instructions](setup.html) will guide you through the process.  Take note of the required R packages that you must also download and install.
+
+## Source content
+
+All source materials for this website can be accessed at https://github.com/SCCWRP/SCCWRP_R_training
 
 ## Questions
 

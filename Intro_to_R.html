@@ -185,7 +185,7 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = false;
+    options.showAndHide = true;
     options.smoothScroll = true;
 
     // tocify
@@ -248,12 +248,6 @@ div.tocify {
   border-radius: 0px;
 }
 
-.tocify-subheader {
-  display: inline;
-}
-.tocify-subheader .tocify-item {
-  font-size: 0.95em;
-}
 
 </style>
 
@@ -269,7 +263,7 @@ div.tocify {
 
 
 
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -285,28 +279,46 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="intro_to_R.html">Introduction to R</a>
+  <a href="Intro_to_R.html">Introduction to R</a>
 </li>
-<li>
-  <a href="Data_Wrangling_1.html">Data wrangling part 1</a>
-</li>
-<li>
-  <a href="Data_Wrangling_2.html">Data wrangling part 2</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data wrangling
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Data_Wrangling_1.html">Part 1</a>
+    </li>
+    <li>
+      <a href="Data_Wrangling_2.html">Part 2</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="Viz_and_Graphics.html">Viz and graphics</a>
 </li>
-<li>
-  <a href="R_luncheon_1.html">R luncheon 1</a>
-</li>
-<li>
-  <a href="R_luncheon_2.html">R luncheon 2</a>
-</li>
-<li>
-  <a href="R_luncheon_3.html">R luncheon 3</a>
-</li>
-<li>
-  <a href="R_luncheon_4.html">R luncheon 4</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R luncheons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="R_luncheon_1.html">R luncheon 1</a>
+    </li>
+    <li>
+      <a href="R_luncheon_2.html">R luncheon 2</a>
+    </li>
+    <li>
+      <a href="R_luncheon_3.html">R luncheon 3</a>
+    </li>
+    <li>
+      <a href="R_luncheon_4.html">R luncheon 4</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
@@ -324,6 +336,7 @@ div.tocify {
 </div>
 
 
+<p><br></p>
 <div id="introduction-to-r" class="section level1">
 <h1>Introduction to R</h1>
 <div id="lesson-outline" class="section level2">
@@ -363,7 +376,7 @@ div.tocify {
 <ul>
 <li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">Stack Overflow blog</a>, <a href="http://blog.revolutionanalytics.com/2016/07/r-moves-up-to-5th-place-in-ieee-language-rankings.html">IEEE rating</a></li>
 </ul>
-<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-06-06, there are 12558 on CRAN!</p>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-06-07, there are 12558 on CRAN!</p>
 <p>Python is another popular open-source programming language. Many beginners often ask the quesiton, why R vs. Python? This is an interesting debate with no easy answer. Some things to consider:</p>
 <ul>
 <li>R has statistical roots, phython does not</li>
@@ -498,7 +511,7 @@ sum(rnorm(100))</code></pre>
 </div>
 <div id="cran" class="section level3">
 <h3>CRAN</h3>
-<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-06-06, there are 12558 on CRAN!</p>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-06-07, there are 12558 on CRAN!</p>
 </div>
 <div id="installing-packages" class="section level3">
 <h3>Installing packages</h3>

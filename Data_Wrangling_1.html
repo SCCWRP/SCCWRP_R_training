@@ -185,7 +185,7 @@ $(document).ready(function ()  {
       ignoreSelector: ".toc-ignore",
       scrollTo: 0
     };
-    options.showAndHide = false;
+    options.showAndHide = true;
     options.smoothScroll = true;
 
     // tocify
@@ -248,12 +248,6 @@ div.tocify {
   border-radius: 0px;
 }
 
-.tocify-subheader {
-  display: inline;
-}
-.tocify-subheader .tocify-item {
-  font-size: 0.95em;
-}
 
 </style>
 
@@ -269,7 +263,7 @@ div.tocify {
 
 
 
-<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+<div class="navbar navbar-inverse  navbar-fixed-top" role="navigation">
   <div class="container">
     <div class="navbar-header">
       <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
@@ -285,28 +279,46 @@ div.tocify {
   <a href="index.html">Home</a>
 </li>
 <li>
-  <a href="intro_to_R.html">Introduction to R</a>
+  <a href="Intro_to_R.html">Introduction to R</a>
 </li>
-<li>
-  <a href="Data_Wrangling_1.html">Data wrangling part 1</a>
-</li>
-<li>
-  <a href="Data_Wrangling_2.html">Data wrangling part 2</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    Data wrangling
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="Data_Wrangling_1.html">Part 1</a>
+    </li>
+    <li>
+      <a href="Data_Wrangling_2.html">Part 2</a>
+    </li>
+  </ul>
 </li>
 <li>
   <a href="Viz_and_Graphics.html">Viz and graphics</a>
 </li>
-<li>
-  <a href="R_luncheon_1.html">R luncheon 1</a>
-</li>
-<li>
-  <a href="R_luncheon_2.html">R luncheon 2</a>
-</li>
-<li>
-  <a href="R_luncheon_3.html">R luncheon 3</a>
-</li>
-<li>
-  <a href="R_luncheon_4.html">R luncheon 4</a>
+<li class="dropdown">
+  <a href="#" class="dropdown-toggle" data-toggle="dropdown" role="button" aria-expanded="false">
+    R luncheons
+     
+    <span class="caret"></span>
+  </a>
+  <ul class="dropdown-menu" role="menu">
+    <li>
+      <a href="R_luncheon_1.html">R luncheon 1</a>
+    </li>
+    <li>
+      <a href="R_luncheon_2.html">R luncheon 2</a>
+    </li>
+    <li>
+      <a href="R_luncheon_3.html">R luncheon 3</a>
+    </li>
+    <li>
+      <a href="R_luncheon_4.html">R luncheon 4</a>
+    </li>
+  </ul>
 </li>
       </ul>
       <ul class="nav navbar-nav navbar-right">
