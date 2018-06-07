@@ -1,0 +1,6 @@
+- getting started with GitHub
+- scraping public data (targeting one or two databases of widespread interest, like climate data)
+- graphing distributions/moving beyond pie and bar charts
+- specific modeling platforms (lm, glm, gam, rf, etc) - but this might be mroe stats than R
+- exporting a formatted table to Word
+- working with shapefiles
