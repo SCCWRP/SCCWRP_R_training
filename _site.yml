@@ -1,0 +1,31 @@
+name: "SCCWRP_R_training"
+navbar:
+  title: "SCCWRP R training"
+  left:
+    - text: "Home"
+      href: index.html
+    - text: "Introduction to R"
+      href: intro_to_R.html
+    - text: "Data wrangling part 1"
+      href: Data_Wrangling_1.html
+    - text: "Data wrangling part 2"
+      href: Data_Wrangling_2.html
+    - text: "Viz and graphics"
+      href: Viz_and_Graphics.html
+    - text: "R luncheon 1"
+      href: R_luncheon_1.html
+    - text: "R luncheon 2"
+      href: R_luncheon_2.html
+    - text: "R luncheon 3"
+      href: R_luncheon_3.html
+    - text: "R luncheon 4"
+      href: R_luncheon_4.html
+output_dir: "."
+output:
+  html_document:
+    theme: cosmo
+    highlight: textmate
+    toc: true
+    toc_float: 
+       collapsed: true
+    

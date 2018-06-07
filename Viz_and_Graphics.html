@@ -1,0 +1,706 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Viz_and_Graphics.utf8</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+<link rel="stylesheet" href="css\styles.css" type="text/css" />
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SCCWRP R training</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="intro_to_R.html">Introduction to R</a>
+</li>
+<li>
+  <a href="Data_Wrangling_1.html">Data wrangling part 1</a>
+</li>
+<li>
+  <a href="Data_Wrangling_2.html">Data wrangling part 2</a>
+</li>
+<li>
+  <a href="Viz_and_Graphics.html">Viz and graphics</a>
+</li>
+<li>
+  <a href="R_luncheon_1.html">R luncheon 1</a>
+</li>
+<li>
+  <a href="R_luncheon_2.html">R luncheon 2</a>
+</li>
+<li>
+  <a href="R_luncheon_3.html">R luncheon 3</a>
+</li>
+<li>
+  <a href="R_luncheon_4.html">R luncheon 4</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<script src="js/hideoutput.js"></script>
+<div id="visualization-and-graphics" class="section level1">
+<h1>Visualization and Graphics</h1>
+<div id="lesson-outline" class="section level2">
+<h2>Lesson Outline</h2>
+<ul>
+<li><a href="#base-r-graphics">Base R graphics</a></li>
+<li><a href="#ggplot2">GGplot2</a>
+<ul>
+<li><a href="#basics">Basics</a></li>
+<li><a href="#modifying-plot-components">Modifying plot components</a></li>
+</ul></li>
+<li><a href="#saving-your-plots">Saving your plots</a></li>
+</ul>
+</div>
+<div id="lesson-exercises" class="section level2">
+<h2>Lesson Exercises</h2>
+<ul>
+<li><a href="#exercise-1">Exercise 1</a></li>
+<li><a href="#exercise-2">Exercise 2</a></li>
+<li><a href="#exercise-3">Exercise 3</a></li>
+<li><a href="#exercise-4">Exercise 4</a></li>
+</ul>
+</div>
+</div>
+<div id="todays-goals" class="section level1">
+<h1>Today’s goals</h1>
+<p>Our final workshop will introduce you to concepts of data visualization and graphics in R. The entire workflow of data exploration is enhanced through looking at your data, whether you’re exploring a dataset for the first time or creating publication-ready figures. Viewing your data provides insight into patterns that can help you explore different hypotheses. No analysis is complete without a solid graphic.</p>
+<p><img src="figure/data-science.png" /></p>
+<p>Graphics capabilities in R have improved tremendously in the last ten years. The de facto plotting library is <code>ggplot2</code> as part of the <code>tidyverse</code>, but there are many other packages available that enhance or build on existing functionality. The base R installation comes with it’s own set of plotting functions. These are useful for quick and dirty exploration but you’ll quickly find that these methods are tedious. We’ll start the lesson today with a cursory look at some of the base R plotting functions. Most of what we’ll discuss today will focus on ggplot2.</p>
+<p>As before, we only have two hours to cover the basics of graphing in R. It’s an unrealistic expectation that you will be a graphics ninja after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.</p>
+<p>Today you should be able to answer (or be able to find answers to) the following:</p>
+<ul>
+<li>What can I do with base R plots?</li>
+<li>What are the requirements of every ggplot?</li>
+<li>What are geoms?</li>
+<li>What are facets?</li>
+<li>What are themes?</li>
+<li>How do I save a plot?</li>
+</ul>
+<div id="exercise-1" class="section level2">
+<h2>Exercise 1</h2>
+<p>We’re going to start the workshop by setting up a script in a new or existing RStudio project. We’re going to work with the fully wrangled dataset we created at the end of the last training. In the interest of time, you can download the formatted data <a href="https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx">here</a>. This dataset is the joined sediment chemistry and station data for Bight08. We’ve already selected and renamed the columns we need from the chemistry data, filtered to get the parameters we want, and joined it with the station data to include latitude, longitude, and depth. As a final step, we’ll create a new categorical column for depth using the <code>cut</code> function.</p>
+<ol style="list-style-type: decimal">
+<li><p>Create a new project in RStudio or use an existing project from last time. If creating a new project, name it “viz_workshop” or something similar.</p></li>
+<li><p>Create a new “R Script” in the Source (scripting) Panel, save that file into your project and name it “graphics_and_viz.R”.</p></li>
+<li><p>Add in a comment line at the top stating the purpose. It should look something like: <code># Graphics and vizualization in R</code>. At the top of this script, add some code to load the <code>tidyverse</code> and <code>readxl</code> packages.</p></li>
+<li><p>Make a folder in your project called <code>data</code> if you don’t have one already. Place the formatted data (<a href="https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx">download</a>) into this folder.</p></li>
+<li><p>Add some lines to your script to import and store the formatted data in your Enviroment. Use the <code>read_excel</code> function to import <code>&quot;data/formatted_data.csv&quot;</code>. Assign it to a variable named “chemdat”.</p></li>
+<li><p>Use the the <code>mutate</code> function with <code>cut</code> to create a new categorical column for depth. Name it <code>depth_cat</code> and cut it at 15 and 150 meters. Remember that <code>cut</code> has two arguments for the <code>breaks</code> and <code>labels</code>. The <code>breaks</code> argument will look like <code>breaks = c(-Inf, 15, 150, Inf)</code> and the <code>labels</code> argument will look like <code>labels= c('shallow', 'mid', 'deep')</code>.</p></li>
+<li><p>Check the data when you’re done with <code>View</code> or <code>head</code>. Also see how many values you have in each new category in <code>depth_cat</code> (hint: <code>table(chemdat$depth_cat)</code>).</p></li>
+</ol>
+<div class="fold s o">
+<pre class="r"><code># Graphics and vizualization in R
+
+# import libraries (use install.packages function if not found)
+library(tidyverse)
+library(readxl)
+
+# import formatted data
+# mutate depth to create a new categorical depth column
+chemdat &lt;- read_excel(&#39;data/formatted_data.xlsx&#39;) %&gt;% 
+  mutate(depth_cat = cut(depth, breaks = c(-Inf, 15, 150, Inf), labels = c(&#39;shallow&#39;, &#39;mid&#39;, &#39;deep&#39;)))
+
+# check data
+head(chemdat)
+View(chemdat)
+table(chemdat$depth_cat)</code></pre>
+</div>
+</div>
+<div id="base-r-graphics" class="section level2">
+<h2>Base R graphics</h2>
+<p>In theory, all of your plotting needs can be accomplished with functions in base R. However, these graphics are not easy to customize and it’s very tedious to create publication-quality graphics. For these reasons, base R graphics are rarely taught but I believe they still serve a purpose in the data exploration workflow. Base R graphics are extremely fast and simple to use for exploring data. I caution you in using these functions for anything beyond simple exploration.</p>
+<p>My most frequent use for base R graphics inlude:</p>
+<ul>
+<li>Simple scatterplots to see how two variables are related (<code>plot</code>)</li>
+<li>Histograms to explore the distribution of a variable (<code>hist</code>)</li>
+</ul>
+<p>We’ll explore some of these simple tools in base R with the <code>mpg</code> dataset. The workhorse plotting function is <code>plot</code>. Let’s make a simple plot of highway mileage vs engine size.</p>
+<pre class="r"><code>plot(hwy ~ displ, data = mpg)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-2-1.png" width="672" /></p>
+<p>We created this plot using the <code>formula</code> notation. We can also create the plot by calling the columns directly.</p>
+<pre class="r"><code>plot(mpg$displ, mpg$hwy)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
+<p>Confusing right? Let’s have a look at the help file for <code>plot</code>.</p>
+<pre class="r"><code>?plot</code></pre>
+<p><img src="figure/plot_help.PNG" /></p>
+<p>This help file lays out some of the basics of plot formatting. We can change the type of plot using the <code>type</code> argument (here, we can only use points), give it a title with <code>main</code>, and change labels on the x and y axes with <code>xlab</code> and <code>ylab</code>.</p>
+<pre class="r"><code>plot(hwy ~ displ, data = mpg, main = &#39;Highway mileage by engine size&#39;, 
+     xlab = &#39;engine size (l)&#39;, ylab = &#39;highway (mpg)&#39;)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
+<p>The help file for the plot function also has this ambiguous <code>...</code> argument. You’ll see this argument for many functions in the help files. This means that the function accepts arguments from other functions. In this case, the plot function accepts arguments from the <code>par</code> function which is used for setting graphical parameters in base R. Let’s look at the help file for <code>par</code>.</p>
+<pre class="r"><code>?par</code></pre>
+<p><img src="figure/par_help.PNG" /></p>
+<p>The most useful section in this help file is the description of the actual graphical parameters you can set. Some useful ones are the <code>cex</code> family of arguments for sizing, <code>col</code> family of arguments for color, the <code>pch</code> argument for point types, and the <code>family</code> argument for font. All of these arguments can be passed directly to the <code>plot</code> function or separately with the <code>par</code> function.</p>
+<pre class="r"><code>plot(hwy ~ displ, data = mpg, main = &#39;Highway mileage by engine size&#39;, 
+     xlab = &#39;engine size (l)&#39;, ylab = &#39;highway (mpg)&#39;, 
+     col = &#39;blue&#39;, pch = 18, cex = 0.75, family = &#39;serif&#39;)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-7-1.png" width="672" /></p>
+<p>Or like this…</p>
+<pre class="r"><code>par(col = &#39;blue&#39;, pch = 18, cex = 0.75, family = &#39;serif&#39;)
+plot(hwy ~ displ, data = mpg, main = &#39;Highway mileage by engine size&#39;, 
+     xlab = &#39;engine size (l)&#39;, ylab = &#39;highway (mpg)&#39;)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-8-1.png" width="672" /></p>
+<p>Notice how the plots are different depending on where the additional arguments are used. Confusing, right? You’ll waste a lot of time trying to tweak the base graphics.</p>
+<p>The <code>hist</code> (histogram) function is the only other plotting function from base R that is worth showing. This gets you info on the basic distribution of a variable and is a graphical way of assessing the spread and central tendency (e.g., mean) of a variable.</p>
+<pre class="r"><code>hist(mpg$hwy)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-9-1.png" width="672" /></p>
+<p>The only useful argument in <code>hist</code> is <code>breaks</code> that controls the number of bins.</p>
+<pre class="r"><code>hist(mpg$hwy, breaks = 20)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-10-1.png" width="672" /></p>
+</div>
+<div id="exercise-2" class="section level2">
+<h2>Exercise 2</h2>
+<p>Let’s make some simple graphics of our chemistry dataset using base R. We’ll make a histogram of chlorophyll and a scatterplot of chlorophyll versus total organic carbon using the <code>plot</code> function. We’ll also add a title and better axis labels to the plots to make them slightly more palatable.</p>
+<ol style="list-style-type: decimal">
+<li><p>Make a histogram of <code>TotalCHL</code> using the <code>hist</code> function. What’s the approximate range of chlorophyll? What’s the most commonly observed value? Try changing the <code>breaks</code> argument.</p></li>
+<li><p>Make a scatterplot of <code>TotalCHl</code> versus <code>TOC</code>with the <code>plot</code> function. Try creating the plot using the <code>formula</code> notation (hint: <code>TotalCHL ~ TOC</code>). Remember you have to use the <code>data</code> argument when you’re using the formula (i.e., <code>data = chemdat</code>).</p></li>
+<li><p>Give the plot an informative title using the <code>main</code> argument directly in the plot function, something like <code>main = &quot;Chlorophyll vs TOC for Bight08&quot;</code>.</p></li>
+<li><p>Change the axis labels to include the units using the <code>xlab</code> and <code>ylab</code> arguments, something like <code>xlab = &quot;Chl (ug/L)&quot;, ylab = &quot;TOC (%)&quot;</code>.</p></li>
+<li><p>Use <code>par</code> before the <code>plot</code> function to change the font to <code>serif</code>, (hint: <code>par(family = &quot;serif&quot;))</code>).</p></li>
+</ol>
+<div class="fold s o">
+<pre class="r"><code># histogram
+hist(chemdat$Total_CHL)
+
+# scatterplot
+plot(Total_CHL ~ TOC, data = chemdat)
+
+# scatterplot with title
+plot(Total_CHL ~ TOC, data = chemdat, main = &#39;Chlorophyll vs TOC for Bight08&#39;)
+
+# scatterplot with title and better axis labels
+plot(Total_CHL ~ TOC, data = chemdat, main = &#39;Chlorophyll vs TOC for Bight08&#39;,
+     xlab = &#39;TOC (%)&#39;, ylab = &#39;Chl (ug/L)&#39;)
+
+# change the font with par
+par(family = &#39;serif&#39;)
+plot(Total_CHL ~ TOC, data = chemdat, main = &#39;Chlorophyll vs TOC for Bight08&#39;,
+     xlab = &#39;TOC (%)&#39;, ylab = &#39;Chl (ug/L)&#39;)</code></pre>
+</div>
+</div>
+<div id="ggplot2" class="section level2">
+<h2>GGplot2</h2>
+<div id="basics" class="section level3">
+<h3>Basics</h3>
+<p>The <code>ggplot2</code> package (full <a href="http://ggplot2.tidyverse.org/index.html">reference</a>) is a huge improvement over base R because it was developed following a strict philosophy known as the <em>grammar of graphics</em>. This philosophy was designed to make thinking, reasoning, and communicating about graphs easier by following a few simple rules. Like building a sentence in speech (aka grammar), all graphs start with a foundational component that is used for building other graph pieces.</p>
+<p>With ggplot2, you begin a plot with the function <code>ggplot()</code>. <code>ggplot()</code> creates a coordinate system that you can add layers to. The first argument of <code>ggplot()</code> is the dataset to use in the graph. So <code>ggplot(data = mpg)</code> creates an empty base graph.</p>
+<pre class="r"><code>ggplot(data = mpg)</code></pre>
+<p>You complete your graph by adding one or more layers (aka <code>geoms</code>) to <code>ggplot()</code>. The function <code>geom_point()</code> adds a layer of points to your plot, which creates a scatterplot. Ggplot2 comes with many geom functions that each add a different type of layer to a plot.</p>
+<pre class="r"><code>ggplot(data = mpg) +
+  geom_point()</code></pre>
+<p>Each geom function in ggplot2 takes a <code>mapping</code> argument. This defines how variables in your dataset are mapped to visual properties. The <code>mapping</code> argument is defined with <code>aes()</code>, and the <code>x</code> and <code>y</code> arguments of <code>aes()</code> specify which variables to map to the x and y axes. ggplot2 looks for the mapped variable in the <code>data</code> argument, in this case, <code>mpg</code>.</p>
+<pre class="r"><code>ggplot(data = mpg) +
+  geom_point(mapping = aes(x = displ, y = hwy))</code></pre>
+<p>Just remember these requirements:</p>
+<ul>
+<li>All ggplot plots start with the <code>ggplot</code> function</li>
+<li>It will need three pieces of information: the <strong>data</strong>, how the data are <strong>mapped</strong> to the plot <strong>aesthetics</strong>, and a <strong>geom</strong> layer</li>
+</ul>
+<p>The core unit of every ggplot looks like this:</p>
+<pre class="r"><code>ggplot(data = &lt;DATA&gt;) + 
+  &lt;GEOM_FUNCTION&gt;(mapping = aes(&lt;MAPPINGS&gt;))</code></pre>
+<p>Applied to the data:</p>
+<pre class="r"><code>ggplot(data = mpg) + 
+  geom_point(mapping = aes(x = displ, y = hwy))</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-16-1.png" width="672" /></p>
+<p>More commonly, the <code>aes</code> function that defines the mapping is included in the initial call to <code>ggplot</code>. This will globally define the mapping to all geoms in a plot, instead of for only one geom. There may be different reasons to globally apply the aesthetics or separately for each geom depending on the data.</p>
+<pre class="r"><code>ggplot(data = mpg, mapping = aes(x = displ, y = hwy)) + 
+  geom_point()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
+<p>Why the need for this complicated structure? The syntax of mapping aesthetics to a dataset lets you easily modify components of an existing plot. Additional datasets and geoms can easily be added to the plot with <code>+</code>.</p>
+<p>Let’s explore some of the other geoms.</p>
+<p>As lines…</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_line()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-18-1.png" width="672" /></p>
+<p>As counts…</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_count()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-19-1.png" width="672" /></p>
+<p>As density…</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_density2d()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-20-1.png" width="672" /></p>
+<p>As a line range…</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_linerange()</code></pre>
+<pre><code>Error: geom_linerange requires the following missing aesthetics: ymin, ymax
+Execution halted</code></pre>
+<p>Oh snap, what happened? This error is telling us that the geom we just tried is missing some required aesthetics in the plot. Here we’ve only used the <code>x</code> and <code>y</code> aesthetics but it looks like it requires <code>ymin</code> and <code>ymax</code>. Lets look at the help file for <code>geom_linerange</code>.</p>
+<pre class="r"><code>?geom_linerange</code></pre>
+<p><img src="figure/aesreq.png" /></p>
+<p>Looks like we don’t have the required aeshetics, nor does it make sense to use this geom because it’s not appropriate for the data. What about the requirements for <code>geom_point</code>?</p>
+<pre class="r"><code>?geom_point</code></pre>
+<p><img src="figure/aesreq2.png" /></p>
+<p>We’ve got the required aesthetics in our plot. Let’s add some others that we can use with <code>geom_point</code>.</p>
+<p>Changing the color:</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-24-1.png" width="672" /></p>
+<p>Changing the size:</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, size = displ)) + 
+  geom_point()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-25-1.png" width="672" /></p>
+<p>Changing the shapes:</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, shape = drv)) + 
+  geom_point()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-26-1.png" width="672" /></p>
+<p>In all of the above examples we’ve mapped an aesthetic to a variable in our dataset. We can just as easily modify the plot without mapping it to a variable (i.e., changing a part of the plot independent of the data). For example, maybe we want to change the color of the points using a single color for everything. Notice the placement of <code>colour</code> outside of the <code>aes</code> mapping function.</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point(colour = &#39;red&#39;)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-27-1.png" width="672" /></p>
+</div>
+</div>
+<div id="exercise-3" class="section level2">
+<h2>Exercise 3</h2>
+<p>Let’s reproduce the scatterplot we created in exercise 2 using ggplot. This requires us to map the <code>TOC</code> and <code>TotalCHL</code> variables to the x and y aesthetics for <code>geom_point</code>.</p>
+<ol style="list-style-type: decimal">
+<li><p>Setup your initial plot with <code>ggplot</code>. Map the x variable to <code>TOC</code>, the y variable to <code>Total_CHL</code>, and the colour variable to <code>depth_cat</code>. The setup should look like this: <code>ggplot(chemdat, aes(x = TOC, y = TotalCHL, colour = depth_cat))</code>). What happens if you run only this code?</p></li>
+<li><p>Add the <code>geom_point()</code> geom to your plot using the <code>+</code> operator. Remember the correct placement of <code>+</code>, it always occurs in the line preceding the layer that is being added to the plot.</p></li>
+<li><p>Chlorophyll follows a log-normal distribution. We can easily transform the y-axis by adding a scale. GGplot has multiple scale functions that accomplish different tasks, all of which relate to setting limits or characteristics of measured variables in your data. Add the following after <code>geom_point()</code> (remember to put a <code>+</code> after <code>geom_point()</code>): <code>scale_y_continuous('log-chl', trans = 'log10')</code>. How does the plot look now?</p></li>
+</ol>
+<div class="fold s o">
+<pre class="r"><code>ggplot(chemdat, aes(x = TOC, y = Total_CHL, colour = depth_cat)) +
+  geom_point() + 
+  scale_y_continuous(&#39;log-chl&#39;, trans = &#39;log10&#39;)</code></pre>
+</div>
+<div id="modifying-plot-components" class="section level3">
+<h3>Modifying plot components</h3>
+<p>There are countless ways we can modify a ggplot, either by manipulating the appearance or adding information that improves our understanding of what we see. In the previous exercise, we used a scale to transform an axis. In this next section we’ll cover three additional ways to modify a plot:</p>
+<ul>
+<li>Modifying the appearance of the plot as a whole can be done using the <code>theme</code> function for individual parts or by using a pre-packaged theme that modifies many parts at once.</li>
+<li>Adding statistical summaries with <code>stat_smooth</code></li>
+<li>Making multi-panel plots with <code>facet_wrap</code> or <code>facet_grid</code>.</li>
+</ul>
+<p>First I’ll show you how to modify the appearance to your liking. Individual components can be modified with <code>theme</code>. Here the legend is moved to the top, the minor grid lines between axis ticks are removed, and the gray panel background is changed to light blue. Check the help file for <code>theme</code> to see all the options.</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme(
+    legend.position = &#39;top&#39;,
+    panel.grid.minor = element_blank(),
+    panel.background = element_rect(fill = &#39;lightblue&#39;)
+  )</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-29-1.png" width="672" /></p>
+<p>Changing plot elements with theme can take some practice because there’s lots to modify. In some respects, this is how <code>ggplot</code> is similar to base R. With flexibility comes tedium. Fortunately, there are several pre-packaged themes that modify several components at once. See <a href="http://ggplot2.tidyverse.org/reference/ggtheme.html">here</a> for the full documentation. There are also additional packages available that supplement the existing themes in<code>ggplot</code> (see <a href="https://github.com/jrnold/ggthemes">here</a>.</p>
+<p>Black and white:</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme_bw()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-30-1.png" width="672" /></p>
+<p>Minimal:</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme_minimal()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-31-1.png" width="672" /></p>
+<p>Classic:</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme_classic()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-32-1.png" width="672" /></p>
+<p>The pre-packaged themes with ggplot have the added benefit of easily changing the global font types and sizes in the plot. These are modified by including the arguments <code>base_family</code> and <code>base_size</code>.</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  theme_bw(base_family = &#39;serif&#39;, base_size = 16)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-33-1.png" width="672" /></p>
+<p>In addition to it’s functional syntax, the real power of <code>ggplot</code> is the ability to add components to the plot that let you quickly evaluate relationships or trends in the data. Statistical relationships can be added with <code>stat_smooth</code>.</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  stat_smooth()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-34-1.png" width="672" /></p>
+<p>Notice that we get one smooth for each type of drive train. This is because we’ve mapped colour to the drive train. Both the <code>geom_smooth</code> and <code>stat_smooth</code> functions use colour as an aesthetic so the global <code>aes</code> function applies to both. We can change this behavior by moving the location of the <code>colour</code> aesthetic. Here color is only mapped to the points.</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy)) + 
+  geom_point(aes(colour = drv)) + 
+  stat_smooth()</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-35-1.png" width="672" /></p>
+<p>By default the <code>stat_smooth</code> function uses a non-linear smooth, either a locally estimated polynomial or generalized additive model depending on size of the dataset. We can change this using the <code>method</code> argument, as for a linear model.</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  stat_smooth(method = &#39;lm&#39;)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-36-1.png" width="672" /></p>
+<p>Finally, <code>ggplot</code> provides some simple functions to create multi-panelled plots. This is useful for viewing different groups of the data as they relate to a variable in the dataset. The <code>facet_wrap</code> function is one of two functions in ggplot that can be used for multi-panel plots (the other being <code>facet_grid</code>, which is similar but different). To create facets, we have to specify which variable you’re using that acts as a grouping variable for each subplot. This is defined using the <code>~</code> sign followed by the variable name within <code>facet_wrap</code>. The <code>ncol</code> (or <code>nrow</code>) argument also indicates how many columns (or rows) in the multi-panel to create.</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  stat_smooth(method = &#39;lm&#39;) + 
+  facet_wrap(~ drv, ncol = 3)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-37-1.png" width="672" /></p>
+<p>The <code>scales</code> argument is also a useful part of <code>facet_wrap</code>. By default, the x and y axes are fixed between the panels. You can change this behavior by using <code>scales = &quot;free&quot;</code>. Be careful using this feature because it can lead to different interpretations of the magnitude of trends.</p>
+<pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
+  geom_point() + 
+  stat_smooth(method = &#39;lm&#39;) + 
+  facet_wrap(~ drv, ncol = 3, scales = &#39;free&#39;)</code></pre>
+<p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-38-1.png" width="672" /></p>
+</div>
+</div>
+<div id="exercise-4" class="section level2">
+<h2>Exercise 4</h2>
+<p>Let’s modify the scatterplot we created in exercise 3 by adding a theme, a statistical summary, and facets. We’ll map the <code>stat_smooth</code> function to depth category and also use this variable to create a three-panel plot.</p>
+<ol style="list-style-type: decimal">
+<li><p>Setup the initial plot as before. Map the x variable to <code>TOC</code>, the y variable to <code>Total_CHL</code>, and the colour variable to <code>depth_cat</code>. Add the <code>geom_point</code> geom and the <code>scale_y_continuous</code> scale with <code>trans = &quot;log10&quot;</code> to transform chlorophyll.</p></li>
+<li><p>Add one of the pre-packaged themes to the plot: <code>theme_bw()</code>, <code>theme_classic()</code>, or <code>theme_minimal()</code>. You can also use any of the other themes from the tidyverse (see <a href="http://ggplot2.tidyverse.org/reference/ggtheme.html">here</a>) or use one from the <code>ggthemes</code> package (see <a href="https://github.com/jrnold/ggthemes">here</a>). You’ll have to install and load the <code>ggthemes</code> package if using the latter.</p></li>
+<li><p>Add the <code>stat_smooth</code> function with the argument <code>method = &quot;lm&quot;</code> to add linear smooths between chlorophyll and TOC for each depth group.</p></li>
+<li><p>Use <code>facet_wrap</code> to create a three-panel plot by depth category (hint: <code>facet_wrap(~ depth_cat, ncol = 3)</code>).</p></li>
+<li><p>You can change the scaling of the axes to make them specific to each facet. Try using the argument <code>scales = &quot;free&quot;</code> within <code>facet_wrap</code>. How does this change the interpretation?</p></li>
+</ol>
+<div class="fold s o">
+<pre class="r"><code>ggplot(chemdat, aes(x = TOC, y = Total_CHL, colour = depth_cat)) +
+  geom_point() + 
+  scale_y_continuous(&#39;log-chl&#39;, trans = &#39;log10&#39;) + 
+  theme_minimal() + 
+  stat_smooth(method = &#39;lm&#39;) + 
+  facet_wrap(~ depth_cat, ncol = 3, scales = &#39;free&#39;)</code></pre>
+</div>
+</div>
+<div id="saving-your-plots" class="section level2">
+<h2>Saving your plots</h2>
+<p>A quality plot deserves to be saved and shared. As you can imagine, there are several ways to save a plot in RStudio. The easiest way (which I don’t recommend) is to use the export feature from the plot viewing pane.</p>
+<p><img src="figure/saveplot.JPG" /></p>
+<p>Although this is convenient, you don’t have fine control over many options that can really make your graphic pop. I recommend using either the <code>ggsave</code> function that comes with the tidyverse, or preferably, one of the available graphics devices from base R (<code>bmp</code>, <code>jpeg</code>, <code>png</code>, <code>tiff</code>, <code>eps</code>, <code>ps</code>, <code>tex</code>, <code>svg</code>, <code>wmf</code>, and my favorite, <code>pdf</code>).</p>
+<p>The <code>ggsave</code> function works only with ggplot objects. You can contol where the plot is saved, the file type, plotting dimensions, resolution, and a few other minor options. By default, it will save the last ggplot that you made.</p>
+<pre class="r"><code>ggsave(&#39;lessons/figure/myfig.jpg&#39;, device = &#39;jpeg&#39;, width = 5, height = 4, units = &#39;in&#39;, dpi = 300)</code></pre>
+<p>The <code>ggsave</code> functions uses the graphics devices from base R behind the scenes. You can always use these directly to save any type of plot (ggplot, base, etc.). These work a bit differently from regular functions. First, you “open” a graphics device by executing the function (e.g., <code>png()</code>, <code>jpeg()</code>, etc.) at the command line. Then you execute your plot command and finish by “closing” the device with <code>dev.off()</code>. In a script, it will look something like this.</p>
+<pre class="r"><code># save a plot as png file
+png(&#39;lessons/figure/myfig.png&#39;, width = 5, height = 4, units = &#39;in&#39;, res = 300)
+plot
+dev.off()</code></pre>
+<p>The value of this approach is the ability to fine tune the output for your graphics. You can save as many figures as you like when the graphics device is open, just make sure to use <code>dev.off()</code> when you’re done.</p>
+</div>
+<div id="next-time" class="section level2">
+<h2>Next time</h2>
+<p>Now you should be able to answer (or be able to find answers to) the following:</p>
+<ul>
+<li>What can I do with base R plots?</li>
+<li>What are the requirements of every ggplot?</li>
+<li>What are geoms?</li>
+<li>What are facets?</li>
+<li>What are themes?</li>
+<li>How do I save a plot?</li>
+</ul>
+<p>Please fill out the final <a href="https://goo.gl/forms/CANQN3aopySufdhI2">feedback</a> form for all of our trainings!</p>
+</div>
+<div id="attribution" class="section level2">
+<h2>Attribution</h2>
+<p>Content in this lesson was pillaged extensively from the USGS-R training curriculum <a href="https://github.com/USGS-R/training-curriculum">here</a> and <a href="https://github.com/hadley/r4ds">R for data Science</a>.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

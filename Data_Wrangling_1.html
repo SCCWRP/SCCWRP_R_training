@@ -1,0 +1,788 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+
+
+
+
+<title>Data_Wrangling_1.utf8</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+</head>
+
+<body>
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+  height: auto;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+
+<div class="container-fluid main-container">
+
+<!-- tabsets -->
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+</script>
+
+<!-- code folding -->
+
+
+
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = false;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+  padding-left: 25px;
+  text-indent: 0;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+.tocify-subheader {
+  display: inline;
+}
+.tocify-subheader .tocify-item {
+  font-size: 0.95em;
+}
+
+</style>
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">SCCWRP R training</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="intro_to_R.html">Introduction to R</a>
+</li>
+<li>
+  <a href="Data_Wrangling_1.html">Data wrangling part 1</a>
+</li>
+<li>
+  <a href="Data_Wrangling_2.html">Data wrangling part 2</a>
+</li>
+<li>
+  <a href="Viz_and_Graphics.html">Viz and graphics</a>
+</li>
+<li>
+  <a href="R_luncheon_1.html">R luncheon 1</a>
+</li>
+<li>
+  <a href="R_luncheon_2.html">R luncheon 2</a>
+</li>
+<li>
+  <a href="R_luncheon_3.html">R luncheon 3</a>
+</li>
+<li>
+  <a href="R_luncheon_4.html">R luncheon 4</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<div class="fluid-row" id="header">
+
+
+
+
+</div>
+
+
+<div id="data-wrangling-pt.-1" class="section level1">
+<h1>Data Wrangling Pt. 1</h1>
+<div id="lesson-outline" class="section level2">
+<h2>Lesson Outline</h2>
+<ul>
+<li><a href="#todays-goals">Today’s goals</a></li>
+<li><a href="#the-tidyverse">The tidyverse</a></li>
+<li><a href="#data-wrangling-with-dplyr">Data wrangling with <code>dplyr</code></a></li>
+<li><a href="#piping">Piping</a></li>
+</ul>
+</div>
+<div id="lesson-exercises" class="section level2">
+<h2>Lesson Exercises</h2>
+<ul>
+<li><a href="#exercise-1">Exercise 1</a></li>
+<li><a href="#exercise-2">Exercise 2</a></li>
+<li><a href="#exercise-3">Exercise 3</a></li>
+</ul>
+</div>
+<div id="todays-goals" class="section level2">
+<h2>Today’s goals</h2>
+<p>Data wrangling (manipulation, ninjery, cleaning, etc.) is the part of any data analysis that will take the most time. While it may not necessarily be fun, it is foundational to all the work that follows. I strongly believe that mastering these skills has more value than mastering a particular analysis. Check out <a href="https://www.nytimes.com/2014/08/18/technology/for-big-data-scientists-hurdle-to-insights-is-janitor-work.html">this article</a> if you don’t believe me.</p>
+<p>As before, we only have two hours to cover the basics of data wrangling. It’s an unrealistic expectation that you will be a ninja wrangler after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.</p>
+<p>Today you should be able to answer (or be able to find answers to) the following:</p>
+<ul>
+<li>Why do we need to manipulate data?</li>
+<li>What is the tidyverse?</li>
+<li>What can you do with dplyr?</li>
+<li>What is piping?</li>
+</ul>
+</div>
+<div id="exercise-1" class="section level2">
+<h2>Exercise 1</h2>
+<p>As a refresher and to get our brains working, we’re going to repeat the exercises from our training last week. The only exception is that we’ll be using some data from the Bight. In this exercise, we’ll make a new project in RStudio and create a script for importing and working with these data today.</p>
+<ol style="list-style-type: decimal">
+<li><p>Start RStudio: To start both R and RStudio requires only firing up RStudio. RStudio should be available from All Programs at the Start Menu. Fire up RStudio. Take a minute or two to orient yourself to the different panes if you need a refresher from last time.</p></li>
+<li><p>Create a new project. Name it “wrangling_workshop” or something similar.</p></li>
+<li><p>Create a new “R Script” in the Source (scripting) Pane, save that file into your project and name it “data_wrangling1.R”. It’ll just be a blank text file at this point.</p></li>
+<li><p>Add in a comment line at the top stating the purpose. It should look something like: <code># Exercise 1: Scripting for data wrangling part 1</code>.</p></li>
+<li><p>Make a folder in your project called <code>data</code>. You should have downloaded this already, but if not, download the Bight dataset from here: <a href="https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13%20Chem%20data.xlsx">https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/B13 Chem data.xlsx</a>. Also download some metadata about the Bight stations from here: <a href="https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master%20Data%20-%20Station%20Info.xlsx">https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/Master Data - Station Info.xlsx</a>. Copy these files into the <code>data</code> folder in your project.</p></li>
+<li><p>Add some lines to your script to import and store the data in your Enviroment. Remember that the data should be in your <code>data</code> folder in your project. The <code>read_excel</code> function from the <code>readxl</code> package is your friend here and the paths are <code>&quot;data/B13 Chem data.xlsx&quot;</code> and <code>&quot;data/Master Data - Station Info.xlsx&quot;</code>. Remember to install/load the <code>readxl</code> library and to assign the data to a variable (<code>&lt;-</code>)</p></li>
+<li><p>Now run your script and make sure it doesn’t throw any errors and you do in fact get a data frame (or tibble).</p></li>
+<li><p>Explore the data frame using some of the functions we covered last time (e.g. <code>head()</code>,<code>dim()</code>, or <code>str()</code>). This part does not need to be included in the script and can be done directly in the console. It is just a quick QA step to be sure the data read in as expected.</p></li>
+</ol>
+</div>
+<div id="the-tidyverse" class="section level2">
+<h2>The tidyverse</h2>
+<p>The <a href="https://www.tidyverse.org/">tidyverse</a> is a set of packages that work in harmony because they share common data representations and design. The tidyverse package is designed to make it easy to install and load core packages from the tidyverse in a single command. With tidyverse, you’ll be able to address all steps of data exploration.</p>
+<p><img src="figure/data-science.png" /></p>
+<p>From the excellent book, <a href="http://r4ds.had.co.nz/">R for Data Science</a>, <strong>data exploration</strong> is the art of looking at your data, rapidly generating hypotheses, quickly testing them, then repeating again and again and again. Tools in the tidyverse also have direct application to more formal analyses with many of the other available R packages on <a href="https://cran.r-project.org/">CRAN</a>.</p>
+<p>You should already have the tidyverse installed, but let’s give it a go if you haven’t done this part yet:</p>
+<pre class="r"><code># install 
+install.packages(&#39;tidyverse&#39;)</code></pre>
+<p>After installation, we can load the package:</p>
+<pre class="r"><code># load
+library(tidyverse)</code></pre>
+<pre><code>## -- Attaching packages --------------------------- tidyverse 1.2.1 --</code></pre>
+<pre><code>## v ggplot2 2.2.1.9000     v readr   1.1.1     
+## v tibble  1.4.2          v purrr   0.2.4     
+## v tidyr   0.8.0          v stringr 1.3.0     
+## v ggplot2 2.2.1.9000     v forcats 0.2.0</code></pre>
+<pre><code>## -- Conflicts ------------------------------ tidyverse_conflicts() --
+## x dplyr::filter() masks stats::filter()
+## x dplyr::lag()    masks stats::lag()
+## x ggplot2::vars() masks dplyr::vars()</code></pre>
+<p>Notice that the messages you get after loading are a bit different from other packages. That’s because tidyverse is a package that manages other packages. Loading tidyverse will load all of the core packagbes:</p>
+<ul>
+<li><a href="http://ggplot2.tidyverse.org">ggplot2</a>, for data visualisation.</li>
+<li><a href="http://dplyr.tidyverse.org">dplyr</a>, for data manipulation.</li>
+<li><a href="http://tidyr.tidyverse.org">tidyr</a>, for data tidying.</li>
+<li><a href="http://readr.tidyverse.org">readr</a>, for data import.</li>
+<li><a href="http://purrr.tidyverse.org">purrr</a>, for functional programming.</li>
+<li><a href="http://tibble.tidyverse.org">tibble</a>, for tibbles, a modern re-imagining of data frames.</li>
+</ul>
+<p>Other packages (e.g., <code>readxl</code>) are also included but you will probably not use these as frequently.</p>
+<p>A nice freature of tidyverse is the ability to check for and install new versions of each package:</p>
+<pre class="r"><code>tidyverse_update()
+#&gt; The following packages are out of date:
+#&gt;  * broom (0.4.0 -&gt; 0.4.1)
+#&gt;  * DBI   (0.4.1 -&gt; 0.5)
+#&gt;  * Rcpp  (0.12.6 -&gt; 0.12.7)
+#&gt; Update now?
+#&gt; 
+#&gt; 1: Yes
+#&gt; 2: No</code></pre>
+<p>As you’ll soon learn using R, there are often several ways to achieve the same goal. The tidyverse provides tools to address problems that can be solved with other packages or even functions from the base installation. Tidyverse is admittedly an <em>opinionated</em> approach to data exploration, but it’s popularity and rapid growth within the R community is a testament to the power of the tools that are provided.</p>
+</div>
+<div id="data-wrangling-with-dplyr" class="section level2">
+<h2>Data wrangling with <code>dplyr</code></h2>
+<p><img src="figure/data-science-wrangle.png" /></p>
+<p>As the graphic implies, the data wrangling process includes data import, tidying, and transformation. The process directly feeds into, and is not mutually exclusive, with the <em>understanding</em> or modelling side of data exploration. More generally, I consider data wrangling as the manipulation or combination of datasets for the purpose of analysis.</p>
+<p>Wrangling begins with import and ends with an output of some kind, such as a plot or a model. In a perfect world, the wrangling process is linear with no need for back-tracking. In reality, we often uncover more information about a dataset, either through wrangling or modeling, that warrants re-evaluation or even gathering more data. Data also come in many forms and the form you need for analysis is rarely the required form of the input data. For these reasons, data wrangling will consume most of your time in data exploration.</p>
+<p><strong>All wrangling is based on a purpose.</strong> No one wrangles for the sake of wrangling (usually), so the process always begins by answering the following two questions:</p>
+<ul>
+<li>What do my input data look like?</li>
+<li>What should my input data look like given what I want to do?</li>
+</ul>
+<p>At the most basic level, going from what your data looks like to what it should look like will require a few key operations. Some common examples:</p>
+<ul>
+<li>Selecting specific variables</li>
+<li>Filtering observations by some criteria</li>
+<li>Adding or modifying existing variables</li>
+<li>Renaming variables</li>
+<li>Arranging rows by a variable</li>
+<li>Summarizing variable conditional on others</li>
+</ul>
+<p>The <code>dplyr</code> package provides easy tools for these common data manipulation tasks. It is built to work directly with data frames and this is one of the foundational packages in what is now known as the tidyverse. The philosophy of dplyr is that one function does one thing and the name of the function says what it does. This is where the tidyverse generally departs from other packages and even base R. It is meant to be easy, logical, and intuitive. There is a lot of great info on dplyr. If you have an interest, I’d encourage you to look more. The vignettes are particularly good.</p>
+<ul>
+<li><a href="https://github.com/hadley/dplyr"><code>dplyr</code> GitHub repo</a></li>
+<li><a href="http://cran.rstudio.com/web/packages/dplyr/">CRAN page: vignettes here</a></li>
+<li><a href="https://www.rstudio.com/wp-content/uploads/2015/02/data-wrangling-cheatsheet.pdf">Cheatsheet</a></li>
+</ul>
+<p>I’ll demonstrate the examples with the <code>mpg</code> dataset from last time. This dataset describes fuel economy of different vehicles and it comes with the tidyverse. Let’s get a feel for the data.</p>
+<pre class="r"><code># convert to data frame, just cause
+mpg &lt;- as.data.frame(mpg)
+
+# see first six rows
+head(mpg)</code></pre>
+<pre><code>##   manufacturer model displ year cyl      trans drv cty hwy fl   class
+## 1         audi    a4   1.8 1999   4   auto(l5)   f  18  29  p compact
+## 2         audi    a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 3         audi    a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 4         audi    a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 5         audi    a4   2.8 1999   6   auto(l5)   f  16  26  p compact
+## 6         audi    a4   2.8 1999   6 manual(m5)   f  18  26  p compact</code></pre>
+<pre class="r"><code># dimensions
+dim(mpg)</code></pre>
+<pre><code>## [1] 234  11</code></pre>
+<pre class="r"><code># column names
+names(mpg)</code></pre>
+<pre><code>##  [1] &quot;manufacturer&quot; &quot;model&quot;        &quot;displ&quot;        &quot;year&quot;        
+##  [5] &quot;cyl&quot;          &quot;trans&quot;        &quot;drv&quot;          &quot;cty&quot;         
+##  [9] &quot;hwy&quot;          &quot;fl&quot;           &quot;class&quot;</code></pre>
+<pre class="r"><code># structure 
+str(mpg)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    234 obs. of  11 variables:
+##  $ manufacturer: chr  &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; &quot;audi&quot; ...
+##  $ model       : chr  &quot;a4&quot; &quot;a4&quot; &quot;a4&quot; &quot;a4&quot; ...
+##  $ displ       : num  1.8 1.8 2 2 2.8 2.8 3.1 1.8 1.8 2 ...
+##  $ year        : int  1999 1999 2008 2008 1999 1999 2008 1999 1999 2008 ...
+##  $ cyl         : int  4 4 4 4 6 6 6 4 4 4 ...
+##  $ trans       : chr  &quot;auto(l5)&quot; &quot;manual(m5)&quot; &quot;manual(m6)&quot; &quot;auto(av)&quot; ...
+##  $ drv         : chr  &quot;f&quot; &quot;f&quot; &quot;f&quot; &quot;f&quot; ...
+##  $ cty         : int  18 21 20 21 16 18 18 18 16 20 ...
+##  $ hwy         : int  29 29 31 30 26 26 27 26 25 28 ...
+##  $ fl          : chr  &quot;p&quot; &quot;p&quot; &quot;p&quot; &quot;p&quot; ...
+##  $ class       : chr  &quot;compact&quot; &quot;compact&quot; &quot;compact&quot; &quot;compact&quot; ...</code></pre>
+<div id="selecting" class="section level3">
+<h3>Selecting</h3>
+<p>Let’s begin using dplyr. Don’t forget to load the tidyverse if you haven’t done so already.</p>
+<pre class="r"><code># first, select some columns
+dplyr_sel1 &lt;- select(mpg, manufacturer, model, cty, hwy)
+head(dplyr_sel1)</code></pre>
+<pre><code>##   manufacturer model cty hwy
+## 1         audi    a4  18  29
+## 2         audi    a4  21  29
+## 3         audi    a4  20  31
+## 4         audi    a4  21  30
+## 5         audi    a4  16  26
+## 6         audi    a4  18  26</code></pre>
+<pre class="r"><code># select everything but class and drv
+dplyr_sel2 &lt;- select(mpg, -drv, -class)
+head(dplyr_sel2)</code></pre>
+<pre><code>##   manufacturer model displ year cyl      trans cty hwy fl
+## 1         audi    a4   1.8 1999   4   auto(l5)  18  29  p
+## 2         audi    a4   1.8 1999   4 manual(m5)  21  29  p
+## 3         audi    a4   2.0 2008   4 manual(m6)  20  31  p
+## 4         audi    a4   2.0 2008   4   auto(av)  21  30  p
+## 5         audi    a4   2.8 1999   6   auto(l5)  16  26  p
+## 6         audi    a4   2.8 1999   6 manual(m5)  18  26  p</code></pre>
+<pre class="r"><code># select columns that contain the letter c
+dplyr_sel3 &lt;- select(mpg, matches(&#39;c&#39;))
+head(dplyr_sel3)</code></pre>
+<pre><code>##   manufacturer cyl cty   class
+## 1         audi   4  18 compact
+## 2         audi   4  21 compact
+## 3         audi   4  20 compact
+## 4         audi   4  21 compact
+## 5         audi   6  16 compact
+## 6         audi   6  18 compact</code></pre>
+</div>
+<div id="filtering" class="section level3">
+<h3>Filtering</h3>
+<p>After selecting columns, you’ll probably want to remove observations that don’t fit some criteria. For example, maybe you want to remove all cars from the dataset that have low mileage on the highway. Maybe you want to look at only six cylinder cars.</p>
+<pre class="r"><code># now select (filter) some observations
+dplyr_good_fuel &lt;- filter(mpg, hwy &gt; 25)
+head(dplyr_good_fuel)</code></pre>
+<pre><code>##   manufacturer model displ year cyl      trans drv cty hwy fl   class
+## 1         audi    a4   1.8 1999   4   auto(l5)   f  18  29  p compact
+## 2         audi    a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 3         audi    a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 4         audi    a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 5         audi    a4   2.8 1999   6   auto(l5)   f  16  26  p compact
+## 6         audi    a4   2.8 1999   6 manual(m5)   f  18  26  p compact</code></pre>
+<pre class="r"><code># now select observations for only six cylinder vehicles
+dplyr_six_cyl &lt;- filter(mpg, cyl == 6)
+head(dplyr_six_cyl)</code></pre>
+<pre><code>##   manufacturer      model displ year cyl      trans drv cty hwy fl   class
+## 1         audi         a4   2.8 1999   6   auto(l5)   f  16  26  p compact
+## 2         audi         a4   2.8 1999   6 manual(m5)   f  18  26  p compact
+## 3         audi         a4   3.1 2008   6   auto(av)   f  18  27  p compact
+## 4         audi a4 quattro   2.8 1999   6   auto(l5)   4  15  25  p compact
+## 5         audi a4 quattro   2.8 1999   6 manual(m5)   4  17  25  p compact
+## 6         audi a4 quattro   3.1 2008   6   auto(s6)   4  17  25  p compact</code></pre>
+<p>Filtering can take a bit of time to master because there are several ways to tell R what you want. Within the filter function, the working part is a <em>logical selection</em> of <code>TRUE</code> and <code>FALSE</code> values that are used to selected rows (<code>TRUE</code> means I want that row, <code>FALSE</code> means I don’t). Every selection within the filter function, no matter how complicated, will always be a T/F vector. This is similar to running queries on a database if you’re familiar with SQL.</p>
+<p>To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>!=</code> (not equal), and <code>==</code> (equal). When you’re starting out with R, the easiest mistake to make is to use <code>=</code> instead of <code>==</code> when testing for equality.</p>
+<p>Multiple arguments to <code>filter()</code> are combined with “and”: every expression must be true in order for a row to be included in the output. For other types of combinations, you’ll need to use Boolean operators yourself: <code>&amp;</code> is “and”, <code>|</code> is “or”, and <code>!</code> is “not”. This is the complete set of Boolean operations.</p>
+<p><img src="figure/transform-logical.png" /></p>
+<p>Let’s start combining filtering operations.</p>
+<pre class="r"><code># get cars with city mileage betwen 18 and 22
+filt1 &lt;- filter(mpg, cty &gt; 18 &amp; cty &lt; 22)
+head(filt1)</code></pre>
+<pre><code>##   manufacturer      model displ year cyl      trans drv cty hwy fl   class
+## 1         audi         a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 2         audi         a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 3         audi         a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 4         audi a4 quattro   2.0 2008   4 manual(m6)   4  20  28  p compact
+## 5         audi a4 quattro   2.0 2008   4   auto(s6)   4  19  27  p compact
+## 6    chevrolet     malibu   2.4 1999   4   auto(l4)   f  19  27  r midsize</code></pre>
+<pre class="r"><code># get four cylinder or compact cars
+filt2 &lt;- filter(mpg, cyl == 4 | class == &#39;compact&#39;)
+head(filt2)</code></pre>
+<pre><code>##   manufacturer model displ year cyl      trans drv cty hwy fl   class
+## 1         audi    a4   1.8 1999   4   auto(l5)   f  18  29  p compact
+## 2         audi    a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 3         audi    a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 4         audi    a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 5         audi    a4   2.8 1999   6   auto(l5)   f  16  26  p compact
+## 6         audi    a4   2.8 1999   6 manual(m5)   f  18  26  p compact</code></pre>
+<pre class="r"><code># get four cylinder and compact cars
+filt3 &lt;- filter(mpg, cyl == 4 &amp; class == &#39;compact&#39;)
+head(filt3)</code></pre>
+<pre><code>##   manufacturer      model displ year cyl      trans drv cty hwy fl   class
+## 1         audi         a4   1.8 1999   4   auto(l5)   f  18  29  p compact
+## 2         audi         a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 3         audi         a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 4         audi         a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 5         audi a4 quattro   1.8 1999   4 manual(m5)   4  18  26  p compact
+## 6         audi a4 quattro   1.8 1999   4   auto(l5)   4  16  25  p compact</code></pre>
+<pre class="r"><code># get cars manufactured by ford or toyota
+filt4 &lt;- filter(mpg, manufacturer == &#39;ford&#39; | manufacturer == &#39;toyota&#39;)
+head(filt4)</code></pre>
+<pre><code>##   manufacturer          model displ year cyl      trans drv cty hwy fl
+## 1         ford expedition 2wd   4.6 1999   8   auto(l4)   r  11  17  r
+## 2         ford expedition 2wd   5.4 1999   8   auto(l4)   r  11  17  r
+## 3         ford expedition 2wd   5.4 2008   8   auto(l6)   r  12  18  r
+## 4         ford   explorer 4wd   4.0 1999   6   auto(l5)   4  14  17  r
+## 5         ford   explorer 4wd   4.0 1999   6 manual(m5)   4  15  19  r
+## 6         ford   explorer 4wd   4.0 1999   6   auto(l5)   4  14  17  r
+##   class
+## 1   suv
+## 2   suv
+## 3   suv
+## 4   suv
+## 5   suv
+## 6   suv</code></pre>
+<pre class="r"><code># an alternative way to get ford and toyota 
+filt5 &lt;- filter(mpg, manufacturer %in% c(&#39;ford&#39;, &#39;toyota&#39;))
+head(filt5)</code></pre>
+<pre><code>##   manufacturer          model displ year cyl      trans drv cty hwy fl
+## 1         ford expedition 2wd   4.6 1999   8   auto(l4)   r  11  17  r
+## 2         ford expedition 2wd   5.4 1999   8   auto(l4)   r  11  17  r
+## 3         ford expedition 2wd   5.4 2008   8   auto(l6)   r  12  18  r
+## 4         ford   explorer 4wd   4.0 1999   6   auto(l5)   4  14  17  r
+## 5         ford   explorer 4wd   4.0 1999   6 manual(m5)   4  15  19  r
+## 6         ford   explorer 4wd   4.0 1999   6   auto(l5)   4  14  17  r
+##   class
+## 1   suv
+## 2   suv
+## 3   suv
+## 4   suv
+## 5   suv
+## 6   suv</code></pre>
+</div>
+<div id="mutating" class="section level3">
+<h3>Mutating</h3>
+<p>Now that we’ve seen how to filter observations and select columns of a data frame, maybe we want to add a new column. In dplyr, <code>mutate</code> allows us to add new columns. These can be vectors you are adding or based on expressions applied to existing columns. For instance, we have a column of highway mileage and maybe we want to convert to km/l (Google says the conversion factor is 0.425).</p>
+<pre class="r"><code># add a column for km/L
+dplyr_mut &lt;- mutate(mpg, hwy_kml = hwy * 0.425)
+head(dplyr_mut)</code></pre>
+<pre><code>##   manufacturer model displ year cyl      trans drv cty hwy fl   class
+## 1         audi    a4   1.8 1999   4   auto(l5)   f  18  29  p compact
+## 2         audi    a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 3         audi    a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 4         audi    a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 5         audi    a4   2.8 1999   6   auto(l5)   f  16  26  p compact
+## 6         audi    a4   2.8 1999   6 manual(m5)   f  18  26  p compact
+##   hwy_kml
+## 1  12.325
+## 2  12.325
+## 3  13.175
+## 4  12.750
+## 5  11.050
+## 6  11.050</code></pre>
+<pre class="r"><code># add a column for lo/hi fuel economy
+dplyr_mut2 &lt;- mutate(mpg, hwy_cat = ifelse(hwy &lt; 25, &#39;hi&#39;, &#39;lo&#39;))
+head(dplyr_mut2)</code></pre>
+<pre><code>##   manufacturer model displ year cyl      trans drv cty hwy fl   class
+## 1         audi    a4   1.8 1999   4   auto(l5)   f  18  29  p compact
+## 2         audi    a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 3         audi    a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 4         audi    a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 5         audi    a4   2.8 1999   6   auto(l5)   f  16  26  p compact
+## 6         audi    a4   2.8 1999   6 manual(m5)   f  18  26  p compact
+##   hwy_cat
+## 1      lo
+## 2      lo
+## 3      lo
+## 4      lo
+## 5      lo
+## 6      lo</code></pre>
+<p>Some other useful dplyr functions include <code>arrange</code> to sort the observations (rows) by a column and <code>rename</code> to (you guessed it) rename a column.</p>
+<pre class="r"><code># arrange by highway economy
+dplyr_arr &lt;- arrange(mpg, hwy)
+head(dplyr_arr)</code></pre>
+<pre><code>##   manufacturer               model displ year cyl      trans drv cty hwy
+## 1        dodge   dakota pickup 4wd   4.7 2008   8   auto(l5)   4   9  12
+## 2        dodge         durango 4wd   4.7 2008   8   auto(l5)   4   9  12
+## 3        dodge ram 1500 pickup 4wd   4.7 2008   8   auto(l5)   4   9  12
+## 4        dodge ram 1500 pickup 4wd   4.7 2008   8 manual(m6)   4   9  12
+## 5         jeep  grand cherokee 4wd   4.7 2008   8   auto(l5)   4   9  12
+## 6    chevrolet     k1500 tahoe 4wd   5.3 2008   8   auto(l4)   4  11  14
+##   fl  class
+## 1  e pickup
+## 2  e    suv
+## 3  e pickup
+## 4  e pickup
+## 5  e    suv
+## 6  e    suv</code></pre>
+<pre class="r"><code># rename some columns
+dplyr_rnm &lt;- rename(mpg, make = manufacturer)
+head(dplyr_rnm)</code></pre>
+<pre><code>##   make model displ year cyl      trans drv cty hwy fl   class
+## 1 audi    a4   1.8 1999   4   auto(l5)   f  18  29  p compact
+## 2 audi    a4   1.8 1999   4 manual(m5)   f  21  29  p compact
+## 3 audi    a4   2.0 2008   4 manual(m6)   f  20  31  p compact
+## 4 audi    a4   2.0 2008   4   auto(av)   f  21  30  p compact
+## 5 audi    a4   2.8 1999   6   auto(l5)   f  16  26  p compact
+## 6 audi    a4   2.8 1999   6 manual(m5)   f  18  26  p compact</code></pre>
+<p>There are many more functions in <code>dplyr</code> but the one’s above are by far the most used. As you can imagine, they are most effective when used to together because there is never only one step in the data wrangling process. After the exercise, we’ll talk about how we can efficiently <em>pipe</em> the functions in dplyr to create a new data object.</p>
+</div>
+</div>
+<div id="exercise-2" class="section level2">
+<h2>Exercise 2</h2>
+<p>Now that you know the basic functions in <code>dplyr</code> and how to use them, let’s apply them to a more relevant dataset. We’re going to import the sediment chemistry dataset from Bight13 and grab some specific data that we want. We’ll be getting all of the observations for chlorophyll (<code>Total_CHL</code>) and organic carbon (<code>Total Organic Carbon</code>). We’ll remove everything else in the data that we don’t need.</p>
+<ol style="list-style-type: decimal">
+<li><p>Import the Bight chemistry data using the <code>read_excel</code> function from the readxl package. The data should be in your <code>data</code> folder. Make sure to store it as an object in your workspace (use <code>&lt;-</code>).</p></li>
+<li><p>Now we need to think about what variables we need to get the chlorophyll data. Select the <code>StationID</code>, <code>Parameter</code>, and <code>Result</code> columns and assign it as a new object in your environment.</p></li>
+<li><p>Using the new object, let’s filter the observations (i.e., the <code>Parameter</code> column) to get only chlorophyll (<code>Total_CHL</code>) and organic carbon (<code>Total Organic Carbon</code>). Again, assign the new object to your environment.</p></li>
+<li><p>When you’re happy with the result, have a look at the data. Did you get what you wanted? How many observations do you have compared to the original data file? Did you succesfully filter the right parameters (hint: <code>table(dat$Parameter)</code>?</p></li>
+<li><p>Save the new file to your data folder using <code>write_csv</code> and call it <code>Bight_wrangle.csv</code>. Don’t forget to include the full path within your project when saving the file.</p></li>
+</ol>
+</div>
+<div id="piping" class="section level2">
+<h2>Piping</h2>
+<p>A complete data wrangling exercise will always include multiple steps to go from the raw data to the output you need. Here’s a terrible wrangling example using functions from base R:</p>
+<pre class="r"><code>cropdat &lt;- rawdat[1:28]
+savecols &lt;- data.frame(cropdat$Party, cropdat$`Last Inventory Year (2015)`)
+names(savecols) &lt;- c(&#39;Party&#39;,&#39;2015&#39;)
+savecols$rank2015 &lt;- rank(-savecols$`2015`)
+top10df &lt;- savecols[savecols$rank2015 &lt;= 10,]
+basedat &lt;- cropdat[cropdat$Party %in% top10df$Party,]</code></pre>
+<p>Technically, if this works it’s not “wrong”, but there are a couple issues that can lead to problems down the line. First, the flow of functions to manipulate the data is not obvious and this makes your code very hard to read. Second, lots of unecessary intermediates have been created in your workspace. Anything that adds to clutter should be avoided because R is fundamentally based on object assignments. The less you assign as a variable in your environment the easier it will be to navigate complex scripts.</p>
+<p>The good news is that you now know how to use the dplyr functions to wrangle data. The function names in dplyr were chosen specifically to be descriptive. This will make your code much more readable than if you were using base R counterparts. The bad news is that I haven’t told you how to easily link the functions. Fortunately, there’s an easy fix to this problem.</p>
+<p>The <code>magrittr</code> package (comes with tidyverse) provides a very useful method called <em>piping</em> that will make wrangling a whole lot easier. The idea is simple: a pipe (<code>%&gt;%</code>) is used to chain functions together. The output from one function becomes the input to the next function in the pipe. This avoids the need to create intermediate objects and creates a logical progression of steps that demystify the wrangling process.</p>
+<p>Consider the simple example:</p>
+<pre class="r"><code># not using pipes, select a column, filter rows
+bad_ex &lt;- select(mpg, manufacturer, hwy)
+bad_ex2 &lt;- filter(bad_ex, hwy &gt; 25)</code></pre>
+<p>With pipes, it looks like this:</p>
+<pre class="r"><code># with pipes, select a column, filter rows
+good_ex &lt;- select(mpg, manufacturer, hwy) %&gt;% 
+  filter(hwy &gt; 25)</code></pre>
+<p>Now we’ve created only one new object in our environment and we can clearly see that we select, then filter. The only real coding difference is now the filter function only includes the part about which rows to keep. You do not need to specify a data object as input to a function if you’re using piping. The pipe will always use the input that comes from above.</p>
+<p>Using pipes, you can link together as many functions as you like.</p>
+<pre class="r"><code># a complete piping example
+all_pipes &lt;- mpg %&gt;% 
+  select(manufacturer, year, hwy, cty) %&gt;% 
+  filter(year == 2008 &amp; hwy &lt;= 25) %&gt;% 
+  rename(
+    make = manufacturer, 
+    hmpg = hwy, 
+    cmpg = cty
+    ) %&gt;% 
+  arrange(-hmpg)
+head(all_pipes)</code></pre>
+<pre><code>##        make year hmpg cmpg
+## 1      audi 2008   25   17
+## 2      audi 2008   25   15
+## 3      audi 2008   25   17
+## 4 chevrolet 2008   25   15
+## 5    nissan 2008   25   19
+## 6   pontiac 2008   25   16</code></pre>
+<p>A couple comments about piping:</p>
+<ul>
+<li>I find it very annoying to type the pipe operator (six key strokes!). RStudio has a nice keyboard shortcut: <code>Crtl + Shift + M</code> for Windows (use <code>Cmd + Shift + M</code> on a mac).</li>
+<li>It’s convention to start a new function on the next line after a pipe operator. This makes the code easier to read and you can also comment out a single step in a long pipe.</li>
+<li>Don’t make your pipes too long, limit them to a particular data object or task.</li>
+</ul>
+</div>
+<div id="exercise-3" class="section level2">
+<h2>Exercise 3</h2>
+<p>Now that we know how to pipe functions, let’s repeat exercise 2 with the Bight data. You should already have code to import, select, and filter the data. In theory, you could create all of exercise 2 with a single continuous pipe. That’s a bit excessive so try to do this by creating only two objects in your workspace. Make one object the raw data and the second object the wrangled data.</p>
+<ol style="list-style-type: decimal">
+<li>Using your code from exercise two, try to replicate the steps using pipes. The steps we used in exercise two were:
+<ul>
+<li>Import the raw data with <code>read_excel</code></li>
+<li>Select the columns <code>StationID</code>, <code>Parameter</code>, and <code>Result</code></li>
+<li>Filter parameter to get only <code>Total_CHL</code> and <code>Total Organic Carbon</code> (hint: use <code>%in%</code>)</li>
+</ul></li>
+<li>When you’re done, you should have a data object that’s exactly the same as the one you created in exercise two. Try to verify this with the <code>identical</code> function from base R (check the help file with <code>?identical</code> if you don’t know how to use this function).</li>
+</ol>
+</div>
+<div id="next-time" class="section level2">
+<h2>Next time</h2>
+<p>Now you should be able to answer (or be able to find answers to) the following:</p>
+<ul>
+<li>Why do we need to manipulate data?</li>
+<li>What is the tidyverse?</li>
+<li>What can you do with dplyr?</li>
+<li>What is piping?</li>
+</ul>
+<p>Next time we’ll continue with data wrangling.</p>
+</div>
+<div id="attribution" class="section level2">
+<h2>Attribution</h2>
+<p>Content in this lesson was pillaged extensively from the USGS-R training curriculum <a href="https://github.com/USGS-R/training-curriculum">here</a> and <a href="https://github.com/hadley/r4ds">R for data Science</a>.</p>
+</div>
+</div>
+
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
