@@ -33,4 +33,6 @@ output:
     toc: true
     toc_float: 
        collapsed: true
+    includes: 
+      in_header: google-analytics.html
     
