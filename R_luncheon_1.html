@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>R_luncheon_1.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -23,8 +23,8 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="js/google-analytics.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -34,10 +34,12 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -348,12 +350,12 @@ div.tocify {
 </div>
 <div id="problem-scope" class="section level1">
 <h1>Problem scope</h1>
-<p>Today’s session will use a compiled dataset that describes filtration of wastewater at different treatment plants in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events. The general goal is to quantify filtration effectiveness by comparing influence/effluent concentrations with the storm events across several wastewater treatment locations. This will provide a benchmark of how well wastewater treatment plants are filtering different water quality parameters when flow through the system is high (i.e., during storms).</p>
+<p>Today’s session will use a compiled dataset that describes filtration of wastewater at different treatment plants in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events. The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several wastewater treatment locations. This will provide a benchmark of how well wastewater treatment plants are filtering different water quality parameters when flow through the system is high (i.e., during storms).</p>
+<p><img src="figure/rawdat.JPG" /></p>
+<p>We want to create a plot like this after getting the raw data in the correct format.</p>
+<p><img src="figure/finalplo.JPG" /></p>
 <p>The data are messy. The spreadsheet includes measurements from different locations where record-keeping was not consistent. Each location may also include several filtration samples, with measurements for one or more storm events. There are several columns in the dataset, not all of which are relevant for our analysis. Here’s a screenshot:</p>
-<div class="figure">
-<img src="figure/lunchdatex.PNG" />
-
-</div>
+<p><img src="figure/lunchdatex.PNG" /></p>
 <p>We want to import the data, wrangle the information to a consistent format, and plot the data to help us assess how well the filtration systems are removing water quality constituents. Each of these steps can be performed in R.</p>
 <ol style="list-style-type: decimal">
 <li><p>Import the Excel spreadsheet</p></li>
@@ -367,18 +369,12 @@ div.tocify {
 <div id="open-rstudio" class="section level2">
 <h2>Open RStudio</h2>
 <p>Find the RStudio shortcut and fire it up. You should see something like this:</p>
-<div class="figure">
-<img src="figure/rstudio.png" />
-
-</div>
+<p><img src="figure/rstudio.png" /></p>
 </div>
 <div id="create-a-new-project-in-rstudio" class="section level2">
 <h2>Create a new project in RStudio</h2>
 <p>To create a new project, click on the File menu at the top and select ‘New project…’</p>
-<div class="figure">
-<img src="figure/rstudio_proj.jpg" />
-
-</div>
+<p><img src="figure/rstudio_proj.jpg" /></p>
 </div>
 <div id="download-the-data-to-your-project" class="section level2">
 <h2>Download the data to your project</h2>
@@ -395,10 +391,7 @@ download.file(
 <h1>Data import</h1>
 <p>Now that we’ve got our project setup with the data, let’s open a new script and load some R packages that we’ll be using.</p>
 <p>Open a new script from the File menu…</p>
-<div class="figure">
-<img src="figure/rstudio_script.jpg" />
-
-</div>
+<p><img src="figure/rstudio_script.jpg" /></p>
 <p>Once the script is open, save it using the drop down file menu on the top left. Give it an informative name (e.g.,<code>Rluncheon1.R</code>) and save it in your project’s home directory. This should be the default location selected by RStudio when you save the file.</p>
 <p>We’ll be using functions from the <a href="https://www.tidyverse.org/">tidyverse</a> collection of packages to import, wrangle, and plot the data. Checkout our training material <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#the-tidyverse">here</a> if you need a brush up. Run this line in the R console if you don’t have the tidyverse installed.</p>
 <pre class="r"><code>install.packages(&#39;tidyverse&#39;)</code></pre>
@@ -452,7 +445,7 @@ library(readxl)</code></pre>
 <div id="data-wrangle" class="section level1">
 <h1>Data wrangle</h1>
 <p>There’s plenty of information in this dataset that we don’t need. Let’s pare it down so it’s more manageable for our question. Before we do that, we need to decide which columns are important and which water quality parameter we care about.</p>
-<p>As mentioned before, we want to compare influence and effluent concentrations measured for one or more samples, for one or more storms, at different wastewater treatment plants. The columns we care about are:</p>
+<p>As mentioned before, we want to compare influent and effluent concentrations measured for one or more samples, for one or more storms, at different wastewater treatment plants. The columns we care about are:</p>
 <ul>
 <li><code>SITENAME</code>: unique identifier for the wastewater treatment plant</li>
 <li><code>MSNAME</code>: identifier for different samples from a wastewater treatment plant, this is where the influent and effluent measurements are identified</li>
@@ -495,7 +488,7 @@ library(readxl)</code></pre>
 ##  $ Storm #          : num  3 9 1 14 5 17 18 10 8 13 ...
 ##  $ WQX Parameter    : chr  &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; ...
 ##  $ WQ Analysis Value: num  76 52 150 38 36 54 62 56 48 47 ...</code></pre>
-<p>Much more manageable! Now comes the hard part… we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment plant are consistently referenced. We can’t easily compare the influent/effluent concentrations in the current data because they are in the same column!</p>
+<p>Much more manageable! Now comes the hard part… we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment plant are consistently referenced. This is information in the dataset that needs to be retained to meanignfully evaluated filtration effectivness. We can’t easily compare the influent/effluent concentrations in the current data because they are in the same column!</p>
 <pre class="r"><code>library(tidyverse)
 library(readxl)
 

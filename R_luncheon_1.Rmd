@@ -22,7 +22,13 @@ Please note that this is not an introduction to R. You are expected to have some
 
 # Problem scope
 
-Today's session will use a compiled dataset that describes filtration of wastewater at different treatment plants in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influence/effluent concentrations with the storm events across several wastewater treatment locations. This will provide a benchmark of how well wastewater treatment plants are filtering different water quality parameters when flow through the system is high (i.e., during storms).  
+Today's session will use a compiled dataset that describes filtration of wastewater at different treatment plants in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several wastewater treatment locations. This will provide a benchmark of how well wastewater treatment plants are filtering different water quality parameters when flow through the system is high (i.e., during storms).  
+
+![](figure/rawdat.JPG)
+
+We want to create a plot like this after getting the raw data in the correct format. 
+
+![](figure/finalplo.JPG)
 
 The data are messy.  The spreadsheet includes measurements from different locations where record-keeping was not consistent.  Each location may also include several filtration samples, with measurements for one or more storm events.  There are several columns in the dataset, not all of which are relevant for our analysis.  Here's a screenshot:
 
@@ -109,7 +115,7 @@ str(dat)
 
 There's plenty of information in this dataset that we don't need.  Let's pare it down so it's more manageable for our question.  Before we do that, we need to decide which columns are important and which water quality parameter we care about.  
 
-As mentioned before, we want to compare influence and effluent concentrations measured for one or more samples, for one or more storms, at different wastewater treatment plants.  The columns we care about are:
+As mentioned before, we want to compare influent and effluent concentrations measured for one or more samples, for one or more storms, at different wastewater treatment plants.  The columns we care about are:
 
 * `SITENAME`: unique identifier for the wastewater treatment plant
 * `MSNAME`: identifier for different samples from a wastewater treatment plant, this is where the influent and effluent measurements are identified
