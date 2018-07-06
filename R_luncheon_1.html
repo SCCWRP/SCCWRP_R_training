@@ -351,14 +351,14 @@ div.tocify {
 <p>Today’s session will use a compiled dataset that describes filtration of wastewater at different treatment plants in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events. The general goal is to quantify filtration effectiveness by comparing influence/effluent concentrations with the storm events across several wastewater treatment locations. This will provide a benchmark of how well wastewater treatment plants are filtering different water quality parameters when flow through the system is high (i.e., during storms).</p>
 <p>The data are messy. The spreadsheet includes measurements from different locations where record-keeping was not consistent. Each location may also include several filtration samples, with measurements for one or more storm events. There are several columns in the dataset, not all of which are relevant for our analysis. Here’s a screenshot:</p>
 <div class="figure">
-<img src="figure/lunchdatex.png" />
+<img src="figure/lunchdatex.PNG" />
 
 </div>
 <p>We want to import the data, wrangle the information to a consistent format, and plot the data to help us assess how well the filtration systems are removing water quality constituents. Each of these steps can be performed in R.</p>
 <ol style="list-style-type: decimal">
 <li><p>Import the Excel spreadsheet</p></li>
 <li><p>Wrangle the data to a consistent format. This will require removing extra columns we don’t need, filtering the observations (rows) for a water quality parameter we’re interested in, and develop a consistent convention that will allow to compare between treatment plants, filtration samples, and storm events.</p></li>
-<li><p>Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis). Our hope is that effluent concentrations will be lower than influent concenrations as a measure of how well the filtration systems are working.</p></li>
+<li><p>Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis). Our hope is that effluent concentrations will be lower than influent concentrations as a measure of how well the filtration systems are working.</p></li>
 </ol>
 </div>
 <div id="housekeeping" class="section level1">
@@ -385,7 +385,10 @@ div.tocify {
 <p>You can download the data from this <a href="https://sccwrp.github.io/SCCWRP_R_training/data/CA_DetentionBasin2.xlsx">link</a>. Once downloaded, you’ll have to copy and paste the Excel file to your project. Run <code>getwd()</code> in the R console if you’re not sure where this is.</p>
 <p>You can also download the data file directly in R. This will download the data and save the file to your new RStudio project in a single step.</p>
 <pre class="r"><code># download the data
-download.file(url = &#39;https://sccwrp.github.io/SCCWRP_R_training/data/CA_DetentionBasin2.xlsx&#39;)</code></pre>
+download.file(
+  url = &#39;https://sccwrp.github.io/SCCWRP_R_training/data/CA_DetentionBasin2.xlsx&#39;,
+  destfile= &#39;CA_DetentionBasin2.xlsx&#39;
+  )</code></pre>
 </div>
 </div>
 <div id="data-import" class="section level1">
@@ -396,6 +399,103 @@ download.file(url = &#39;https://sccwrp.github.io/SCCWRP_R_training/data/CA_Dete
 <img src="figure/rstudio_script.jpg" />
 
 </div>
+<p>Once the script is open, save it using the drop down file menu on the top left. Give it an informative name (e.g.,<code>Rluncheon1.R</code>) and save it in your project’s home directory. This should be the default location selected by RStudio when you save the file.</p>
+<p>We’ll be using functions from the <a href="https://www.tidyverse.org/">tidyverse</a> collection of packages to import, wrangle, and plot the data. Checkout our training material <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#the-tidyverse">here</a> if you need a brush up. Run this line in the R console if you don’t have the tidyverse installed.</p>
+<pre class="r"><code>install.packages(&#39;tidyverse&#39;)</code></pre>
+<p>In the script you just opened, add the following lines to load the tidyverse package and the readxl package (for data import).</p>
+<pre class="r"><code>library(tidyverse)
+library(readxl)</code></pre>
+<p>Then add this line to import the dataset using the <code>read_excel()</code> function. The imported dataset will be assigned to the <code>dat</code> variable in the workspace for your current R session.</p>
+<pre class="r"><code>dat &lt;- read_excel(&#39;CA_DetentionBasin2.xlsx&#39;)</code></pre>
+<p>Let’s get a feeling for the dataset before we proceed.</p>
+<pre class="r"><code>head(dat)</code></pre>
+<pre><code>## # A tibble: 6 x 23
+##    SITEID SITENAME    MSID MSNAME `Storm #` SAMPLEDATE          SAMPLETIME
+##     &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;dttm&gt;              &lt;lgl&gt;     
+## 1 -1.78e9 I-5 / S~ -1.02e9 27E           16 2001-03-06 00:00:00 NA        
+## 2 -1.78e9 I-5 / S~  1.08e9 27I           18 2001-04-20 00:00:00 NA        
+## 3 -1.78e9 I-5 / S~  1.08e9 27I           18 2001-04-21 00:00:00 NA        
+## 4 -1.78e9 I-5 / S~  1.08e9 27I           15 2001-02-23 00:00:00 NA        
+## 5 -1.78e9 I-5 / S~  1.08e9 27I            3 1999-03-26 00:00:00 NA        
+## 6 -1.78e9 I-5 / S~  1.08e9 27I            9 2000-03-04 00:00:00 NA        
+## # ... with 16 more variables: `WQX Parameter` &lt;chr&gt;, `Sample
+## #   Fraction` &lt;chr&gt;, `WQ Analysis Value` &lt;dbl&gt;, `WQ Units` &lt;chr&gt;,
+## #   MEDIA &lt;chr&gt;, QUAL &lt;chr&gt;, METHOD &lt;lgl&gt;, DLUnits &lt;chr&gt;, SGTCODE &lt;dbl&gt;,
+## #   SGTCodeDescp &lt;chr&gt;, STCODE &lt;dbl&gt;, STCODEDescp &lt;chr&gt;, COMPOSITNU &lt;lgl&gt;,
+## #   QAQC &lt;chr&gt;, Cat_AnalysisFlag &lt;chr&gt;, COMMENT &lt;chr&gt;</code></pre>
+<pre class="r"><code>str(dat)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    2875 obs. of  23 variables:
+##  $ SITEID           : num  -1.78e+09 -1.78e+09 -1.78e+09 -1.78e+09 -1.78e+09 ...
+##  $ SITENAME         : chr  &quot;I-5 / SR-56&quot; &quot;I-5 / SR-56&quot; &quot;I-5 / SR-56&quot; &quot;I-5 / SR-56&quot; ...
+##  $ MSID             : num  -1.02e+09 1.08e+09 1.08e+09 1.08e+09 1.08e+09 ...
+##  $ MSNAME           : chr  &quot;27E&quot; &quot;27I&quot; &quot;27I&quot; &quot;27I&quot; ...
+##  $ Storm #          : num  16 18 18 15 3 9 18 11 14 16 ...
+##  $ SAMPLEDATE       : POSIXct, format: &quot;2001-03-06&quot; &quot;2001-04-20&quot; ...
+##  $ SAMPLETIME       : logi  NA NA NA NA NA NA ...
+##  $ WQX Parameter    : chr  &quot;Kjeldahl nitrogen&quot; &quot;Arsenic&quot; &quot;Nickel&quot; &quot;Organic Carbon&quot; ...
+##  $ Sample Fraction  : chr  &quot;Total&quot; &quot;Dissolved&quot; &quot;Total&quot; &quot;Total&quot; ...
+##  $ WQ Analysis Value: num  5.7e-01 1.2 4.7 1.0e+01 7.6e+01 5.2e+01 2.3 1.1e+04 1.9e+02 2.0e-01 ...
+##  $ WQ Units         : chr  &quot;mg/L&quot; &quot;µg/L&quot; &quot;µg/L&quot; &quot;mg/L&quot; ...
+##  $ MEDIA            : chr  &quot;Water&quot; &quot;Water&quot; &quot;Water&quot; &quot;Water&quot; ...
+##  $ QUAL             : chr  NA NA NA NA ...
+##  $ METHOD           : logi  NA NA NA NA NA NA ...
+##  $ DLUnits          : chr  &quot;mg/L&quot; &quot;µg/L&quot; &quot;µg/L&quot; &quot;mg/L&quot; ...
+##  $ SGTCODE          : num  1 1 1 1 1 1 1 1 1 1 ...
+##  $ SGTCodeDescp     : chr  &quot;Surface Runoff/Flow&quot; &quot;Surface Runoff/Flow&quot; &quot;Surface Runoff/Flow&quot; &quot;Surface Runoff/Flow&quot; ...
+##  $ STCODE           : num  1 1 1 1 1 1 1 1 1 1 ...
+##  $ STCODEDescp      : chr  &quot;Flow Weighted Composite EMCs&quot; &quot;Flow Weighted Composite EMCs&quot; &quot;Flow Weighted Composite EMCs&quot; &quot;Flow Weighted Composite EMCs&quot; ...
+##  $ COMPOSITNU       : logi  NA NA NA NA NA NA ...
+##  $ QAQC             : chr  NA NA NA NA ...
+##  $ Cat_AnalysisFlag : chr  &quot;=&quot; &quot;=&quot; &quot;=&quot; &quot;n&quot; ...
+##  $ COMMENT          : chr  NA &quot;10 30 09 Corrected MS ID to relate 27I to inflow instead of outflow.&quot; &quot;10 30 09 Corrected MS ID to relate 27I to inflow instead of outflow.&quot; &quot;10 30 09 Corrected MS ID to relate 27I to inflow instead of outflow.  Exc from analysis--appears to be duplicat&quot;| __truncated__ ...</code></pre>
+</div>
+<div id="data-wrangle" class="section level1">
+<h1>Data wrangle</h1>
+<p>There’s plenty of information in this dataset that we don’t need. Let’s pare it down so it’s more manageable for our question. Before we do that, we need to decide which columns are important and which water quality parameter we care about.</p>
+<p>As mentioned before, we want to compare influence and effluent concentrations measured for one or more samples, for one or more storms, at different wastewater treatment plants. The columns we care about are:</p>
+<ul>
+<li><code>SITENAME</code>: unique identifier for the wastewater treatment plant</li>
+<li><code>MSNAME</code>: identifier for different samples from a wastewater treatment plant, this is where the influent and effluent measurements are identified</li>
+<li><code>Storm #</code>: identifier for storm events that occurred at a wastewater treatment plant</li>
+<li><code>WQX Parameter</code>: name of measured water quality values</li>
+<li><code>WQ Analysis Value</code>: concentration of the measured water quality values, as influent or effluent</li>
+</ul>
+<p>We can use the <code>select()</code> function to pull the columns we want. Here we are using pipes to make the syntax a little more clear. Checkout the content <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#selecting">here</a> for background on the <code>select()</code> function and <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#piping">here</a> for a refresher on pipes.</p>
+<pre class="r"><code>dat &lt;- dat %&gt;%
+  select(SITENAME, MSNAME, `Storm #`,`WQX Parameter`, `WQ Analysis Value`)</code></pre>
+<p>We just created a new <code>dat</code> object by overwriting the previous one we made when we imported the raw data. The new object contains only the columns we care about. Also note that some column names had to be surrounded by backticks (``). R doesnt’ like it when names have “special character”, such as spaces, so sometimes we need to use the backticks when calling the name.</p>
+<p>Now that we have the columns we want, we still need to get the observations for the water quality parameter we want to analyze. Let’s see what’s available:</p>
+<pre class="r"><code>unique(dat$`WQX Parameter`)</code></pre>
+<pre><code>##  [1] &quot;Kjeldahl nitrogen&quot;                
+##  [2] &quot;Arsenic&quot;                          
+##  [3] &quot;Nickel&quot;                           
+##  [4] &quot;Organic Carbon&quot;                   
+##  [5] &quot;Hardness, carbonate&quot;              
+##  [6] &quot;Fecal Coliform&quot;                   
+##  [7] &quot;Zinc&quot;                             
+##  [8] &quot;Cadmium&quot;                          
+##  [9] &quot;Chromium&quot;                         
+## [10] &quot;pH&quot;                               
+## [11] &quot;Total suspended solids&quot;           
+## [12] &quot;Phosphorus as P&quot;                  
+## [13] &quot;Copper&quot;                           
+## [14] &quot;Lead&quot;                             
+## [15] &quot;Nitrogen, Nitrate (NO3) as N&quot;     
+## [16] &quot;Total dissolved solids&quot;           
+## [17] &quot;Specific conductance&quot;             
+## [18] &quot;Phosphorus, orthophosphate as PO4&quot;</code></pre>
+<p>Let’s pull out the rows for water hardness. We can use the <code>filter()</code> function to get these rows by “filtering” the observations where <code>WQX Parameter</code> is equal to <code>Hardness, carbonate</code>. See <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#filtering">here</a> for a refresher of filter.</p>
+<pre class="r"><code>dat &lt;- dat %&gt;% 
+  filter(`WQX Parameter` == &quot;Hardness, carbonate&quot;)</code></pre>
+<p>Let’s examine our handywork:</p>
+<pre class="r"><code>str(dat)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    139 obs. of  5 variables:
+##  $ SITENAME         : chr  &quot;I-5 / SR-56&quot; &quot;I-5 / SR-56&quot; &quot;I-5 / SR-56&quot; &quot;I-5 / SR-56&quot; ...
+##  $ MSNAME           : chr  &quot;27I&quot; &quot;27I&quot; &quot;27I&quot; &quot;27E&quot; ...
+##  $ Storm #          : num  3 9 1 14 5 17 18 10 8 13 ...
+##  $ WQX Parameter    : chr  &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; ...
+##  $ WQ Analysis Value: num  76 52 150 38 36 54 62 56 48 47 ...</code></pre>
+<p>Much more manageable! Now comes the hard part… we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment plant are consistently referenced. We can’t easily compare the influent/effluent concentrations in the current data because they are in the same column!</p>
 <pre class="r"><code>library(tidyverse)
 library(readxl)
 

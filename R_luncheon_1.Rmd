@@ -26,7 +26,7 @@ Today's session will use a compiled dataset that describes filtration of wastewa
 
 The data are messy.  The spreadsheet includes measurements from different locations where record-keeping was not consistent.  Each location may also include several filtration samples, with measurements for one or more storm events.  There are several columns in the dataset, not all of which are relevant for our analysis.  Here's a screenshot:
 
-![](figure/lunchdatex.png)
+![](figure/lunchdatex.PNG)
 
 We want to import the data, wrangle the information to a consistent format, and plot the data to help us assess how well the filtration systems are removing water quality constituents. Each of these steps can be performed in R.
 
@@ -34,7 +34,7 @@ We want to import the data, wrangle the information to a consistent format, and 
 
 1. Wrangle the data to a consistent format. This will require removing extra columns we don't need, filtering the observations (rows) for a water quality parameter we're interested in, and develop a consistent convention that will allow to compare between treatment plants, filtration samples, and storm events.
 
-1. Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis).  Our hope is that effluent concentrations will be lower than influent concenrations as a measure of how well the filtration systems are working.
+1. Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis).  Our hope is that effluent concentrations will be lower than influent concentrations as a measure of how well the filtration systems are working.
 
 # Housekeeping
 
@@ -60,7 +60,10 @@ You can also download the data file directly in R. This will download the data a
 
 ```{r, eval = F}
 # download the data
-download.file(url = 'https://sccwrp.github.io/SCCWRP_R_training/data/CA_DetentionBasin2.xlsx')
+download.file(
+  url = 'https://sccwrp.github.io/SCCWRP_R_training/data/CA_DetentionBasin2.xlsx',
+  destfile= 'CA_DetentionBasin2.xlsx'
+  )
 ```
 
 # Data import
@@ -70,6 +73,79 @@ Now that we've got our project setup with the data, let's open a new script and 
 Open a new script from the File menu...
 
 ![](figure/rstudio_script.jpg)
+
+Once the script is open, save it using the drop down file menu on the top left.  Give it an informative name (e.g.,`Rluncheon1.R`) and save it in your project's home directory.  This should be the default location selected by RStudio when you save the file.
+
+We'll be using functions from the [tidyverse](https://www.tidyverse.org/) collection of packages to import, wrangle, and plot the data.  Checkout our training material [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#the-tidyverse) if you need a brush up.  Run this line in the R console if you don't have the tidyverse installed.
+
+```{r, eval = F}
+install.packages('tidyverse')
+```
+
+In the script you just opened, add the following lines to load the tidyverse package and the readxl package (for data import).
+
+```{r, message = F, warning = F}
+library(tidyverse)
+library(readxl)
+```
+
+Then add this line to import the dataset using the `read_excel()` function.  The imported dataset will be assigned to the `dat` variable in the workspace for your current R session.
+
+```{r, echo = F, message = F}
+dat <- read_excel('data/CA_DetentionBasin2.xlsx')
+```
+```{r, eval = F}
+dat <- read_excel('CA_DetentionBasin2.xlsx')
+```
+
+Let's get a feeling for the dataset before we proceed.
+
+```{r}
+head(dat)
+str(dat)
+```
+
+# Data wrangle
+
+There's plenty of information in this dataset that we don't need.  Let's pare it down so it's more manageable for our question.  Before we do that, we need to decide which columns are important and which water quality parameter we care about.  
+
+As mentioned before, we want to compare influence and effluent concentrations measured for one or more samples, for one or more storms, at different wastewater treatment plants.  The columns we care about are:
+
+* `SITENAME`: unique identifier for the wastewater treatment plant
+* `MSNAME`: identifier for different samples from a wastewater treatment plant, this is where the influent and effluent measurements are identified
+* `Storm #`: identifier for storm events that occurred at a wastewater treatment plant
+* `WQX Parameter`: name of measured water quality values
+* `WQ Analysis Value`: concentration of the measured water quality values, as influent or effluent
+
+We can use the `select()` function to pull the columns we want.  Here we are using pipes to make the syntax a little more clear.  Checkout the content [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#selecting) for background on the `select()` function and [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#piping) for a refresher on pipes.    
+
+```{r}
+dat <- dat %>%
+  select(SITENAME, MSNAME, `Storm #`,`WQX Parameter`, `WQ Analysis Value`)
+```
+
+We just created a new `dat` object by overwriting the previous one we made when we imported the raw data.  The new object contains only the columns we care about.  Also note that some column names had to be surrounded by backticks (``).  R doesnt' like it when names have "special character", such as spaces, so sometimes we need to use the backticks when calling the name. 
+
+Now that we have the columns we want, we still need to get the observations for the water quality parameter we want to analyze. Let's see what's available:
+
+```{r}
+unique(dat$`WQX Parameter`)
+```
+
+Let's pull out the rows for water hardness.  We can use the `filter()` function to get these rows by "filtering" the observations where `WQX Parameter` is equal to `Hardness, carbonate`.  See [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#filtering) for a refresher of filter.
+
+```{r}
+dat <- dat %>% 
+  filter(`WQX Parameter` == "Hardness, carbonate")
+```
+
+Let's examine our handywork:
+
+```{r}
+str(dat)
+```
+
+Much more manageable!  Now comes the hard part... we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment plant are consistently referenced. This is information in the dataset that needs to be retained to meanignfully evaluated filtration effectivness.  We can't easily compare the influent/effluent concentrations in the current data because they are in the same column!
 
 ```{r eval = F}
 library(tidyverse)
