@@ -4,3 +4,5 @@
 - specific modeling platforms (lm, glm, gam, rf, etc) - but this might be mroe stats than R
 - exporting a formatted table to Word
 - working with shapefiles
+- data I/O for eval of filtration effectiveness
+- spatial analysis in R

@@ -8,4 +8,95 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 # R luncheon 1
 
-Content TBD
+Welcome to the first R luncheon!  These short and informal sessions are designed for continued learning of R that builds off of our previous training sessions (access any of the earlier content from our [home page](index.html)).  Our goal is to understand how we use R to approach real-world examples in bite size chunks. Each session will focus on a selected problem that may be specific to a research area but contains analysis challenges that are shared no matter the context.  The discussion will contain two parts:
+
+1. Presentation of the problem: what we are starting with and where we want to go. 
+
+1. Steps to address the problem in general terms
+
+1. Specific steps to address the problem using R
+
+1. Execution of the workflow to achieve the final product.  
+
+Please note that this is not an introduction to R. You are expected to have some background knowledge with the understanding that you may not be comfortable using R to complete all steps of an analysis. You should leave the session with a greater understanding of how R can help you develop an efficient and repeatable workflow for your own data challenges.  I encourage lively discussion as we go through the workflow for each luncheon, so ask plenty of questions!
+
+# Problem scope
+
+Today's session will use a compiled dataset that describes filtration of wastewater at different treatment plants in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influence/effluent concentrations with the storm events across several wastewater treatment locations. This will provide a benchmark of how well wastewater treatment plants are filtering different water quality parameters when flow through the system is high (i.e., during storms).  
+
+The data are messy.  The spreadsheet includes measurements from different locations where record-keeping was not consistent.  Each location may also include several filtration samples, with measurements for one or more storm events.  There are several columns in the dataset, not all of which are relevant for our analysis.  Here's a screenshot:
+
+![](figure/lunchdatex.png)
+
+We want to import the data, wrangle the information to a consistent format, and plot the data to help us assess how well the filtration systems are removing water quality constituents. Each of these steps can be performed in R.
+
+1. Import the Excel spreadsheet
+
+1. Wrangle the data to a consistent format. This will require removing extra columns we don't need, filtering the observations (rows) for a water quality parameter we're interested in, and develop a consistent convention that will allow to compare between treatment plants, filtration samples, and storm events.
+
+1. Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis).  Our hope is that effluent concentrations will be lower than influent concenrations as a measure of how well the filtration systems are working.
+
+# Housekeeping
+
+Let's start by opening RStudio, creating a new project, and downloading the data to the project.  
+
+## Open RStudio
+
+Find the RStudio shortcut and fire it up.  You should see something like this: 
+
+![](figure/rstudio.png)
+
+## Create a new project in RStudio
+
+To create a new project, click on the File menu at the top and select 'New project...'
+
+![](figure/rstudio_proj.jpg)
+
+## Download the data to your project
+
+You can download the data from this [link](https://sccwrp.github.io/SCCWRP_R_training/data/CA_DetentionBasin2.xlsx).  Once downloaded, you'll have to copy and paste the Excel file to your project.  Run `getwd()` in the R console if you're not sure where this is. 
+
+You can also download the data file directly in R. This will download the data and save the file to your new RStudio project in a single step.
+
+```{r, eval = F}
+# download the data
+download.file(url = 'https://sccwrp.github.io/SCCWRP_R_training/data/CA_DetentionBasin2.xlsx')
+```
+
+# Data import
+
+Now that we've got our project setup with the data, let's open a new script and load some R packages that we'll be using. 
+
+Open a new script from the File menu...
+
+![](figure/rstudio_script.jpg)
+
+```{r eval = F}
+library(tidyverse)
+library(readxl)
+
+dat <- read_excel('Z:/MarcusBeck/From Nabiul/I_O.xlsx')
+tab <- read_excel('Z:/MarcusBeck/From Nabiul/New_Name.xlsx')
+
+# wrangle
+datjn <- dat %>% 
+  left_join(tab, by = 'MSNAME') %>% 
+  select(-SAMPLEDATE, -`WQ Units`, -MSNAME) %>% 
+  group_by(`Storm #`, SITENAME, MSNAME__1, substation) %>%
+  summarise(value = mean(`WQ Analysis Value`)) %>%
+  ungroup %>%
+  spread(MSNAME__1, value)
+
+# ecdf functions
+ecdfin <- ecdf(datjn$Influent)
+ecdfef <- ecdf(datjn$Effluent)
+
+# predict ecdf
+datjn <- datjn %>%
+  mutate(
+    ecdfin_prd = ecdfin(Influent), 
+    ecdfef_prd = ecdfef(Effluent)
+  )
+
+```
+
