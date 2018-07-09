@@ -22,7 +22,7 @@ Please note that this is not an introduction to R. You are expected to have some
 
 # Problem scope
 
-Today's session will use a compiled dataset that describes filtration of wastewater at different treatment plants in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several wastewater treatment locations. This will provide a benchmark of how well wastewater treatment plants are filtering different water quality parameters when flow through the system is high (i.e., during storms).  
+Today's session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several locations. This will provide a benchmark of how well stormwater treatment locations are filtering different water quality parameters during high flow events (i.e., storms).  
 
 ![](figure/rawdat.JPG)
 
@@ -38,7 +38,7 @@ We want to import the data, wrangle the information to a consistent format, and 
 
 1. Import the Excel spreadsheet
 
-1. Wrangle the data to a consistent format. This will require removing extra columns we don't need, filtering the observations (rows) for a water quality parameter we're interested in, and develop a consistent convention that will allow to compare between treatment plants, filtration samples, and storm events.
+1. Wrangle the data to a consistent format. This will require removing extra columns we don't need, filtering the observations (rows) for a water quality parameter we're interested in, and develop a consistent convention that will allow to compare between stormwater treatment locations, filtration samples, and storm events.
 
 1. Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis).  Our hope is that effluent concentrations will be lower than influent concentrations as a measure of how well the filtration systems are working.
 
@@ -115,11 +115,11 @@ str(dat)
 
 There's plenty of information in this dataset that we don't need.  Let's pare it down so it's more manageable for our question.  Before we do that, we need to decide which columns are important and which water quality parameter we care about.  
 
-As mentioned before, we want to compare influent and effluent concentrations measured for one or more samples, for one or more storms, at different wastewater treatment plants.  The columns we care about are:
+As mentioned before, we want to compare influent and effluent concentrations measured for one or more samples, for one or more storms, at different stormwater treatment locations.  The columns we care about are:
 
-* `SITENAME`: unique identifier for the wastewater treatment plant
-* `MSNAME`: identifier for different samples from a wastewater treatment plant, this is where the influent and effluent measurements are identified
-* `Storm #`: identifier for storm events that occurred at a wastewater treatment plant
+* `SITENAME`: unique identifier for the stormwater treatment location
+* `MSNAME`: identifier for different samples from a stormwater treatment location, this is where the influent and effluent measurements are identified
+* `Storm #`: identifier for storm events that occurred at a stormwater treatment location
 * `WQX Parameter`: name of measured water quality values
 * `WQ Analysis Value`: concentration of the measured water quality values, as influent or effluent
 
@@ -151,9 +151,9 @@ Let's examine our handywork:
 str(dat)
 ```
 
-Much more manageable!  Now comes the hard part... we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment plant are consistently referenced. This is information in the dataset that needs to be retained to meanignfully evaluated filtration effectivness.  We can't easily compare the influent/effluent concentrations in the current data because they are in the same column!
+Much more manageable!  Now comes the hard part... we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced. This is information in the dataset that needs to be retained to meaningfully evaluate filtration effectiveness.  We can't easily compare the influent/effluent concentrations in the current data because they are in the same column!
 
-```{r eval = F}
+```{r eval = F, echo = F}
 library(tidyverse)
 library(readxl)
 

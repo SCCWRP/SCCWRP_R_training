@@ -350,7 +350,7 @@ div.tocify {
 </div>
 <div id="problem-scope" class="section level1">
 <h1>Problem scope</h1>
-<p>Today’s session will use a compiled dataset that describes filtration of wastewater at different treatment plants in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events. The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several wastewater treatment locations. This will provide a benchmark of how well wastewater treatment plants are filtering different water quality parameters when flow through the system is high (i.e., during storms).</p>
+<p>Today’s session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events. The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several locations. This will provide a benchmark of how well stormwater treatment locations are filtering different water quality parameters during high flow events (i.e., storms).</p>
 <p><img src="figure/rawdat.JPG" /></p>
 <p>We want to create a plot like this after getting the raw data in the correct format.</p>
 <p><img src="figure/finalplo.JPG" /></p>
@@ -359,7 +359,7 @@ div.tocify {
 <p>We want to import the data, wrangle the information to a consistent format, and plot the data to help us assess how well the filtration systems are removing water quality constituents. Each of these steps can be performed in R.</p>
 <ol style="list-style-type: decimal">
 <li><p>Import the Excel spreadsheet</p></li>
-<li><p>Wrangle the data to a consistent format. This will require removing extra columns we don’t need, filtering the observations (rows) for a water quality parameter we’re interested in, and develop a consistent convention that will allow to compare between treatment plants, filtration samples, and storm events.</p></li>
+<li><p>Wrangle the data to a consistent format. This will require removing extra columns we don’t need, filtering the observations (rows) for a water quality parameter we’re interested in, and develop a consistent convention that will allow to compare between stormwater treatment locations, filtration samples, and storm events.</p></li>
 <li><p>Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis). Our hope is that effluent concentrations will be lower than influent concentrations as a measure of how well the filtration systems are working.</p></li>
 </ol>
 </div>
@@ -445,11 +445,11 @@ library(readxl)</code></pre>
 <div id="data-wrangle" class="section level1">
 <h1>Data wrangle</h1>
 <p>There’s plenty of information in this dataset that we don’t need. Let’s pare it down so it’s more manageable for our question. Before we do that, we need to decide which columns are important and which water quality parameter we care about.</p>
-<p>As mentioned before, we want to compare influent and effluent concentrations measured for one or more samples, for one or more storms, at different wastewater treatment plants. The columns we care about are:</p>
+<p>As mentioned before, we want to compare influent and effluent concentrations measured for one or more samples, for one or more storms, at different stormwater treatment locations. The columns we care about are:</p>
 <ul>
-<li><code>SITENAME</code>: unique identifier for the wastewater treatment plant</li>
-<li><code>MSNAME</code>: identifier for different samples from a wastewater treatment plant, this is where the influent and effluent measurements are identified</li>
-<li><code>Storm #</code>: identifier for storm events that occurred at a wastewater treatment plant</li>
+<li><code>SITENAME</code>: unique identifier for the stormwater treatment location</li>
+<li><code>MSNAME</code>: identifier for different samples from a stormwater treatment location, this is where the influent and effluent measurements are identified</li>
+<li><code>Storm #</code>: identifier for storm events that occurred at a stormwater treatment location</li>
 <li><code>WQX Parameter</code>: name of measured water quality values</li>
 <li><code>WQ Analysis Value</code>: concentration of the measured water quality values, as influent or effluent</li>
 </ul>
@@ -488,32 +488,7 @@ library(readxl)</code></pre>
 ##  $ Storm #          : num  3 9 1 14 5 17 18 10 8 13 ...
 ##  $ WQX Parameter    : chr  &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; &quot;Hardness, carbonate&quot; ...
 ##  $ WQ Analysis Value: num  76 52 150 38 36 54 62 56 48 47 ...</code></pre>
-<p>Much more manageable! Now comes the hard part… we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment plant are consistently referenced. This is information in the dataset that needs to be retained to meanignfully evaluated filtration effectivness. We can’t easily compare the influent/effluent concentrations in the current data because they are in the same column!</p>
-<pre class="r"><code>library(tidyverse)
-library(readxl)
-
-dat &lt;- read_excel(&#39;Z:/MarcusBeck/From Nabiul/I_O.xlsx&#39;)
-tab &lt;- read_excel(&#39;Z:/MarcusBeck/From Nabiul/New_Name.xlsx&#39;)
-
-# wrangle
-datjn &lt;- dat %&gt;% 
-  left_join(tab, by = &#39;MSNAME&#39;) %&gt;% 
-  select(-SAMPLEDATE, -`WQ Units`, -MSNAME) %&gt;% 
-  group_by(`Storm #`, SITENAME, MSNAME__1, substation) %&gt;%
-  summarise(value = mean(`WQ Analysis Value`)) %&gt;%
-  ungroup %&gt;%
-  spread(MSNAME__1, value)
-
-# ecdf functions
-ecdfin &lt;- ecdf(datjn$Influent)
-ecdfef &lt;- ecdf(datjn$Effluent)
-
-# predict ecdf
-datjn &lt;- datjn %&gt;%
-  mutate(
-    ecdfin_prd = ecdfin(Influent), 
-    ecdfef_prd = ecdfef(Effluent)
-  )</code></pre>
+<p>Much more manageable! Now comes the hard part… we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced. This is information in the dataset that needs to be retained to meaningfully evaluate filtration effectiveness. We can’t easily compare the influent/effluent concentrations in the current data because they are in the same column!</p>
 </div>
 
 
