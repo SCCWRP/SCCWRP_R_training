@@ -8,6 +8,15 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 # R luncheon 1
 
+## Lesson Outline
+
+* [Problem scope]
+* [Housekeeping]
+* [Data import]
+* [Data wrangle]
+* [Plot the data]
+* [Summary]
+
 Welcome to the first R luncheon!  These short and informal sessions are designed for continued learning of R that builds off of our previous training sessions (access any of the earlier content from our [home page](index.html)).  Our goal is to understand how we use R to approach real-world examples in bite size chunks. Each session will focus on a selected problem that may be specific to a research area but contains analysis challenges that are shared no matter the context.  The discussion will contain two parts:
 
 1. Presentation of the problem: what we are starting with and where we want to go. 
@@ -221,7 +230,7 @@ dat <- dat %>%
 dat
 ```
 
-## Plot the data
+# Plot the data
 
 Now we're ready to plot!  Let's use ggplot (refresher [here](https://sccwrp.github.io/SCCWRP_R_training/Viz_and_Graphics.html#ggplot2) to make a simple scatterplot with a trend line.
 ```{r}
@@ -241,7 +250,7 @@ ggplot(dat, aes(x = I, y = E)) +
   coord_equal()
 ```
 
-## Summary
+# Summary
 
 Let's recap the steps:
 

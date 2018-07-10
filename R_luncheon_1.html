@@ -337,6 +337,16 @@ div.tocify {
 
 <div id="r-luncheon-1" class="section level1">
 <h1>R luncheon 1</h1>
+<div id="lesson-outline" class="section level2">
+<h2>Lesson Outline</h2>
+<ul>
+<li><a href="#problem-scope">Problem scope</a></li>
+<li><a href="#housekeeping">Housekeeping</a></li>
+<li><a href="#data-import">Data import</a></li>
+<li><a href="#data-wrangle">Data wrangle</a></li>
+<li><a href="#plot-the-data">Plot the data</a></li>
+<li><a href="#summary">Summary</a></li>
+</ul>
 <p>Welcome to the first R luncheon! These short and informal sessions are designed for continued learning of R that builds off of our previous training sessions (access any of the earlier content from our <a href="index.html">home page</a>). Our goal is to understand how we use R to approach real-world examples in bite size chunks. Each session will focus on a selected problem that may be specific to a research area but contains analysis challenges that are shared no matter the context. The discussion will contain two parts:</p>
 <ol style="list-style-type: decimal">
 <li><p>Presentation of the problem: what we are starting with and where we want to go.</p></li>
@@ -345,6 +355,7 @@ div.tocify {
 <li><p>Execution of the workflow to achieve the final product.</p></li>
 </ol>
 <p>Please note that this is not an introduction to R. You are expected to have some background knowledge with the understanding that you may not be comfortable using R to complete all steps of an analysis. You should leave the session with a greater understanding of how R can help you develop an efficient and repeatable workflow for your own data challenges. I encourage lively discussion as we go through the workflow for each luncheon, so ask plenty of questions!</p>
+</div>
 </div>
 <div id="problem-scope" class="section level1">
 <h1>Problem scope</h1>
@@ -519,12 +530,12 @@ library(readxl)</code></pre>
 <pre><code>## # A tibble: 6 x 5
 ##   SITENAME MSNAME  `Storm #` influent effluent
 ##   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-## 1 site1    sample1         1     6.58     5.48
-## 2 site1    sample2         2     6.29     3.61
-## 3 site1    sample3         2     6.66     3.84
-## 4 site2    sample1         2     8.94     5.48
-## 5 site2    sample2         2     7.30     5.11
-## 6 site2    sample3         2     9.62     5.18</code></pre>
+## 1 site1    sample1         1     9.71     3.56
+## 2 site1    sample2         1     6.26     5.13
+## 3 site1    sample3         1     9.94     4.42
+## 4 site2    sample1         1     8.78     5.42
+## 5 site2    sample2         2     6.96     6.31
+## 6 site2    sample3         1     9.04     5.66</code></pre>
 <p>There are three things about this dataset that differ from our actual data:</p>
 <ol style="list-style-type: decimal">
 <li><p>Consistent naming convention between sites and samples</p></li>
@@ -565,7 +576,7 @@ str(dat)</code></pre>
 <pre><code>## # A tibble: 5 x 11
 ## # Groups:   SITENAME [5]
 ##   SITENAME     `27E` `27I` `31E` `31I` `37E` `37I`  `4E`  `4I`  `5E`  `5I`
-##   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
+## * &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
 ## 1 I-15/SR-78 ~    NA  NA    NA    NA    8.44  38.2  NA    NA    NA    NA  
 ## 2 I-5 / I-605~    NA  NA    NA    NA   NA     NA    19.4  34.6  NA    NA  
 ## 3 I-5 / SR-56      8  20.1  NA    NA   NA     NA    NA    NA    NA    NA  
@@ -602,14 +613,15 @@ dat</code></pre>
 <pre><code>## # A tibble: 5 x 4
 ## # Groups:   SITENAME [5]
 ##   SITENAME              samplename     E     I
-##   &lt;chr&gt;                 &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;
+## * &lt;chr&gt;                 &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;
 ## 1 I-15/SR-78 EDB        37          8.44  38.2
 ## 2 I-5 / I-605 EDB       4          19.4   34.6
 ## 3 I-5 / SR-56           27          8     20.1
 ## 4 I-5/Manchester (east) 31         18.3   67.9
 ## 5 I-605 / SR-91 EDB     5          33.0   65.4</code></pre>
-<div id="plot-the-data" class="section level2">
-<h2>Plot the data</h2>
+</div>
+<div id="plot-the-data" class="section level1">
+<h1>Plot the data</h1>
 <p>Now we’re ready to plot! Let’s use ggplot (refresher <a href="https://sccwrp.github.io/SCCWRP_R_training/Viz_and_Graphics.html#ggplot2">here</a> to make a simple scatterplot with a trend line.</p>
 <pre class="r"><code>ggplot(dat, aes(x = I, y = E)) +
   geom_point() + 
@@ -625,8 +637,8 @@ dat</code></pre>
   coord_equal()</code></pre>
 <p><img src="R_luncheon_1_files/figure-html/unnamed-chunk-17-1.png" width="672" /></p>
 </div>
-<div id="summary" class="section level2">
-<h2>Summary</h2>
+<div id="summary" class="section level1">
+<h1>Summary</h1>
 <p>Let’s recap the steps:</p>
 <ol style="list-style-type: decimal">
 <li><p>Imported the Excel spreadsheet using the <code>read_excel()</code> function from the readxl package (in tidyverse)</p></li>
@@ -641,7 +653,6 @@ dat</code></pre>
 <li><p>Compared the effluent and influent concentrations using ggplot</p></li>
 </ol>
 <p>Our conclusion? Looks like the filters are doing a good job removing lead from the stormwater.</p>
-</div>
 </div>
 
 
