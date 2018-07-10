@@ -130,7 +130,7 @@ dat <- dat %>%
   select(SITENAME, MSNAME, `Storm #`,`WQX Parameter`, `WQ Analysis Value`)
 ```
 
-We just created a new `dat` object by overwriting the previous one we made when we imported the raw data.  The new object contains only the columns we care about.  Also note that some column names had to be surrounded by backticks (``).  R doesnt' like it when names have "special character", such as spaces, so sometimes we need to use the backticks when calling the name. 
+We just created a new `dat` object by overwriting the previous one we made when we imported the raw data.  The new object contains only the columns we care about.  Also note that some column names had to be surrounded by backticks (``).  R doesnt' like it when names have "special characters", such as spaces, so sometimes we need to use the backticks when calling the name. 
 
 Now that we have the columns we want, we still need to get the observations for the water quality parameter we want to analyze. Let's see what's available:
 
@@ -138,47 +138,122 @@ Now that we have the columns we want, we still need to get the observations for 
 unique(dat$`WQX Parameter`)
 ```
 
-Let's pull out the rows for water hardness.  We can use the `filter()` function to get these rows by "filtering" the observations where `WQX Parameter` is equal to `Hardness, carbonate`.  See [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#filtering) for a refresher of filter.
+Let's pull out the rows for lead.  We can use the `filter()` function to get these rows by "filtering" the observations where `WQX Parameter` is equal to `Lead`.  See [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#filtering) for a refresher of filter.
 
 ```{r}
 dat <- dat %>% 
-  filter(`WQX Parameter` == "Hardness, carbonate")
+  filter(`WQX Parameter` == 'Lead')
 ```
 
 Let's examine our handywork:
 
 ```{r}
 str(dat)
+head(dat)
 ```
 
-Much more manageable!  Now comes the hard part... we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced. This is information in the dataset that needs to be retained to meaningfully evaluate filtration effectiveness.  We can't easily compare the influent/effluent concentrations in the current data because they are in the same column!
+Much more manageable!  Now comes the hard part... we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced in the rows. This is information in the dataset that needs to be retained to meaningfully evaluate filtration effectiveness.  We can't easily compare the influent/effluent concentrations in the current data because they are in the same column!
 
-```{r eval = F, echo = F}
-library(tidyverse)
-library(readxl)
+Here's an example of what the data should look like for us to plot effluent against influent:
+```{r echo = F}
+nobs <- 6
+datex <- tibble(
+  SITENAME = rep(c('site1', 'site2'), each = nobs/2), 
+  MSNAME = rep(c('sample1', 'sample2', 'sample3'), times = nobs/3), 
+  `Storm #` = sample(c(1, 2), nobs, replace = T), 
+  influent = runif(nobs, 6, 10), 
+  effluent = runif(nobs, 3, 7)
+) %>% 
+  arrange(SITENAME, MSNAME, `Storm #`)
+datex
+```
+There are three things about this dataset that differ from our actual data:
 
-dat <- read_excel('Z:/MarcusBeck/From Nabiul/I_O.xlsx')
-tab <- read_excel('Z:/MarcusBeck/From Nabiul/New_Name.xlsx')
+1) Consistent naming convention between sites and samples
 
-# wrangle
-datjn <- dat %>% 
-  left_join(tab, by = 'MSNAME') %>% 
-  select(-SAMPLEDATE, -`WQ Units`, -MSNAME) %>% 
-  group_by(`Storm #`, SITENAME, MSNAME__1, substation) %>%
-  summarise(value = mean(`WQ Analysis Value`)) %>%
-  ungroup %>%
-  spread(MSNAME__1, value)
+1) Separate columns for influent and effluent
 
-# ecdf functions
-ecdfin <- ecdf(datjn$Influent)
-ecdfef <- ecdf(datjn$Effluent)
+1) Each row references the site name, sample name, and storm number correctly for the influent and effluent observations
 
-# predict ecdf
-datjn <- datjn %>%
+Before we proceed, we'll make life a little easier by taking care of the storms column.  Nabiul assures me that we can average the concentrations for multiple storm events for each site and sample combination and still meaningfully evaluate filtration efficiency.  This will also get us to lunch quicker... so, we can use some tools from the dplyr package (as part of the tidyverse) to make our lives easier.  We will use `group_by()` and `summarise()` to average the water quality concentrations across storms for the unique site/sample combinations (see [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#group_by_and_summarize) for more info).
+
+```{r}
+dat <- dat %>% 
+  group_by(SITENAME, MSNAME) %>% 
+  summarise(avewq = mean(`WQ Analysis Value`))
+str(dat)
+head(dat)
+```
+
+We are almost there.  Now we just need to get the influent and effluent values in different columns.  If you recall our earlier training sessions [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#spreading), we can use the `spread()` function from the tidyr package (again, included in the tidyverse).  This function lets us "spread" values in one column to multiple columns using "key" values in a second column. The key values are used as the column names for the values that are spread from one to many columns.   
+
+Here's an example of spreading with a different dataset:
+
+![](figure/tidy-8.png)
+
+Let's try this on our dataset, where the key column is `MSNAME` and the value column is `avewq` from our summarised data.
+
+```{r}
+dat %>%
+  spread(MSNAME, avewq)
+```
+
+So this isn't exactly right. The data are definitely spread but we have unique columns for every influent/effluent sample in our dataset.  We'll need to separate the sample names and the influent/effluent designations in the `MSNAME` column before we can proceed.  If you recall from our past training, these data are not ["tidy"](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#tidy_data), meaning, among other things, that the `MSNAME` column contains two pieces of information in one cell.  The column includes information on both the sample name and the influent/effluent designation. 
+
+There's a handy function from base R called `gsub()` that lets you find patterns in a character string and replace them with values of your choosing. Here, we want to create two new columns from `MSNAME`, one with only the sample name (numbers) and another with only the influent/effluent designations (letters).  This will allow the `spread()` function to create a single column for influent and a single column for effluent, while retaining the correct sample and site names in the rows. This can be done as follows:
+
+```{r}
+dat <- dat %>% 
   mutate(
-    ecdfin_prd = ecdfin(Influent), 
-    ecdfef_prd = ecdfef(Effluent)
+    samplename = gsub('[aA-zZ]+', '', MSNAME),
+    infeff = gsub('[0-9]+', '', MSNAME)
   )
-
+dat
 ```
 
+We just used the `mutate()` function to create two new columns, where `samplename` was created by finding all letters in `MSNAME` and removing them and `infeff` was created by finding all digits in `MSNAME` and removing them. The `gsub()` function is very powerful and uses "regular expression matching" to search for patterns in the character strings that can be replaced (in this case, with nothing `''`).  This could easily cover a few hours of instruction, but here's a [cheatsheet](https://www.rstudio.com/wp-content/uploads/2016/09/RegExCheatsheet.pdf) on regular expressions if you want to learn on your own. 
+
+Now all we have to do is remove the old `MSNAME` column and spread as before.
+```{r}
+dat <- dat %>% 
+  select(-MSNAME) %>% 
+  spread(infeff, avewq)
+dat
+```
+
+## Plot the data
+
+Now we're ready to plot!  Let's use ggplot (refresher [here](https://sccwrp.github.io/SCCWRP_R_training/Viz_and_Graphics.html#ggplot2) to make a simple scatterplot with a trend line.
+```{r}
+ggplot(dat, aes(x = I, y = E)) +
+  geom_point() + 
+  stat_smooth(method = 'lm', se = F)
+```
+
+Let's make the comparisons a little easier to see.  We'll add a line through the origin and use the same scale for both axes.
+```{r}
+ggplot(dat, aes(x = I, y = E)) +
+  geom_point() + 
+  stat_smooth(method = 'lm', se = F) + 
+  geom_abline(intercept = 0, slope = 1, linetype = 'dashed') + 
+  scale_y_continuous(limits = c(0, 70)) +
+  scale_x_continuous(limits = c(0, 70)) + 
+  coord_equal()
+```
+
+## Summary
+
+Let's recap the steps:
+
+1. Imported the Excel spreadsheet using the `read_excel()` function from the readxl package (in tidyverse)
+
+1. Wrangled the data to a consistent format.
+     1. Selected the columns we wanted using `select()`
+     1. Filtered the rows for lead using `filter()`
+     1. Averaged concenctrations across storm events using `group_by()` and `summarise()`
+     1. Created unique columns for sample name and influent/effluent categories using `mutate()` and `gsub()`
+     1. Spread the data using `spread()` to get the influent/effluent concentrations in differnt columns
+
+1. Compared the effluent and influent concentrations using ggplot
+
+Our conclusion?  Looks like the filters are doing a good job removing lead from the stormwater.  
