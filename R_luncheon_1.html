@@ -351,26 +351,27 @@ div.tocify {
 </ul>
 <p>Welcome to the first R luncheon! These short and informal sessions are designed for continued learning of R that builds off of our previous training sessions (access any of the earlier content from our <a href="index.html">home page</a>). Our goal is to understand how we use R to approach real-world examples in bite size chunks. Each session will focus on a selected problem that may be specific to a research area but contains analysis challenges that are shared no matter the context. The discussion will contain two parts:</p>
 <ol style="list-style-type: decimal">
-<li><p>Presentation of the problem: what we are starting with and where we want to go.</p></li>
+<li><p>Presentation of the problem: what we are starting with and where we want to go</p></li>
 <li><p>Steps to address the problem in general terms</p></li>
 <li><p>Specific steps to address the problem using R</p></li>
-<li><p>Execution of the workflow to achieve the final product.</p></li>
+<li><p>Execution of the workflow to achieve the final product</p></li>
 </ol>
-<p>Please note that this is not an introduction to R. You are expected to have some background knowledge with the understanding that you may not be comfortable using R to complete all steps of an analysis. You should leave the session with a greater understanding of how R can help you develop an efficient and repeatable workflow for your own data challenges. I encourage lively discussion as we go through the workflow for each luncheon, so ask plenty of questions!</p>
+<p>Please note that this is not an introduction to R. You are expected to have some background knowledge, with the understanding that you may not be comfortable using R to complete all steps of an analysis. You should leave the session with better knowledge of how R can help you develop an efficient and repeatable workflow for your own data challenges. I encourage lively discussion as we go through the workflow for each luncheon, so ask plenty of questions!</p>
 </div>
 </div>
 <div id="problem-scope" class="section level1">
 <h1>Problem scope</h1>
-<p>Today’s session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events. The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several locations. This will provide a benchmark of how well the filters are removing potentially harmful water quality constituents during high flow events.</p>
+<p>Today’s session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events. The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations across several locations and storm events. This will provide a benchmark of how well the filters are removing potentially harmful water quality constituents during high flow events.</p>
+<p>Here’s a conceptual representation of the raw data.</p>
 <p><img src="figure/rawdat.JPG" /></p>
 <p>We want to create a plot like this after getting the raw data in the correct format.</p>
 <p><img src="figure/finalplo.JPG" /></p>
-<p>The data are messy. The spreadsheet includes measurements from different locations where record-keeping was not consistent. Each location may also include several filtration samples, with measurements for one or more storm events. There are several columns in the dataset, not all of which are relevant for our analysis. Here’s a screenshot:</p>
+<p>The data are messy. The spreadsheet includes measurements from different locations where record-keeping was not consistent. Each location may also include several filtration samples and one or more recorded storm events where measurements were taken at a sample. There are several columns in the dataset, not all of which are relevant for our analysis. Here’s a screenshot:</p>
 <p><img src="figure/lunchdatex.PNG" /></p>
 <p>We want to import the data, wrangle the information to a consistent format, and plot the data to help us assess how well the filtration systems are removing water quality constituents. Each of these steps can be performed in R.</p>
 <ol style="list-style-type: decimal">
 <li><p>Import the Excel spreadsheet</p></li>
-<li><p>Wrangle the data to a consistent format. This will require removing extra columns we don’t need, filtering the observations (rows) for a water quality parameter we’re interested in, and develop a consistent convention that will allow to compare between stormwater treatment locations, filtration samples, and storm events.</p></li>
+<li><p>Wrangle the data to a consistent format. This will require removing extra columns we don’t need, filtering the observations (rows) for a water quality parameter we’re interested in, and develop a consistent format that will allow us to compare between BMP locations, filtration samples, and storm events.</p></li>
 <li><p>Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis). Our hope is that effluent concentrations will be lower than influent concentrations as a measure of how well the filtration systems are working.</p></li>
 </ol>
 </div>
@@ -409,7 +410,7 @@ download.file(
 <p>In the script you just opened, add the following lines to load the tidyverse package and the readxl package (for data import).</p>
 <pre class="r"><code>library(tidyverse)
 library(readxl)</code></pre>
-<p>Then add this line to import the dataset using the <code>read_excel()</code> function. The imported dataset will be assigned to the <code>dat</code> variable in the workspace for your current R session.</p>
+<p>Then add this line to import the dataset using the <code>read_excel()</code> function. The imported dataset will be assigned to the <code>dat</code> variable in the workspace for your current R session. <strong>You can send the code in your script to the R console using <code>Ctrl + Enter</code> (<code>Cmd + Enter</code> on a Mac) or using the run button on the top right of the scripting window.</strong></p>
 <pre class="r"><code>dat &lt;- read_excel(&#39;CA_DetentionBasin2.xlsx&#39;)</code></pre>
 <p>Let’s get a feeling for the dataset before we proceed.</p>
 <pre class="r"><code>head(dat)</code></pre>
@@ -509,7 +510,7 @@ library(readxl)</code></pre>
 ## 4 I-5 / SR-56 27E            6 Lead                            1.5
 ## 5 I-5 / SR-56 27I           15 Lead                           57  
 ## 6 I-5 / SR-56 27E            9 Lead                           10</code></pre>
-<p>Much more manageable! Now comes the hard part… we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced in the rows. This is information in the dataset that needs to be retained to meaningfully evaluate filtration effectiveness. We can’t easily compare the influent/effluent concentrations in the current data because they are in the same column!</p>
+<p>Much more manageable! Now comes the hard part… we need to get the data in a format where we can easily compare the influent and effluent concentrations, but the data are currently in one column. We need to make separate columns for influent and effluent concentations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced in the rows.</p>
 <p>Here’s an example of what the data should look like for us to plot effluent against influent:</p>
 <pre><code>## # A tibble: 6 x 5
 ##   SITENAME MSNAME  `Storm #` influent effluent
@@ -526,7 +527,7 @@ library(readxl)</code></pre>
 <li><p>Separate columns for influent and effluent</p></li>
 <li><p>Each row references the site name, sample name, and storm number correctly for the influent and effluent observations</p></li>
 </ol>
-<p>Before we proceed, we’ll make life a little easier by taking care of the storms column. We would retain these columns if this were a real analysis, but this will get us to lunch quicker… so, we can use some tools from the dplyr package (as part of the tidyverse) to help us out. We will use <code>group_by()</code> and <code>summarise()</code> to average the water quality concentrations across storms for the unique site/sample combinations (see <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#group_by_and_summarize">here</a> for more info).</p>
+<p>Before we proceed, we’ll make life a little easier by taking care of the storms column. We would retain this info if this were a real analysis, but this will get us to lunch quicker… so, we can use some tools from the dplyr package (as part of the tidyverse) to help us out. We’ll use <code>group_by()</code> and <code>summarise()</code> to average the water quality concentrations across storms for the unique site/sample combinations (see <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#group_by_and_summarize">here</a> for more info).</p>
 <pre class="r"><code>dat &lt;- dat %&gt;% 
   group_by(SITENAME, MSNAME) %&gt;% 
   summarise(avewq = mean(`WQ Analysis Value`))
@@ -548,7 +549,7 @@ str(dat)</code></pre>
 ## 4 I-5 / I-605 EDB 4I     34.6 
 ## 5 I-5 / SR-56     27E     8   
 ## 6 I-5 / SR-56     27I    20.1</code></pre>
-<p>We are almost there. Now we just need to get the influent and effluent values in different columns. If you recall our earlier training sessions <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#spreading">here</a>, we can use the <code>spread()</code> function from the tidyr package (again, included in the tidyverse). This function lets us “spread” values in one column to multiple columns using “key” values in a second column. The key values are used as the column names for the values that are spread from one to many columns.</p>
+<p>We’re almost there. Now we just need to get the influent and effluent values in different columns. If you recall our earlier training session <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#spreading">here</a>, we can use the <code>spread()</code> function from the tidyr package (again, included in the tidyverse). This function lets us “spread” values in one column to multiple columns using “key” values in a second column. The key values are used as the column names for the values that are spread from one to many columns.</p>
 <p>Here’s an example of spreading with a different dataset:</p>
 <p><img src="figure/tidy-8.png" /></p>
 <p>Let’s try this on our dataset, where the key column is <code>MSNAME</code> and the value column is <code>avewq</code> from our summarised data.</p>
@@ -627,13 +628,13 @@ dat</code></pre>
 <ol style="list-style-type: decimal">
 <li>Selected the columns we wanted using <code>select()</code></li>
 <li>Filtered the rows for lead using <code>filter()</code></li>
-<li>Averaged concenctrations across storm events using <code>group_by()</code> and <code>summarise()</code></li>
+<li>Averaged concentrations across storm events using <code>group_by()</code> and <code>summarise()</code></li>
 <li>Created unique columns for sample name and influent/effluent categories using <code>mutate()</code> and <code>gsub()</code></li>
-<li>Spread the data using <code>spread()</code> to get the influent/effluent concentrations in differnt columns</li>
+<li>Spread the data using <code>spread()</code> to get the influent/effluent concentrations in different columns</li>
 </ol></li>
 <li><p>Compared the effluent and influent concentrations using ggplot</p></li>
 </ol>
-<p>Our conclusion? Looks like the filters are doing a good job removing lead from the stormwater.</p>
+<p>Our conclusion? Looks like the filters are doing a good job removing lead from the stormwater. Rest easy California…</p>
 </div>
 
 

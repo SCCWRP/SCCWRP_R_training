@@ -19,19 +19,21 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 Welcome to the first R luncheon!  These short and informal sessions are designed for continued learning of R that builds off of our previous training sessions (access any of the earlier content from our [home page](index.html)).  Our goal is to understand how we use R to approach real-world examples in bite size chunks. Each session will focus on a selected problem that may be specific to a research area but contains analysis challenges that are shared no matter the context.  The discussion will contain two parts:
 
-1. Presentation of the problem: what we are starting with and where we want to go. 
+1. Presentation of the problem: what we are starting with and where we want to go
 
 1. Steps to address the problem in general terms
 
 1. Specific steps to address the problem using R
 
-1. Execution of the workflow to achieve the final product.  
+1. Execution of the workflow to achieve the final product  
 
-Please note that this is not an introduction to R. You are expected to have some background knowledge with the understanding that you may not be comfortable using R to complete all steps of an analysis. You should leave the session with a greater understanding of how R can help you develop an efficient and repeatable workflow for your own data challenges.  I encourage lively discussion as we go through the workflow for each luncheon, so ask plenty of questions!
+Please note that this is not an introduction to R. You are expected to have some background knowledge, with the understanding that you may not be comfortable using R to complete all steps of an analysis. You should leave the session with better knowledge of how R can help you develop an efficient and repeatable workflow for your own data challenges.  I encourage lively discussion as we go through the workflow for each luncheon, so ask plenty of questions!
 
 # Problem scope
 
-Today's session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several locations. This will provide a benchmark of how well the filters are removing potentially harmful water quality constituents during high flow events.  
+Today's session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations across several locations and storm events. This will provide a benchmark of how well the filters are removing potentially harmful water quality constituents during high flow events.  
+
+Here's a conceptual representation of the raw data.
 
 ![](figure/rawdat.JPG)
 
@@ -39,7 +41,7 @@ We want to create a plot like this after getting the raw data in the correct for
 
 ![](figure/finalplo.JPG)
 
-The data are messy.  The spreadsheet includes measurements from different locations where record-keeping was not consistent.  Each location may also include several filtration samples, with measurements for one or more storm events.  There are several columns in the dataset, not all of which are relevant for our analysis.  Here's a screenshot:
+The data are messy.  The spreadsheet includes measurements from different locations where record-keeping was not consistent.  Each location may also include several filtration samples and one or more recorded storm events where measurements were taken at a sample.  There are several columns in the dataset, not all of which are relevant for our analysis.  Here's a screenshot:
 
 ![](figure/lunchdatex.PNG)
 
@@ -47,7 +49,7 @@ We want to import the data, wrangle the information to a consistent format, and 
 
 1. Import the Excel spreadsheet
 
-1. Wrangle the data to a consistent format. This will require removing extra columns we don't need, filtering the observations (rows) for a water quality parameter we're interested in, and develop a consistent convention that will allow to compare between stormwater treatment locations, filtration samples, and storm events.
+1. Wrangle the data to a consistent format. This will require removing extra columns we don't need, filtering the observations (rows) for a water quality parameter we're interested in, and develop a consistent format that will allow us to compare between BMP locations, filtration samples, and storm events.
 
 1. Plot the data using a simple scatterplot of effluent concentration (y-axis) against influent concentration (x-axis).  Our hope is that effluent concentrations will be lower than influent concentrations as a measure of how well the filtration systems are working.
 
@@ -104,7 +106,7 @@ library(tidyverse)
 library(readxl)
 ```
 
-Then add this line to import the dataset using the `read_excel()` function.  The imported dataset will be assigned to the `dat` variable in the workspace for your current R session.
+Then add this line to import the dataset using the `read_excel()` function.  The imported dataset will be assigned to the `dat` variable in the workspace for your current R session.  __You can send the code in your script to the R console using `Ctrl + Enter` (`Cmd + Enter` on a Mac) or using the run button on the top right of the scripting window.__
 
 ```{r, echo = F, message = F}
 dat <- read_excel('data/CA_DetentionBasin2.xlsx')
@@ -161,7 +163,7 @@ str(dat)
 head(dat)
 ```
 
-Much more manageable!  Now comes the hard part... we need to get the data in a format where we can easily compare the influent and effluent concentrations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced in the rows. This is information in the dataset that needs to be retained to meaningfully evaluate filtration effectiveness.  We can't easily compare the influent/effluent concentrations in the current data because they are in the same column!
+Much more manageable!  Now comes the hard part... we need to get the data in a format where we can easily compare the influent and effluent concentrations, but the data are currently in one column.  We need to make separate columns for influent and effluent concentations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced in the rows. 
 
 Here's an example of what the data should look like for us to plot effluent against influent:
 ```{r echo = F}
@@ -184,7 +186,7 @@ There are three things about this dataset that differ from our actual data:
 
 1) Each row references the site name, sample name, and storm number correctly for the influent and effluent observations
 
-Before we proceed, we'll make life a little easier by taking care of the storms column.  We would retain these columns if this were a real analysis, but this will get us to lunch quicker... so, we can use some tools from the dplyr package (as part of the tidyverse) to help us out.  We will use `group_by()` and `summarise()` to average the water quality concentrations across storms for the unique site/sample combinations (see [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#group_by_and_summarize) for more info).
+Before we proceed, we'll make life a little easier by taking care of the storms column.  We would retain this info if this were a real analysis, but this will get us to lunch quicker... so, we can use some tools from the dplyr package (as part of the tidyverse) to help us out.  We'll use `group_by()` and `summarise()` to average the water quality concentrations across storms for the unique site/sample combinations (see [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#group_by_and_summarize) for more info).
 
 ```{r}
 dat <- dat %>% 
@@ -194,7 +196,7 @@ str(dat)
 head(dat)
 ```
 
-We are almost there.  Now we just need to get the influent and effluent values in different columns.  If you recall our earlier training sessions [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#spreading), we can use the `spread()` function from the tidyr package (again, included in the tidyverse).  This function lets us "spread" values in one column to multiple columns using "key" values in a second column. The key values are used as the column names for the values that are spread from one to many columns.   
+We're almost there.  Now we just need to get the influent and effluent values in different columns.  If you recall our earlier training session [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#spreading), we can use the `spread()` function from the tidyr package (again, included in the tidyverse).  This function lets us "spread" values in one column to multiple columns using "key" values in a second column. The key values are used as the column names for the values that are spread from one to many columns.   
 
 Here's an example of spreading with a different dataset:
 
@@ -259,10 +261,10 @@ Let's recap the steps:
 1. Wrangled the data to a consistent format.
      1. Selected the columns we wanted using `select()`
      1. Filtered the rows for lead using `filter()`
-     1. Averaged concenctrations across storm events using `group_by()` and `summarise()`
+     1. Averaged concentrations across storm events using `group_by()` and `summarise()`
      1. Created unique columns for sample name and influent/effluent categories using `mutate()` and `gsub()`
-     1. Spread the data using `spread()` to get the influent/effluent concentrations in differnt columns
+     1. Spread the data using `spread()` to get the influent/effluent concentrations in different columns
 
 1. Compared the effluent and influent concentrations using ggplot
 
-Our conclusion?  Looks like the filters are doing a good job removing lead from the stormwater.  
+Our conclusion?  Looks like the filters are doing a good job removing lead from the stormwater. Rest easy California...
