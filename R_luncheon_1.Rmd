@@ -31,7 +31,7 @@ Please note that this is not an introduction to R. You are expected to have some
 
 # Problem scope
 
-Today's session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several locations. This will provide a benchmark of how well stormwater treatment locations are filtering different water quality parameters during high flow events (i.e., storms).  
+Today's session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events.  The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations with the storm events across several locations. This will provide a benchmark of how well the filters are removing potentially harmful water quality constituents during high flow events.  
 
 ![](figure/rawdat.JPG)
 
@@ -184,7 +184,7 @@ There are three things about this dataset that differ from our actual data:
 
 1) Each row references the site name, sample name, and storm number correctly for the influent and effluent observations
 
-Before we proceed, we'll make life a little easier by taking care of the storms column.  Nabiul assures me that we can average the concentrations for multiple storm events for each site and sample combination and still meaningfully evaluate filtration efficiency.  This will also get us to lunch quicker... so, we can use some tools from the dplyr package (as part of the tidyverse) to make our lives easier.  We will use `group_by()` and `summarise()` to average the water quality concentrations across storms for the unique site/sample combinations (see [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#group_by_and_summarize) for more info).
+Before we proceed, we'll make life a little easier by taking care of the storms column.  We would retain these columns if this were a real analysis, but this will get us to lunch quicker... so, we can use some tools from the dplyr package (as part of the tidyverse) to help us out.  We will use `group_by()` and `summarise()` to average the water quality concentrations across storms for the unique site/sample combinations (see [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#group_by_and_summarize) for more info).
 
 ```{r}
 dat <- dat %>% 
