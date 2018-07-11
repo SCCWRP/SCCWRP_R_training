@@ -232,7 +232,7 @@ dat
 
 # Plot the data
 
-Now we're ready to plot!  Let's use ggplot (refresher [here](https://sccwrp.github.io/SCCWRP_R_training/Viz_and_Graphics.html#ggplot2) to make a simple scatterplot with a trend line.
+Now we're ready to plot!  Let's use ggplot (refresher [here](https://sccwrp.github.io/SCCWRP_R_training/Viz_and_Graphics.html#ggplot2)) to make a simple scatterplot with a trend line.
 ```{r}
 ggplot(dat, aes(x = I, y = E)) +
   geom_point() + 

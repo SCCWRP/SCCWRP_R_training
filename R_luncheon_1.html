@@ -514,12 +514,12 @@ library(readxl)</code></pre>
 <pre><code>## # A tibble: 6 x 5
 ##   SITENAME MSNAME  `Storm #` influent effluent
 ##   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-## 1 site1    sample1         2     9.78     5.15
-## 2 site1    sample2         1     6.69     4.49
-## 3 site1    sample3         1     8.84     3.04
-## 4 site2    sample1         2     7.49     6.31
-## 5 site2    sample2         2     7.37     4.84
-## 6 site2    sample3         2     9.28     6.63</code></pre>
+## 1 site1    sample1         2     7.60     4.74
+## 2 site1    sample2         1     7.94     4.96
+## 3 site1    sample3         1     8.98     6.22
+## 4 site2    sample1         2     9.14     4.38
+## 5 site2    sample2         1     6.41     3.76
+## 6 site2    sample3         2     7.00     5.78</code></pre>
 <p>There are three things about this dataset that differ from our actual data:</p>
 <ol style="list-style-type: decimal">
 <li><p>Consistent naming convention between sites and samples</p></li>
@@ -603,7 +603,7 @@ dat</code></pre>
 </div>
 <div id="plot-the-data" class="section level1">
 <h1>Plot the data</h1>
-<p>Now we’re ready to plot! Let’s use ggplot (refresher <a href="https://sccwrp.github.io/SCCWRP_R_training/Viz_and_Graphics.html#ggplot2">here</a> to make a simple scatterplot with a trend line.</p>
+<p>Now we’re ready to plot! Let’s use ggplot (refresher <a href="https://sccwrp.github.io/SCCWRP_R_training/Viz_and_Graphics.html#ggplot2">here</a>) to make a simple scatterplot with a trend line.</p>
 <pre class="r"><code>ggplot(dat, aes(x = I, y = E)) +
   geom_point() + 
   stat_smooth(method = &#39;lm&#39;, se = F)</code></pre>

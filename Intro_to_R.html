@@ -376,7 +376,7 @@ div.tocify {
 <ul>
 <li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">Stack Overflow blog</a>, <a href="http://blog.revolutionanalytics.com/2016/07/r-moves-up-to-5th-place-in-ieee-language-rankings.html">IEEE rating</a></li>
 </ul>
-<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-06-08, there are 12558 on CRAN!</p>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-07-11, there are 12673 on CRAN!</p>
 <p>Python is another popular open-source programming language. Many beginners often ask the quesiton, why R vs. Python? This is an interesting debate with no easy answer. Some things to consider:</p>
 <ul>
 <li>R has statistical roots, phython does not</li>
@@ -453,7 +453,7 @@ div.tocify {
 <div id="r-language-fundamentals" class="section level2">
 <h2>R language fundamentals</h2>
 <p>The basic syntax of a function follows the form: <code>function_name(arg1, arg2, ...)</code>.</p>
-<p>With the base install, you will gain access to many (3371 functions, to be exact). Some examples:</p>
+<p>With the base install, you will gain access to many (3329 functions, to be exact). Some examples:</p>
 <pre class="r"><code># print
 print(&#39;hello world!&#39;)</code></pre>
 <pre><code>## [1] &quot;hello world!&quot;</code></pre>
@@ -462,32 +462,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1] 11.585311 13.713698  9.224786  6.383736 10.522593 11.250173  7.483174
-##   [8] 10.388228  7.330914 12.270113  9.073371  8.558840  8.771651  9.735168
-##  [15] 12.407769  9.913473  7.973836  8.470156  6.980393  9.528917  9.055738
-##  [22] 11.313858  9.361242 12.259355 10.103278 10.134838 12.964401  9.577023
-##  [29] 11.077796  7.997512 11.962113 10.232592  8.906418 10.129388 12.978621
-##  [36]  8.205326 15.597602  5.291515  8.681245 10.464512 10.129707  8.951763
-##  [43] 11.186381 12.970417  9.719853  6.980935  7.615783 11.977401  9.149251
-##  [50]  9.969712  9.347099  9.215611 11.140931  9.947824 10.052235  9.210289
-##  [57]  9.061419 11.558698  9.711885 13.204837  9.315828 10.878945 11.762664
-##  [64] 12.654254 11.447515 12.773667 12.497295  9.981434 12.269745  8.220288
-##  [71] 10.090292 12.383424  6.863486  9.506474 10.699658 10.035931  7.208414
-##  [78] 12.207100 10.773313 11.067522 11.355445 10.288043 10.144221  8.635602
-##  [85]  9.512197  7.654949 15.367706  7.366553  8.043837  8.957891  8.343877
-##  [92]  8.816165 11.736129  7.221017 16.014372  9.058707  9.522406  7.807659
-##  [99]  9.010432 12.560301</code></pre>
+<pre><code>##   [1]  8.695555 11.540166  8.979170  7.267293  9.671552 12.834712  8.723648
+##   [8] 11.266596  8.322213  5.916281  7.631342 12.112202  9.203376  8.879538
+##  [15]  7.462834 10.468994  8.444577 12.340848 11.748375 10.312985  9.757771
+##  [22] 11.822585  6.774422  8.969701  5.321807  9.175888 10.133901  7.345296
+##  [29] 13.121698 11.547006 11.505298  6.574723 10.327308 11.249330 12.027019
+##  [36]  8.515410 14.019963  9.800648  9.981414 11.510370  9.258445 10.180505
+##  [43]  9.006965 12.168217 12.238664  8.356334 10.678449 11.125902 10.057605
+##  [50]  9.375665  6.841026 10.156957  8.061954 10.700730  8.545022 10.198763
+##  [57]  8.489203 13.495511  9.169047  7.127649 10.880379  6.962292  8.532147
+##  [64] 11.509525 10.028683 14.063929 12.764482 15.420550 11.414565  8.617935
+##  [71]  5.299903  8.491167 11.267229 14.374382 10.408357  6.287783 10.376271
+##  [78]  9.331624  7.603695 10.891615  7.738794 13.677890  9.639196  2.851215
+##  [85] 10.211608  6.739686  9.394807  8.625213 12.647761 10.556186  9.548463
+##  [92] 10.855535 10.736543  7.795702  9.215885  9.864392  9.112394  7.303982
+##  [99]  7.518163 13.084311</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] 0.1155965</code></pre>
+<pre><code>## [1] 0.03335207</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] -13.46084</code></pre>
+<pre><code>## [1] -16.19127</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] -9.648773</code></pre>
+<pre><code>## [1] 3.379936</code></pre>
 <p>With this, you have the very basics of how we write R code and save objects that can be used later.</p>
 <div id="a-few-side-notes" class="section level3">
 <h3>A few side notes</h3>
@@ -511,7 +511,7 @@ sum(rnorm(100))</code></pre>
 </div>
 <div id="cran" class="section level3">
 <h3>CRAN</h3>
-<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-06-08, there are 12558 on CRAN!</p>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-07-11, there are 12673 on CRAN!</p>
 </div>
 <div id="installing-packages" class="section level3">
 <h3>Installing packages</h3>
@@ -708,18 +708,18 @@ myls</code></pre>
 <pre><code>##  [1] &quot;all_pipes&quot;       &quot;alldat&quot;          &quot;bad_ex&quot;         
 ##  [4] &quot;bad_ex2&quot;         &quot;by_make&quot;         &quot;by_yr_drv&quot;      
 ##  [7] &quot;chemdat&quot;         &quot;chr_var&quot;         &quot;dat&quot;            
-## [10] &quot;dbl_var&quot;         &quot;displ_cat&quot;       &quot;dplyr_arr&quot;      
-## [13] &quot;dplyr_good_fuel&quot; &quot;dplyr_mut&quot;       &quot;dplyr_mut2&quot;     
-## [16] &quot;dplyr_rnm&quot;       &quot;dplyr_sel1&quot;      &quot;dplyr_sel2&quot;     
-## [19] &quot;dplyr_sel3&quot;      &quot;dplyr_six_cyl&quot;   &quot;filt1&quot;          
-## [22] &quot;filt2&quot;           &quot;filt3&quot;           &quot;filt4&quot;          
-## [25] &quot;filt5&quot;           &quot;good_ex&quot;         &quot;int_var&quot;        
-## [28] &quot;log_var&quot;         &quot;logs&quot;            &quot;ltrs&quot;           
-## [31] &quot;metadat&quot;         &quot;more_sums&quot;       &quot;mpg&quot;            
-## [34] &quot;my_random_sum&quot;   &quot;mydf&quot;            &quot;myls&quot;           
-## [37] &quot;mymat&quot;           &quot;nums&quot;            &quot;origin&quot;         
-## [40] &quot;pkgs&quot;            &quot;sumdat&quot;          &quot;tidydat&quot;        
-## [43] &quot;x&quot;</code></pre>
+## [10] &quot;datex&quot;           &quot;dbl_var&quot;         &quot;displ_cat&quot;      
+## [13] &quot;dplyr_arr&quot;       &quot;dplyr_good_fuel&quot; &quot;dplyr_mut&quot;      
+## [16] &quot;dplyr_mut2&quot;      &quot;dplyr_rnm&quot;       &quot;dplyr_sel1&quot;     
+## [19] &quot;dplyr_sel2&quot;      &quot;dplyr_sel3&quot;      &quot;dplyr_six_cyl&quot;  
+## [22] &quot;filt1&quot;           &quot;filt2&quot;           &quot;filt3&quot;          
+## [25] &quot;filt4&quot;           &quot;filt5&quot;           &quot;good_ex&quot;        
+## [28] &quot;int_var&quot;         &quot;log_var&quot;         &quot;logs&quot;           
+## [31] &quot;ltrs&quot;            &quot;metadat&quot;         &quot;more_sums&quot;      
+## [34] &quot;mpg&quot;             &quot;my_random_sum&quot;   &quot;mydf&quot;           
+## [37] &quot;myls&quot;            &quot;mymat&quot;           &quot;nobs&quot;           
+## [40] &quot;nums&quot;            &quot;origin&quot;          &quot;pkgs&quot;           
+## [43] &quot;sumdat&quot;          &quot;tidydat&quot;         &quot;x&quot;</code></pre>
 <p>Before we go on, let’s look at the data class:</p>
 <pre class="r"><code>class(dat)</code></pre>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
