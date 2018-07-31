@@ -34,7 +34,6 @@ R luncheons are a more informal approach to teaching you about R.  The intent is
 
 1) **7/11** R luncheon 1
       * [content](R_luncheon_1.html)
-      * [RSVP](https://goo.gl/forms/s858rTtqcyeLt4it1)
 2) **8/8** R luncheon 2
       * [content](R_luncheon_2.html)
 3) **9/5** R luncheon 3
