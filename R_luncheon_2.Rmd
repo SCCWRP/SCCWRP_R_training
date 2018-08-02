@@ -8,4 +8,207 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 # R luncheon 2
 
-Content TBD
+## Lesson Outline
+
+* [Problem scope]
+* [Housekeeping]
+* [Data import]
+* [Data wrangle]
+* [Data analysis]
+* [Summary]
+
+Welcome to the second R luncheon!  The format for this session will be similar to the first, with the general goal of better understanding how we can use R to approach real-world examples in bite size chunks. The discussion will contain four parts:
+
+1. Presentation of the problem: what we are starting with and where we want to go
+
+1. Steps to address the problem in general terms
+
+1. Specific steps to address the problem using R
+
+1. Execution of the workflow to achieve the final product  
+
+Please note that this is not an introduction to R. You can visit any of the other topics on our [main page](index.html) for a refresher on some of the basics. In the mean time, feel free to ask plenty of questions as we go through today's lesson!
+
+# Problem scope
+
+Today's session will focus on a sediment chemistry dataset for several monitoring sites along the coast.  The raw data are provided in two separate Excel spreadsheets, one containing the sediment data and the other containing station location data.  Each site in the dataset has estimates of the concentration of different contaminants (e.g., mercury, lead, etc.) that were found in the sediment samples.  Toxicity tests were also conducted for each sample that evaluated the mortality/survivorship of organisms that were exposed to the sediment.  
+
+Our goal for this dataset is to explore relationships among the stations to identify:
+
+1. Spatial patterns among the measurements, and 
+
+2. Characterize any association of these measurements with toxicity.  
+
+This type of information can help identify which pollutants are of most concern and where efforts should be focused to minimize exposure risk.  Alternatively, it can also help identify which measurements may not need to be sampled as frequently.  
+
+This dataset is a perfect example of a real-world analysis challenge.  The data are provided with minimal background and the goal of the analysis is very general.  We don't know where the stations are located, nor do we have any prior knowledge about expected patterns.  As a result, the analysis will be exploratory and a relatively flexible approach will be used to answer the research question.  Our steps will include:
+
+1. Import the station chemistry data and station location data
+
+1. Wrangle the data to a consistent format.  This will include formatting the chemistry data to deal with any Excel artifacts and joining the final dataset with the location data for plotting.  We'll also have to think about dealing with outliers or other "incorrect" data.  This is almost a certainty with such a large dataset.
+
+1. Evaluate any spatial relationships among the variables.  Do any measurements relate to depth? What about latitude or longitude?  
+
+1. Evaluate assocations of the chemistry data with results from the toxicity tests.  Are any variables standing out?  What are any other challenges we need to consider?  
+
+# Housekeeping
+
+Let's start by opening RStudio, creating a new project, and downloading the data to the project.  
+
+## Open RStudio
+
+Find the RStudio shortcut and fire it up.  You should see something like this: 
+
+![](figure/rstudio.png)
+
+## Create a new project in RStudio
+
+To create a new project, click on the File menu at the top and select 'New project...'
+
+![](figure/rstudio_proj.jpg)
+
+## Download the data to your project
+
+You can download the two data files from this [link](https://sccwrp.github.io/SCCWRP_R_training/data/Sed_chem_tox - expanded.xlsx) for the chemistry data and this [link](https://sccwrp.github.io/SCCWRP_R_training/data/AllBightStationLocations.csv) for the station locations.  Once downloaded, you'll have to copy and paste the Excel file to your project.  Run `getwd()` in the R console if you're not sure where this is. 
+
+You can also download the data file directly in R. This will download the data and save the file to your new RStudio project in a single step.
+
+```{r, eval = F}
+# download the first file
+download.file(
+  url = 'https://sccwrp.github.io/SCCWRP_R_training/data/Sed_chem_tox - expanded.xlsx',
+  destfile = 'Sed_chem_tox - expanded.xlsx'
+  )
+
+# download the second file
+download.file(
+  url = 'https://sccwrp.github.io/SCCWRP_R_training/data/AllBightStationLocations.csv',
+  destfile = 'AllBightStationLocations.csv'
+  )
+```
+
+# Data import
+
+Now that we've got our project setup with the data, let's open a new script and load some R packages that we'll be using. 
+
+Open a new script from the File menu...
+
+![](figure/rstudio_script.jpg)
+
+Once the script is open, save it using the drop down file menu on the top left.  Give it an informative name (e.g.,`Rluncheon2.R`) and save it in your project's home directory.  This should be the default location selected by RStudio when you save the file.
+
+We'll be using functions from the [tidyverse](https://www.tidyverse.org/) collection of packages to import, wrangle, and plot the data.  Checkout our training material [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#the-tidyverse) if you need a brush up.  Run this line in the R console if you don't have the tidyverse installed.
+
+```{r, eval = F}
+install.packages('tidyverse')
+```
+
+In the script you just opened, add the following lines to load the tidyverse package and the readxl package (for data import).
+
+```{r, message = F, warning = F}
+library(tidyverse)
+library(readxl)
+```
+
+Then add this line to import the chemistry dataset using the `read_excel()` function.  The imported dataset will be assigned to the `datchem` variable in the workspace for your current R session.  We'll import the station location data using the base R function `read.csv`.  __You can send the code in your script to the R console using `Ctrl + Enter` (`Cmd + Enter` on a Mac) or using the run button on the top right of the scripting window.__
+
+```{r, echo = F, message = F}
+datchem <- read_excel('data/Sed_chem_tox - expanded.xlsx')
+datlocs <- read.csv('data/AllBightStationLocations.csv')
+```
+```{r, eval = F}
+datchem <- read_excel('Sed_chem_tox - expanded.xlsx')
+datlocs <- read.csv('AllBightStationLocations.csv')
+```
+
+Let's get a feeling for the dataset before we proceed.
+
+```{r}
+head(datchem)
+str(datchem)
+head(datlocs)
+str(datlocs)
+```
+
+# Data wrangle
+
+We'll tackle the chemistry data first.  We can't work with the data in its current format because of some artificts left over when we imported the Excel spreadsheet.  Here are a few of the issues we'll have to handle:
+
+1. Incorrect first row
+
+1. Some columns we don't care about
+
+1. Some columns are character strings when they should be numeric
+
+1. Some column names are inconvenient
+
+Here's how we can address these issues step by step. First, remove the first row and overwrite the existing object:
+
+```{r}
+datchem <- datchem[-1, ]
+```
+
+Remove two columns we don't need using the `select` function with the `-` sign.  The amphipod survival column is redundant with `%Amph.` and `X__2` is a bunch of comments we don't need. 
+
+```{r}
+datchem <- datchem %>% 
+  select(-`Amphipod survival (n =20)`, -`X__2`)
+```
+
+An additional problem is that some columns were character strings but we know that every entry should be numeric.  We can use the `mutate_if` function that conditionally converts columns given some criteria.  This is similar to the `mutate` function with an added twist.
+
+```{r}
+datchem <- datchem %>% 
+  mutate_if(is.character, as.numeric)
+```
+
+This appeared to work, but why did we get so many warning messages?  This is R's way of telling us that it tried and failed to convert somethign to a number.  As a result, these entries were given an `NA` value.  If you look at the original dataset, you'll notice that some entries were given as `?`.  These can't be converted to numbers, so an `NA` value is fine in this case.
+
+We're almost done wrangling the chemistry dataset.  Now we just need to rename some of the columns.  Let's rename anything that includes a special character" or is otherwise inconvenient to work with.
+
+```{r}
+datchem <- datchem %>% 
+  rename(
+    station = `Station ID`, 
+    depth = `Depth\r\n(m)`,
+    toc = `%TOC`,
+    tn = `%TN`,
+    fine = `%Fine`,
+    amph_surv = X__1, 
+    embr_surv = `%M.Emb.Surv.`
+  ) 
+```
+
+The location dataset is much simpler to work with.  Our goal is to wrangle the information to a format that we can easily join to the chemistry dataset.  Our chemistry dataset is from Bight 2008 so we first want to filter the station location data for the same year.  
+
+```{r}
+datlocs <- datlocs %>% 
+  filter(Bight %in% 2008) 
+```
+
+Then we want to rename the StationID column to match that in our chemistry dataset.  This will let us join the two datasets using a shared column name.  The station column also has to be numeric to match the chemistry data.
+
+```{r}
+datlocs <- datlocs %>% 
+  rename(station = StationID) %>% 
+  mutate(station = as.numeric(station))
+```
+
+Finally, let's remove the `FID` and `Bight` columns.
+
+```{r}
+datlocs <- datlocs %>% 
+  select(-FID, -Bight)
+```
+
+Now we can join the chemistry and location data to create a single dataset. First let's see if all the station IDs that are in our chemistry data are also in our location data. 
+
+```{r}
+setdiff(datchem$station, datlocs$station)
+```
+
+```{r}
+
+```
+
+

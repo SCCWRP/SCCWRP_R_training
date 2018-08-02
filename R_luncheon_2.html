@@ -339,7 +339,207 @@ div.tocify {
 
 <div id="r-luncheon-2" class="section level1">
 <h1>R luncheon 2</h1>
-<p>Content TBD</p>
+<div id="lesson-outline" class="section level2">
+<h2>Lesson Outline</h2>
+<ul>
+<li><a href="#problem-scope">Problem scope</a></li>
+<li><a href="#housekeeping">Housekeeping</a></li>
+<li><a href="#data-import">Data import</a></li>
+<li><a href="#data-wrangle">Data wrangle</a></li>
+<li>[Data analysis]</li>
+<li>[Summary]</li>
+</ul>
+<p>Welcome to the second R luncheon! The format for this session will be similar to the first, with the general goal of better understanding how we can use R to approach real-world examples in bite size chunks. The discussion will contain four parts:</p>
+<ol style="list-style-type: decimal">
+<li><p>Presentation of the problem: what we are starting with and where we want to go</p></li>
+<li><p>Steps to address the problem in general terms</p></li>
+<li><p>Specific steps to address the problem using R</p></li>
+<li><p>Execution of the workflow to achieve the final product</p></li>
+</ol>
+<p>Please note that this is not an introduction to R. You can visit any of the other topics on our <a href="index.html">main page</a> for a refresher on some of the basics. In the mean time, feel free to ask plenty of questions as we go through today’s lesson!</p>
+</div>
+</div>
+<div id="problem-scope" class="section level1">
+<h1>Problem scope</h1>
+<p>Today’s session will focus on a sediment chemistry dataset for several monitoring sites along the coast. The raw data are provided in two separate Excel spreadsheets, one containing the sediment data and the other containing station location data. Each site in the dataset has estimates of the concentration of different contaminants (e.g., mercury, lead, etc.) that were found in the sediment samples. Toxicity tests were also conducted for each sample that evaluated the mortality/survivorship of organisms that were exposed to the sediment.</p>
+<p>Our goal for this dataset is to explore relationships among the stations to identify:</p>
+<ol style="list-style-type: decimal">
+<li><p>Spatial patterns among the measurements, and</p></li>
+<li><p>Characterize any association of these measurements with toxicity.</p></li>
+</ol>
+<p>This type of information can help identify which pollutants are of most concern and where efforts should be focused to minimize exposure risk. Alternatively, it can also help identify which measurements may not need to be sampled as frequently.</p>
+<p>This dataset is a perfect example of a real-world analysis challenge. The data are provided with minimal background and the goal of the analysis is very general. We don’t know where the stations are located, nor do we have any prior knowledge about expected patterns. As a result, the analysis will be exploratory and a relatively flexible approach will be used to answer the research question. Our steps will include:</p>
+<ol style="list-style-type: decimal">
+<li><p>Import the station chemistry data and station location data</p></li>
+<li><p>Wrangle the data to a consistent format. This will include formatting the chemistry data to deal with any Excel artifacts and joining the final dataset with the location data for plotting. We’ll also have to think about dealing with outliers or other “incorrect” data. This is almost a certainty with such a large dataset.</p></li>
+<li><p>Evaluate any spatial relationships among the variables. Do any measurements relate to depth? What about latitude or longitude?</p></li>
+<li><p>Evaluate assocations of the chemistry data with results from the toxicity tests. Are any variables standing out? What are any other challenges we need to consider?</p></li>
+</ol>
+</div>
+<div id="housekeeping" class="section level1">
+<h1>Housekeeping</h1>
+<p>Let’s start by opening RStudio, creating a new project, and downloading the data to the project.</p>
+<div id="open-rstudio" class="section level2">
+<h2>Open RStudio</h2>
+<p>Find the RStudio shortcut and fire it up. You should see something like this:</p>
+<p><img src="figure/rstudio.png" /></p>
+</div>
+<div id="create-a-new-project-in-rstudio" class="section level2">
+<h2>Create a new project in RStudio</h2>
+<p>To create a new project, click on the File menu at the top and select ‘New project…’</p>
+<p><img src="figure/rstudio_proj.jpg" /></p>
+</div>
+<div id="download-the-data-to-your-project" class="section level2">
+<h2>Download the data to your project</h2>
+<p>You can download the two data files from this <a href="https://sccwrp.github.io/SCCWRP_R_training/data/Sed_chem_tox%20-%20expanded.xlsx">link</a> for the chemistry data and this <a href="https://sccwrp.github.io/SCCWRP_R_training/data/AllBightStationLocations.csv">link</a> for the station locations. Once downloaded, you’ll have to copy and paste the Excel file to your project. Run <code>getwd()</code> in the R console if you’re not sure where this is.</p>
+<p>You can also download the data file directly in R. This will download the data and save the file to your new RStudio project in a single step.</p>
+<pre class="r"><code># download the first file
+download.file(
+  url = &#39;https://sccwrp.github.io/SCCWRP_R_training/data/Sed_chem_tox - expanded.xlsx&#39;,
+  destfile = &#39;Sed_chem_tox - expanded.xlsx&#39;
+  )
+
+# download the second file
+download.file(
+  url = &#39;https://sccwrp.github.io/SCCWRP_R_training/data/AllBightStationLocations.csv&#39;,
+  destfile = &#39;AllBightStationLocations.csv&#39;
+  )</code></pre>
+</div>
+</div>
+<div id="data-import" class="section level1">
+<h1>Data import</h1>
+<p>Now that we’ve got our project setup with the data, let’s open a new script and load some R packages that we’ll be using.</p>
+<p>Open a new script from the File menu…</p>
+<p><img src="figure/rstudio_script.jpg" /></p>
+<p>Once the script is open, save it using the drop down file menu on the top left. Give it an informative name (e.g.,<code>Rluncheon2.R</code>) and save it in your project’s home directory. This should be the default location selected by RStudio when you save the file.</p>
+<p>We’ll be using functions from the <a href="https://www.tidyverse.org/">tidyverse</a> collection of packages to import, wrangle, and plot the data. Checkout our training material <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#the-tidyverse">here</a> if you need a brush up. Run this line in the R console if you don’t have the tidyverse installed.</p>
+<pre class="r"><code>install.packages(&#39;tidyverse&#39;)</code></pre>
+<p>In the script you just opened, add the following lines to load the tidyverse package and the readxl package (for data import).</p>
+<pre class="r"><code>library(tidyverse)
+library(readxl)</code></pre>
+<p>Then add this line to import the chemistry dataset using the <code>read_excel()</code> function. The imported dataset will be assigned to the <code>datchem</code> variable in the workspace for your current R session. We’ll import the station location data using the base R function <code>read.csv</code>. <strong>You can send the code in your script to the R console using <code>Ctrl + Enter</code> (<code>Cmd + Enter</code> on a Mac) or using the run button on the top right of the scripting window.</strong></p>
+<pre class="r"><code>datchem &lt;- read_excel(&#39;Sed_chem_tox - expanded.xlsx&#39;)
+datlocs &lt;- read.csv(&#39;AllBightStationLocations.csv&#39;)</code></pre>
+<p>Let’s get a feeling for the dataset before we proceed.</p>
+<pre class="r"><code>head(datchem)</code></pre>
+<pre><code>## # A tibble: 6 x 32
+##   `Station ID` `Depth\r\n(m)` `%TOC`  `%TN` `%Fine` `Amphipod survi~ X__1 
+##          &lt;dbl&gt;          &lt;dbl&gt;  &lt;dbl&gt;  &lt;dbl&gt; &lt;chr&gt;   &lt;chr&gt;            &lt;chr&gt;
+## 1           NA           NA    NA    NA     &lt;NA&gt;    raw data         %Amp~
+## 2         6001            0.9   0.11  0.003 0       18.2             91   
+## 3         6004            0.8   0.18  0.03  13.7    18.400000000000~ 92   
+## 4         6009            0.6   0.38  0.046 9.5     18               90   
+## 5         6010            0.6   0.06  0.008 3       17.399999999999~ 87   
+## 6         6012            0.8   0.35  0.047 4       19               95   
+## # ... with 25 more variables: `%M.Emb.Surv.` &lt;chr&gt;, Al &lt;chr&gt;, Sb &lt;chr&gt;,
+## #   As &lt;chr&gt;, Ba &lt;dbl&gt;, Be &lt;dbl&gt;, Cd &lt;dbl&gt;, Cr &lt;dbl&gt;, Co &lt;dbl&gt;, Cu &lt;dbl&gt;,
+## #   Fe &lt;dbl&gt;, Pb &lt;dbl&gt;, Mn &lt;dbl&gt;, Hg &lt;dbl&gt;, Mo &lt;dbl&gt;, Ni &lt;dbl&gt;, Se &lt;dbl&gt;,
+## #   Ag &lt;dbl&gt;, Sr &lt;dbl&gt;, Tl &lt;dbl&gt;, Sn &lt;dbl&gt;, Ti &lt;dbl&gt;, V &lt;dbl&gt;, Zn &lt;dbl&gt;,
+## #   X__2 &lt;chr&gt;</code></pre>
+<pre class="r"><code>str(datchem)</code></pre>
+<pre><code>## Classes &#39;tbl_df&#39;, &#39;tbl&#39; and &#39;data.frame&#39;:    156 obs. of  32 variables:
+##  $ Station ID               : num  NA 6001 6004 6009 6010 ...
+##  $ Depth
+## (m)             : num  NA 0.9 0.8 0.6 0.6 0.8 1.8 1.5 3.7 3.5 ...
+##  $ %TOC                     : num  NA 0.11 0.18 0.38 0.06 0.35 1.82 0.35 0.9 0.99 ...
+##  $ %TN                      : num  NA 0.003 0.03 0.046 0.008 0.047 0.124 0.02 0.055 0.069 ...
+##  $ %Fine                    : chr  NA &quot;0&quot; &quot;13.7&quot; &quot;9.5&quot; ...
+##  $ Amphipod survival (n =20): chr  &quot;raw data&quot; &quot;18.2&quot; &quot;18.400000000000002&quot; &quot;18&quot; ...
+##  $ X__1                     : chr  &quot;%Amph.&quot; &quot;91&quot; &quot;92&quot; &quot;90&quot; ...
+##  $ %M.Emb.Surv.             : chr  NA &quot;90&quot; &quot;100&quot; &quot;0&quot; ...
+##  $ Al                       : chr  NA &quot;1040&quot; &quot;6690&quot; &quot;12700&quot; ...
+##  $ Sb                       : chr  NA &quot;0&quot; &quot;0.1&quot; &quot;0.2&quot; ...
+##  $ As                       : chr  NA &quot;1&quot; &quot;1.4&quot; &quot;3.1&quot; ...
+##  $ Ba                       : num  NA 4.4 54.7 78.9 18.5 29.9 89.7 51.7 85 69.7 ...
+##  $ Be                       : num  NA 0 0.1 0.3 0 0.1 0.8 0.3 0.4 0.5 ...
+##  $ Cd                       : num  NA 0 0.1 0.3 0 0.1 0.3 0.3 0.2 0.3 ...
+##  $ Cr                       : num  NA 1.4 7.7 13.3 2.6 4.1 47.3 18.5 36.4 36.1 ...
+##  $ Co                       : num  NA 0.3 2.4 3.5 1 1.5 12.2 5 7.2 6.9 ...
+##  $ Cu                       : num  NA 0.5 6 13 1.9 ...
+##  $ Fe                       : num  NA 1726 8100 13900 3192 ...
+##  $ Pb                       : num  NA 0.7 4.1 10 1.4 2.5 21.5 9.2 24 19 ...
+##  $ Mn                       : num  NA 12.2 62.9 166.2 27.9 ...
+##  $ Hg                       : num  NA 0 0 0 0 0 0.2 0.1 0.2 0.2 ...
+##  $ Mo                       : num  NA 0 0.3 0.5 0.2 0.4 2.1 0.3 0.5 1 ...
+##  $ Ni                       : num  NA 0.4 3.6 6.9 1.2 2 16.9 6.2 10.8 10.6 ...
+##  $ Se                       : num  NA 0 0.1 0.2 0 0.1 0.4 0.1 0.2 0.3 ...
+##  $ Ag                       : num  NA 0.1 0.1 0.2 0.1 0.1 1.2 0.4 0.9 0.9 ...
+##  $ Sr                       : num  NA 43 14.8 50.5 8.2 14.9 53.6 32.6 32.9 30.9 ...
+##  $ Tl                       : num  NA 0 0.1 0.1 0 0 0.3 0.2 0.3 0.3 ...
+##  $ Sn                       : num  NA 0.1 1.1 2.6 0.3 0.7 3.2 1.1 3.4 3.4 ...
+##  $ Ti                       : num  NA 59.7 417.9 493.6 156.2 ...
+##  $ V                        : num  NA 4 19.6 29.6 7.5 11.1 94.7 45.3 61.6 58.6 ...
+##  $ Zn                       : num  NA 3.2 28.7 56.8 10.3 ...
+##  $ X__2                     : chr  NA NA NA NA ...</code></pre>
+<pre class="r"><code>head(datlocs)</code></pre>
+<pre><code>##   FID StationID Bight Latitude Longitude
+## 1   0      1001  1994 33.98533 -118.6077
+## 2   1      1003  1994 33.98400 -118.5690
+## 3   2      1005  1994 33.98250 -118.5373
+## 4   3      1014  1994 33.97417 -118.5588
+## 5   4      1019  1994 33.97067 -118.4800
+## 6   5      1025  1994 33.96833 -118.4760</code></pre>
+<pre class="r"><code>str(datlocs)</code></pre>
+<pre><code>## &#39;data.frame&#39;:    1867 obs. of  5 variables:
+##  $ FID      : int  0 1 2 3 4 5 6 7 8 9 ...
+##  $ StationID: Factor w/ 1772 levels &quot;1001&quot;,&quot;1003&quot;,..: 1 2 3 4 5 6 7 8 9 10 ...
+##  $ Bight    : int  1994 1994 1994 1994 1994 1994 1994 1994 1994 1994 ...
+##  $ Latitude : num  34 34 34 34 34 ...
+##  $ Longitude: num  -119 -119 -119 -119 -118 ...</code></pre>
+</div>
+<div id="data-wrangle" class="section level1">
+<h1>Data wrangle</h1>
+<p>We’ll tackle the chemistry data first. We can’t work with the data in its current format because of some artificts left over when we imported the Excel spreadsheet. Here are a few of the issues we’ll have to handle:</p>
+<ol style="list-style-type: decimal">
+<li><p>Incorrect first row</p></li>
+<li><p>Some columns we don’t care about</p></li>
+<li><p>Some columns are character strings when they should be numeric</p></li>
+<li><p>Some column names are inconvenient</p></li>
+</ol>
+<p>Here’s how we can address these issues step by step. First, remove the first row and overwrite the existing object:</p>
+<pre class="r"><code>datchem &lt;- datchem[-1, ]</code></pre>
+<p>Remove two columns we don’t need using the <code>select</code> function with the <code>-</code> sign. The amphipod survival column is redundant with <code>%Amph.</code> and <code>X__2</code> is a bunch of comments we don’t need.</p>
+<pre class="r"><code>datchem &lt;- datchem %&gt;% 
+  select(-`Amphipod survival (n =20)`, -`X__2`)</code></pre>
+<p>An additional problem is that some columns were character strings but we know that every entry should be numeric. We can use the <code>mutate_if</code> function that conditionally converts columns given some criteria. This is similar to the <code>mutate</code> function with an added twist.</p>
+<pre class="r"><code>datchem &lt;- datchem %&gt;% 
+  mutate_if(is.character, as.numeric)</code></pre>
+<p>This appeared to work, but why did we get so many warning messages? This is R’s way of telling us that it tried and failed to convert somethign to a number. As a result, these entries were given an <code>NA</code> value. If you look at the original dataset, you’ll notice that some entries were given as <code>?</code>. These can’t be converted to numbers, so an <code>NA</code> value is fine in this case.</p>
+<p>We’re almost done wrangling the chemistry dataset. Now we just need to rename some of the columns. Let’s rename anything that includes a special character&quot; or is otherwise inconvenient to work with.</p>
+<pre class="r"><code>datchem &lt;- datchem %&gt;% 
+  rename(
+    station = `Station ID`, 
+    depth = `Depth\r\n(m)`,
+    toc = `%TOC`,
+    tn = `%TN`,
+    fine = `%Fine`,
+    amph_surv = X__1, 
+    embr_surv = `%M.Emb.Surv.`
+  ) </code></pre>
+<p>The location dataset is much simpler to work with. Our goal is to wrangle the information to a format that we can easily join to the chemistry dataset. Our chemistry dataset is from Bight 2008 so we first want to filter the station location data for the same year.</p>
+<pre class="r"><code>datlocs &lt;- datlocs %&gt;% 
+  filter(Bight %in% 2008) </code></pre>
+<p>Then we want to rename the StationID column to match that in our chemistry dataset. This will let us join the two datasets using a shared column name. The station column also has to be numeric to match the chemistry data.</p>
+<pre class="r"><code>datlocs &lt;- datlocs %&gt;% 
+  rename(station = StationID) %&gt;% 
+  mutate(station = as.numeric(station))</code></pre>
+<p>Finally, let’s remove the <code>FID</code> and <code>Bight</code> columns.</p>
+<pre class="r"><code>datlocs &lt;- datlocs %&gt;% 
+  select(-FID, -Bight)</code></pre>
+<p>Now we can join the chemistry and location data to create a single dataset. First let’s see if all the station IDs that are in our chemistry data are also in our location data.</p>
+<pre class="r"><code>setdiff(datchem$station, datlocs$station)</code></pre>
+<pre><code>##   [1] 6001 6004 6009 6010 6012 6015 6017 6025 6027 6031 6039 6040 6041 6042
+##  [15] 6045 6046 6047 6049 6052 6054 6057 6060 6065 6069 6071 6072 6075 6080
+##  [29] 6083 6084 6085 6087 6090 6093 6094 6113 6115 6116 6119 6120 6125 6127
+##  [43] 6128 6129 6130 6133 6134 6136 6140 6145 6148 6151 6152 6153 6154 6155
+##  [57] 6157 6159 6161 6165 6171 6173 6177 6179 6180 6181 6189 6192 6197 6200
+##  [71] 6204 6211 6212 6213 6216 6217 6219 6223 6228 6229 6230 6232 6236 6239
+##  [85] 6242 6243 6244 6245 6250 6251 6252 6253 6264 6269 6270 6271 6280 6282
+##  [99] 6288 6291 6294 6303 6308 6311 6314 6317 6320 6325 6327 6328 6362 6363
+## [113] 6383 6384 6386 6387 6402 6404 6405 6413 6416 6419 6424 6428 6432 6437
+## [127] 6443 6446 6448 6449 6450 6460 6462 6466 6467 6482 6487 6489 6493 6508
+## [141] 6513 6518 6520 6527 6530 6546 6549 6553 6560 6570 6572 6649 6659 6660
+## [155] 6661</code></pre>
 </div>
 
 
