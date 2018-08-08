@@ -31,7 +31,7 @@ Please note that this is not an introduction to R. You can visit any of the othe
 
 # Problem scope
 
-Today's session will focus on a sediment chemistry dataset for several monitoring sites along the coast.  The raw data are provided in two separate Excel spreadsheets, one containing the sediment data and the other containing station location data.  Each site in the dataset has estimates of the concentration of different contaminants (e.g., mercury, lead, etc.) that were found in the sediment samples.  Toxicity tests were also conducted for each sample that evaluated the mortality/survivorship of organisms that were exposed to the sediment.  
+Today's session will focus on a sediment chemistry dataset for several monitoring sites along the coast.  The raw data are provided in two separate Excel spreadsheets, one containing the [sediment data](https://sccwrp.github.io/SCCWRP_R_training/data/Sed_chem_tox - expanded.xlsx) and the other containing station [location data](https://sccwrp.github.io/SCCWRP_R_training/data/AllBightStationLocations.csv).  Each site in the dataset has estimates of the concentration of different contaminants (e.g., mercury, lead, etc.) that were found in the sediment samples.  Toxicity tests were also conducted for each sample that evaluated the mortality/survivorship of organisms that were exposed to the sediment.  
 
 ![](figure/sedsnap.JPG)
 ![](figure/sedsnap2.JPG)
@@ -40,7 +40,7 @@ Our goal for this dataset is to explore relationships among the stations to iden
 
 1. Spatial patterns among the measurements, and 
 
-2. Characterize any association of these measurements with toxicity.  
+2. Characterize any association of these measurements with mortality/survivorship.  
 
 This type of information can help identify which pollutants are of most concern and where efforts should be focused to minimize exposure risk.  Alternatively, monitoring is expensive and it can help identify which measurements may not need to be sampled as frequently.  
 
@@ -54,6 +54,8 @@ This dataset is a perfect example of a real-world analysis challenge.  The data 
 1. Evaluate any spatial relationships among the variables.  Do any measurements relate to depth? What about latitude or longitude?  
 
 1. Evaluate assocations of the chemistry data with results from the toxicity tests.  Are any variables standing out?  What are any other challenges we need to consider?  
+
+![](figure/luncheon2workflow.png)
 
 # Housekeeping
 
@@ -136,7 +138,7 @@ str(datlocs)
 
 # Data wrangle
 
-We'll tackle the chemistry data first.  We can't work with the data in its current format because of some artificts left over when we imported the Excel spreadsheet.  Here are a few of the issues we'll have to handle:
+Neither of our two datasets are in a format that allows us to easily evalute relationships among the variables.  We'll tackle the chemistry data first.  We can't work with the data in its current format because of some artificts left over when we imported the Excel spreadsheet.  Here are a few of the issues we'll have to handle:
 
 1. Incorrect first row
 
@@ -159,7 +161,7 @@ datchem <- datchem %>%
   select(-`Amphipod survival (n =20)`, -`X__2`)
 ```
 
-An additional problem is that some columns were character strings but we know that every entry should be numeric.  R will try to guess the types of values in a column when the data are imported.  It will default to character data in ambiguous cases, i.e., a column contains a mix of numbers and letters.  To fix this issue, we can use the `mutate_if` function that conditionally converts columns given some criteria.  This is similar to the `mutate` function with an added twist by checking all column at once.
+An additional problem is that some columns were character strings but we know that every entry should be numeric.  R will try to guess the types of values in a column when the data are imported.  It will default to character data in ambiguous cases, i.e., a column contains a mix of numbers and letters.  To fix this issue, we can use the `mutate_if` function that conditionally converts columns given some criteria.  This is similar to the `mutate` function with an added twist by checking all columns at once.
 
 ```{r}
 datchem <- datchem %>% 
@@ -168,7 +170,7 @@ datchem <- datchem %>%
 
 This appeared to work, but why did we get so many warning messages?  This is R's way of telling us that it tried and failed to convert something to a number.  As a result, these entries were given an `NA` value.  If you look at the original dataset, you'll notice that some entries were given as `?`.  These can't be converted to numbers, so an `NA` value is fine in this case.
 
-We're almost done wrangling the chemistry dataset.  Now we just need to rename some of the columns.  Let's rename anything that includes a special character" or is otherwise inconvenient to work with.
+We're almost done wrangling the chemistry dataset.  Now we just need to rename some of the columns.  Let's rename anything that includes a "special character" or is otherwise inconvenient to work with.
 
 ```{r}
 datchem <- datchem %>% 
@@ -180,7 +182,7 @@ datchem <- datchem %>%
   ) 
 ```
 
-The location dataset is much simpler to work with.  Our goal is to wrangle the information to a format that we can easily join to the chemistry dataset.  Our chemistry dataset is from Bight 2008 so we first want to filter the station location data for the same year.  
+Now we can start working with the location data, which will be much simpler to work with because it was already in a flat-file format.  Our goal is to wrangle the data so that we can easily join it to the chemistry dataset.  Our chemistry dataset is from Bight 2008 so we first want to filter the station location data for the same year.  
 
 ```{r}
 datlocs <- datlocs %>% 
@@ -195,20 +197,26 @@ datlocs <- datlocs %>%
   mutate(station = as.numeric(station))
 ```
 
-Finally, let's remove the `FID` and `Bight` columns that we don't need.
+Finally, let's remove the `FID` and `Bight` columns that we don't need. 
 
 ```{r}
 datlocs <- datlocs %>% 
   select(-FID, -Bight)
 ```
 
-Now we can join the chemistry and location data to create a single dataset. First let's see if all the station IDs that are in our chemistry data are also in our location data. 
+Here's what our cleaned up chemistry and location datasets look like.
+```{r}
+head(datchem)
+head(datlocs)
+```
+
+Now we can join the two to create a single dataset (see [here](https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#combining-data) for a refresher on joins). First let's see if all the station IDs that are in our chemistry data are also in our location data. 
 
 ```{r}
 setdiff(datchem$station, datlocs$station)
 ```
 
-Okay, so there's one station in our chemistry data that wasn't in our location data.  That's okay and an acceptable loss.  We'll use an `inner_join` to combine the two datasets by the station id.  This will drop all stations that aren't shared between the two datasets.   
+Okay, so there's one station in our chemistry data that wasn't in our location data.  That's okay and an acceptable loss.  We'll use the `inner_join()` function to combine the two datasets by the station id.  This will drop all stations that aren't shared between the two datasets.   
 
 ```{r}
 dat <- inner_join(datlocs, datchem, by = 'station')
@@ -222,11 +230,11 @@ dim(dat)
 head(dat)
 ```
 
-The last and final step before we start addressing our research question is to identify and possibly remove outliers.  There are quite a few definitions of what constitutes an outlier.  Generally speaking, these are values that are "far" from the central tendency of the rest of the data, where "far" could be defined many ways, e.g., 1.5 x the interquartile range, > 95th percentile, etc.  There's no strict rule that applies to every dataset and the chosen definition depends on the needs of your analysis, and more importantly, what is considerable unacceptable in the eyes of you, the analyst.  
+The last and final step before we start addressing our research question is to identify and possibly remove outliers.  There are quite a few definitions of what makes something an outlier.  Generally speaking, these are values that are "far" from the central tendency of the rest of the data, where "far" could be defined many ways, e.g., 1.5 x the interquartile range, > 95th percentile, etc.  There's no strict rule that applies to every dataset and the chosen definition depends on the needs of your analysis, and more importantly, what is considerable unacceptable in the eyes of you, the analyst.  
 
 For this analysis, we're going to be looking at simple correlations among the variables.  In this sense, any observations that can skew a perceived correlation could be considered an outlier and these would typically be values that are due to measurement error, human error, etc. A good first step would be to look at a pairs plot of the data.  This is a matrix of all paired scatter plots for every variable in the dataset. We can use this to not only evalute relative associations but also find which pairs of values deviate wildly from the rest.  
 
-We'll create a pairs plot by evaluating everything except the station column.  We'll set the argument `gap = 0` to minimize gaps between the plot panels to help us better see the plots. The argument `cex = 0.5` reduces the point size. Pro tip: you might get an error <span style="color:red">Error in plot.new() : figure margins too large</span>.  This simply means that the figure margins in RStudios plot window (bottom right panel) are too small to plot the data.  Use the `windows()` function from the command line to make a new graphics device that you can expand. 
+We'll create a pairs plot by evaluating everything except the station column.  We'll set the argument `gap = 0` to minimize gaps between the plot panels to help us better see the plots. The argument `cex = 0.5` will reduce the point size to minimize clutter. Pro tip: you might get an error <span style="color:red">Error in plot.new() : figure margins too large</span>.  This simply means that the figure margins in RStudio's plot window (bottom right panel) are too small to plot the data.  Use the `windows()` function from the command line to make a new graphics device that you can expand. 
 ```{r, fig.height = 8, fig.width = 8}
 pairs(dat[, -1], gap = 0, cex = 0.5)
 ```
@@ -237,7 +245,7 @@ It looks like we have some problem values:
 * chromium > 100
 * mercury > 3
 
-We'll want to remove these by hand since these will likely cause problems, i.e., skewing correlation coefficients, linear models, etc. This is most easily done by selecting the variables from the dataset, subsetting by the offending values, and assigning an `NA` value.
+We'll want to remove these by hand since these will likely cause problems, i.e., skewing correlation coefficients, linear models, etc. This is most easily done by selecting the variables from the dataset, subsetting by the offending values, and assigning an `NA` value.  We can do this by indexing with base R or using dplyr syntax, your choice.
 
 ```{r, eval = T}
 dat$amph_surv[dat$amph_surv < 40] <- NA
@@ -266,7 +274,7 @@ This is a relatively subjective approach to removing outliers.  At the end of th
 
 # Data analysis
 
-Now we can start addressing our research questions. Our first question is whether or not any of thes variables following some kind of spatial pattern.  This would suggest somethig about location is affecting sediment toxicity, such as different sources of pollutatns or different management patterns.  We can get a visual representation of these patterns by looking at how they vary by latitude and longitude. 
+Now we can start addressing our research questions. Our first question is whether or not any of thes variables following some kind of spatial pattern.  This would suggest something about location is affecting sediment toxicity, such as different origins or different management actions that influence source/sink dynamics.  We can get a visual representation of these patterns by looking at how they vary by latitude and longitude. 
 
 We can use ggplot for a quick assessment.  
 ```{r}
@@ -275,7 +283,7 @@ ggplot(dat, aes(x = Longitude, y = Latitude)) +
   coord_cartesian()
 ```
 
-Now let's overlay some of the survivability estimates on the points.
+Now let's overlay some of the survivability estimates on the points (you can swap out any of the other toxicity measures using the `colour` aesthetic).
 ```{r}
 ggplot(dat, aes(x = Longitude, y = Latitude, colour = amph_surv)) +
   geom_point() + 
@@ -294,7 +302,7 @@ library(GGally)
 library(GGally)
 ```
 
-We can use the `ggpairs` function to make a beefed up version of the pairs plot.  In addition to paired scatterplots, you can get a better idea of the distribution of each variable and actual estimates of correlations between pairs of variables. We'll not look at latitude or longitude for this example. 
+We can use the `ggpairs` function to make a beefed up version of the pairs plot.  In addition to paired scatterplots, you can get a better idea of the distribution of each variable and actual estimates of correlations between pairs of variables. We'll not look at the station, latitude or, longitude columns for this example. 
 
 ```{r, fig.height = 8, fig.width = 8}
 ggpairs(dat[, -c(1:3)])
@@ -311,7 +319,9 @@ summary(mod)
 
 # Summary
 
-Clearly this simple analysis is not doing this dataset justice, but we've identified an analysis workflow that identifies significant associations for follow-up analysis.  A good starting place would be to look at individual bays to minimize variation between locations.  Alternatively, a formal multivariate analysis that simultaneously compares all the data could be insightful (for example, [here](https://fawda123.github.io/sed_chem_tox/sed_chem_tox.html)).  Either way, we've covered some of the basics for good data stewardship defined within the constraints of our question.  These methods have value for any data analysis. 
+Clearly this simple analysis is not doing this dataset justice, but we've identified an analysis workflow that identifies significant associations for follow-up analysis.  A good starting place would be to look at individual bays to minimize variation between locations.  Alternatively, a formal multivariate analysis that simultaneously compares all the data could be insightful (for example, [here](https://fawda123.github.io/sed_chem_tox/sed_chem_tox.html)).  Either way, we've covered some of the basics for good data stewardship defined within the constraints of our question.  These methods have value for any data analysis workflow. 
+
+![](figure/luncheon2workflow.png)
 
 
 
