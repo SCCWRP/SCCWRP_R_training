@@ -302,7 +302,7 @@ library(GGally)
 library(GGally)
 ```
 
-We can use the `ggpairs` function to make a beefed up version of the pairs plot.  In addition to paired scatterplots, you can get a better idea of the distribution of each variable and actual estimates of correlations between pairs of variables. We'll not look at the station, latitude or, longitude columns for this example. 
+We can use the `ggpairs` function to make a beefed up version of the pairs plot.  In addition to paired scatterplots, you can get a better idea of the distribution of each variable and actual estimates of correlations between pairs of variables. We'll not look at the station, latitude, or longitude columns for this example. 
 
 ```{r, fig.height = 8, fig.width = 8}
 ggpairs(dat[, -c(1:3)])

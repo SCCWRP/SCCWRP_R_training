@@ -11,9 +11,99 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ## Lesson Outline
 
 * [Vector data]
+* [Simple features]
 
-Welcome to the third R luncheon!  By popular demand, the final two luncheons will explore using R for geospatial analsyis and mapping.  Today's session will focus on geospatial analysis using the new [simple features](https://r-spatial.github.io/sf/) package and our final session will focus on creating publication ready maps in R.  We will focus almost entirely on working with vector data in these next two lessons, but checkout the [raster](https://cran.r-project.org/web/packages/raster/) and [rgdal](https://cran.r-project.org/web/packages/rgdal/index.html) packages if you want to work with raster data in R.  There are several useful vignettes in the raster link.
+Welcome to the third R luncheon!  By popular demand, the final two luncheons will explore using R for geospatial analsyis and mapping.  Today's session will focus on geospatial analysis using the new [simple features](https://r-spatial.github.io/sf/) package and our final session will focus on creating publication ready maps in R.  We will focus entirely on working with vector data in these next two lessons, but checkout the [raster](https://cran.r-project.org/web/packages/raster/) and [rgdal](https://cran.r-project.org/web/packages/rgdal/index.html) packages if you want to work with raster data in R.  There are several useful vignettes in the raster link.
 
-Please note that this is not an introduction to R and you are also expected to have an understanding of basic geospatial concepts for these next two sessions. You can visit any of the other topics on our [main page](index.html) for a refresher on some of the basics. In the mean time, feel free to ask plenty of questions as we go through today's lesson!
+Please note that this is not an introduction to R and you are also expected to have an understanding of basic geospatial concepts for these next two sessions. You can visit any of the other topics on our [main page](index.html) for a refresher on some of the R basics. In the mean time, feel free to ask plenty of questions as we go through today's lesson!
+
+The goals for today are:
+
+1) Understand the vector data structure
+
+1) Understand how to import vector data in R
+
+1) Understand how R stores spatial data using the simple features package
+
+1) Execute basic geospatial functions in R
 
 ## Vector data
+
+Most of us should be familiar with the basic types of spatial data and their components.  We're going to focus entirely on vector data for this lesson because these data are easily conceptualized as __features__ or discrete objects with spatial information.  More about this later.  Raster data by contrast are stored in a regular grid where the cells of the grid are associated with values.  Raster data are more common for data with continous coverage, such as climate or weather layers.  
+
+Vector data come in three flavors.  The simplest of is a __point__, which is a 0-dimensional feature that can be used to represent a specific location on the earth, such as a single tree or an entire city. Linear, 1-dimensional features can be represented with points (or vertices) that are connected by a path to form a __line__ and when many points are connected these form a __polyline__. Finally, when a polyline's path returns to its origin to represent an enclosed space, such as a forest, watershed boundary, or lake, this forms a __polygon__.
+
+![https://earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-vector-data-r/](figure/pts-lines-polys.png)
+*Image [source](https://earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-vector-data-r/)*
+
+All vector data are represented similarly, whether they're points, lines or polygons.  Points are defined by a single coordinate location, whereas a line or polygon is several points with a grouping variable that distinguishes one object from another. In all cases, the aggregate dataset is composed of one or more features of the same type (points, lines, or polygons).
+
+There are two other pieces of information that are included with vector data.  The __attributes__ that can be associated with each feature and the __coordinate reference system__ or __CRS__.  The attributes can be any supporting information about a feature, such as a town name or summary data about the features.  You can identify attributes as anything in a spatial dataset that is not explicitly used to define the location of the features.  
+
+The CRS is used to establish a frame of reference for the locations in your spatial data.  The chosen CRS ensures that all features are correctly referenced relative to each other, especially between different datasets.  As a simple example, imagine comparing length measurements for two objects where one was measured in centimeters and another in inches.  If you didn't know the unit of measurement, you could not compare relative lengths.  The CRS is similar in that it establishes a common frame of reference, but for spatial data.  An added complication with spatial data is that location can be represented in both 2-dimensional or 3-dimensional space. This is beyond the scope of this lesson, but you should be sure that
+
+1) the CRS is the same when comparing between datasets, and 
+
+1) the CRS is appropriate for the region you're looking at.    
+
+![](figure/crs-comparisons.jpg) 
+
+*Image [source](https://nceas.github.io/oss-lessons/spatial-data-gis-law/1-mon-spatial-data-intro.html)*
+
+To summarize, vector data include the following:
+
+1) spatial data (e.g., latitude, longitude) as points, lines, or polygons
+
+1) attributes
+
+1) a coordinate reference system
+
+## Simple features
+
+R has a long history of packages for working with spatial data.  For many years, the [sp](https://cran.r-project.org/web/packages/sp/index.html) package was the standard and most widely used toolset for working with spatial data in R. This package laid the foundation for creating spatial data classes and methods in R, but unfortunately it's development predated a lot of the newer tools that are built around the [tidyverse](https://www.tidyverse.org/).  This makes it incredibly difficult to incorporate sp data objects with the more commonly used data analysis workflows.  
+
+The [simple features](https://r-spatial.github.io/sf/) or sf package was developed to streamline the use of spatial data in R and to align its functionality with those provided in the tidyverse.  The `sf` package provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R and without a doubt, `sf` will replace `sp` as the fundamental spatial model in R for vector data. Packages are already being updated around `sf`. 
+
+Simple Features is a hierarchical data model that represents a wide range of geometry types - it includes all common vector geometry types (but does not include raster) and even allows geometry collections, which can have multiple geometry types in a single object. From the first sf package vignette we see:
+
+![](figure/sf_objects.png)
+
+You'll notice that these are the same features we described above, but the sf package allows implementation of "multi" features and geometry collections that include more than one type of feature.
+
+## Creating spatial data with simple features
+
+Let's start by opening RStudio, creating a new project, and opening a new script within that project.  At the top of the script, install the sf package if you haven't done so and load the package after installation.
+
+```{r, eval = F}
+install.package('sf')
+library(sf)
+```
+```{r, message = F, echo = F, warning = F}
+library(sf)
+```
+
+After the package is loaded, you can check out all of the methods that are available for `sf` data objects.  Many of these names will look familiar if you've done geospatial analysis before.  We'll use some of these a little bit later.
+
+```{r}
+methods(class = 'sf')
+```
+
+All of the functions and methods in sf are prefixed with st_, which stands for ‘spatial and temporal’.  This is kind of confusing but this is in reference to standard methods avialable in [PostGIS](https://en.wikipedia.org/wiki/PostGIS), an open-source backend that is used by many geospatial platforms.  An advantage of this prefixing is all commands are easy to find with command-line completion in sf, in addition to naming continuity with existing software.
+
+There are two ways to create a spatial data object in R, i.e., an `sf` object, using the sf package.
+
+1) Directly import a shapefile
+
+1) Convert an existing R object with latitude/longitude data
+
+We'll import a shapefile first and look at its structure so we can better understand the `sf` object.  The `st_read()` function can be used for import.
+
+```{r}
+polys <- st_read('data/Bight13_MPAs_Offshore.shp')
+```
+
+
+
+
+
+
