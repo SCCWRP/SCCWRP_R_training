@@ -8,4 +8,12 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 # R luncheon 3
 
-Content TBD
+## Lesson Outline
+
+* [Vector data]
+
+Welcome to the third R luncheon!  By popular demand, the final two luncheons will explore using R for geospatial analsyis and mapping.  Today's session will focus on geospatial analysis using the new [simple features](https://r-spatial.github.io/sf/) package and our final session will focus on creating publication ready maps in R.  We will focus almost entirely on working with vector data in these next two lessons, but checkout the [raster](https://cran.r-project.org/web/packages/raster/) and [rgdal](https://cran.r-project.org/web/packages/rgdal/index.html) packages if you want to work with raster data in R.  There are several useful vignettes in the raster link.
+
+Please note that this is not an introduction to R and you are also expected to have an understanding of basic geospatial concepts for these next two sessions. You can visit any of the other topics on our [main page](index.html) for a refresher on some of the basics. In the mean time, feel free to ask plenty of questions as we go through today's lesson!
+
+## Vector data
