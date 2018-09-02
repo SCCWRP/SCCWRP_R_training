@@ -11,11 +11,11 @@
 
 
 
-<title>R_luncheon_1.utf8</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -23,8 +23,8 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 <script src="js/google-analytics.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -34,12 +34,10 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
 }
 </script>
 
@@ -363,11 +361,20 @@ div.tocify {
 <h1>Problem scope</h1>
 <p>Today’s session will use a compiled dataset that describes filtration of stormwater at different treatment locations in California. The dataset has measured influent and effluent concentrations of different water quality parameters that were measured during storm events. The general goal is to quantify filtration effectiveness by comparing influent/effluent concentrations across several locations and storm events. This will provide a benchmark of how well the filters are removing potentially harmful water quality constituents during high flow events.</p>
 <p>Here’s a conceptual representation of the raw data.</p>
-<p><img src="figure/rawdat.JPG" /></p>
+<div class="figure">
+<img src="figure/rawdat.JPG" />
+
+</div>
 <p>We want to create a plot like this after getting the raw data in the correct format.</p>
-<p><img src="figure/finalplo.JPG" /></p>
+<div class="figure">
+<img src="figure/finalplo.JPG" />
+
+</div>
 <p>The data are messy. The spreadsheet includes measurements from different locations where record-keeping was not consistent. Each location may also include several filtration samples and one or more recorded storm events where measurements were taken at a sample. There are several columns in the dataset, not all of which are relevant for our analysis. Here’s a screenshot:</p>
-<p><img src="figure/lunchdatex.PNG" /></p>
+<div class="figure">
+<img src="figure/lunchdatex.PNG" />
+
+</div>
 <p>We want to import the data, wrangle the information to a consistent format, and plot the data to help us assess how well the filtration systems are removing water quality constituents. Each of these steps can be performed in R.</p>
 <ol style="list-style-type: decimal">
 <li><p>Import the Excel spreadsheet</p></li>
@@ -381,12 +388,18 @@ div.tocify {
 <div id="open-rstudio" class="section level2">
 <h2>Open RStudio</h2>
 <p>Find the RStudio shortcut and fire it up. You should see something like this:</p>
-<p><img src="figure/rstudio.png" /></p>
+<div class="figure">
+<img src="figure/rstudio.png" />
+
+</div>
 </div>
 <div id="create-a-new-project-in-rstudio" class="section level2">
 <h2>Create a new project in RStudio</h2>
 <p>To create a new project, click on the File menu at the top and select ‘New project…’</p>
-<p><img src="figure/rstudio_proj.jpg" /></p>
+<div class="figure">
+<img src="figure/rstudio_proj.jpg" />
+
+</div>
 </div>
 <div id="download-the-data-to-your-project" class="section level2">
 <h2>Download the data to your project</h2>
@@ -403,7 +416,10 @@ download.file(
 <h1>Data import</h1>
 <p>Now that we’ve got our project setup with the data, let’s open a new script and load some R packages that we’ll be using.</p>
 <p>Open a new script from the File menu…</p>
-<p><img src="figure/rstudio_script.jpg" /></p>
+<div class="figure">
+<img src="figure/rstudio_script.jpg" />
+
+</div>
 <p>Once the script is open, save it using the drop down file menu on the top left. Give it an informative name (e.g.,<code>Rluncheon1.R</code>) and save it in your project’s home directory. This should be the default location selected by RStudio when you save the file.</p>
 <p>We’ll be using functions from the <a href="https://www.tidyverse.org/">tidyverse</a> collection of packages to import, wrangle, and plot the data. Checkout our training material <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_1.html#the-tidyverse">here</a> if you need a brush up. Run this line in the R console if you don’t have the tidyverse installed.</p>
 <pre class="r"><code>install.packages(&#39;tidyverse&#39;)</code></pre>
@@ -417,12 +433,12 @@ library(readxl)</code></pre>
 <pre><code>## # A tibble: 6 x 23
 ##    SITEID SITENAME    MSID MSNAME `Storm #` SAMPLEDATE          SAMPLETIME
 ##     &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;      &lt;dbl&gt; &lt;dttm&gt;              &lt;lgl&gt;     
-## 1 -1.78e9 I-5 / S~ -1.02e9 27E          16. 2001-03-06 00:00:00 NA        
-## 2 -1.78e9 I-5 / S~  1.08e9 27I          18. 2001-04-20 00:00:00 NA        
-## 3 -1.78e9 I-5 / S~  1.08e9 27I          18. 2001-04-21 00:00:00 NA        
-## 4 -1.78e9 I-5 / S~  1.08e9 27I          15. 2001-02-23 00:00:00 NA        
-## 5 -1.78e9 I-5 / S~  1.08e9 27I           3. 1999-03-26 00:00:00 NA        
-## 6 -1.78e9 I-5 / S~  1.08e9 27I           9. 2000-03-04 00:00:00 NA        
+## 1 -1.78e9 I-5 / S~ -1.02e9 27E           16 2001-03-06 00:00:00 NA        
+## 2 -1.78e9 I-5 / S~  1.08e9 27I           18 2001-04-20 00:00:00 NA        
+## 3 -1.78e9 I-5 / S~  1.08e9 27I           18 2001-04-21 00:00:00 NA        
+## 4 -1.78e9 I-5 / S~  1.08e9 27I           15 2001-02-23 00:00:00 NA        
+## 5 -1.78e9 I-5 / S~  1.08e9 27I            3 1999-03-26 00:00:00 NA        
+## 6 -1.78e9 I-5 / S~  1.08e9 27I            9 2000-03-04 00:00:00 NA        
 ## # ... with 16 more variables: `WQX Parameter` &lt;chr&gt;, `Sample
 ## #   Fraction` &lt;chr&gt;, `WQ Analysis Value` &lt;dbl&gt;, `WQ Units` &lt;chr&gt;,
 ## #   MEDIA &lt;chr&gt;, QUAL &lt;chr&gt;, METHOD &lt;lgl&gt;, DLUnits &lt;chr&gt;, SGTCODE &lt;dbl&gt;,
@@ -504,23 +520,23 @@ library(readxl)</code></pre>
 <pre><code>## # A tibble: 6 x 5
 ##   SITENAME    MSNAME `Storm #` `WQX Parameter` `WQ Analysis Value`
 ##   &lt;chr&gt;       &lt;chr&gt;      &lt;dbl&gt; &lt;chr&gt;                         &lt;dbl&gt;
-## 1 I-5 / SR-56 27E          15. Lead                           1.00
-## 2 I-5 / SR-56 27I           2. Lead                          29.0 
-## 3 I-5 / SR-56 27E          17. Lead                           8.10
-## 4 I-5 / SR-56 27E           6. Lead                           1.50
-## 5 I-5 / SR-56 27I          15. Lead                          57.0 
-## 6 I-5 / SR-56 27E           9. Lead                          10.0</code></pre>
+## 1 I-5 / SR-56 27E           15 Lead                            1  
+## 2 I-5 / SR-56 27I            2 Lead                           29  
+## 3 I-5 / SR-56 27E           17 Lead                            8.1
+## 4 I-5 / SR-56 27E            6 Lead                            1.5
+## 5 I-5 / SR-56 27I           15 Lead                           57  
+## 6 I-5 / SR-56 27E            9 Lead                           10</code></pre>
 <p>Much more manageable! Now comes the hard part… we need to get the data in a format where we can easily compare the influent and effluent concentrations, but the data are currently in one column. We need to make separate columns for influent and effluent concentations, while keeping the data structured in a way so that samples for each storm event and each treatment location are consistently referenced in the rows.</p>
 <p>Here’s an example of what the data should look like for us to plot effluent against influent:</p>
 <pre><code>## # A tibble: 6 x 5
 ##   SITENAME MSNAME  `Storm #` influent effluent
 ##   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-## 1 site1    sample1        2.     7.82     6.74
-## 2 site1    sample2        1.     8.46     4.28
-## 3 site1    sample3        2.     6.19     3.30
-## 4 site2    sample1        2.     8.94     6.17
-## 5 site2    sample2        1.     7.35     4.16
-## 6 site2    sample3        1.     8.36     4.00</code></pre>
+## 1 site1    sample1         2     9.53     5.86
+## 2 site1    sample2         1     9.16     6.34
+## 3 site1    sample3         1     9.42     6.14
+## 4 site2    sample1         1     9.07     3.62
+## 5 site2    sample2         2     9.13     4.15
+## 6 site2    sample3         1     7.96     3.96</code></pre>
 <p>There are three things about this dataset that differ from our actual data:</p>
 <ol style="list-style-type: decimal">
 <li><p>Consistent naming convention between sites and samples</p></li>
@@ -547,11 +563,14 @@ str(dat)</code></pre>
 ## 2 I-15/SR-78 EDB  37I    38.2 
 ## 3 I-5 / I-605 EDB 4E     19.4 
 ## 4 I-5 / I-605 EDB 4I     34.6 
-## 5 I-5 / SR-56     27E     8.00
+## 5 I-5 / SR-56     27E     8   
 ## 6 I-5 / SR-56     27I    20.1</code></pre>
 <p>We’re almost there. Now we just need to get the influent and effluent values in different columns. If you recall our earlier training session <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#spreading">here</a>, we can use the <code>spread()</code> function from the tidyr package (again, included in the tidyverse). This function lets us “spread” values in one column to multiple columns using “key” values in a second column. The key values are used as the column names for the values that are spread from one to many columns.</p>
 <p>Here’s an example of spreading with a different dataset:</p>
-<p><img src="figure/tidy-8.png" /></p>
+<div class="figure">
+<img src="figure/tidy-8.png" />
+
+</div>
 <p>Let’s try this on our dataset, where the key column is <code>MSNAME</code> and the value column is <code>avewq</code> from our summarised data.</p>
 <pre class="r"><code>dat %&gt;%
   spread(MSNAME, avewq)</code></pre>
@@ -559,11 +578,11 @@ str(dat)</code></pre>
 ## # Groups:   SITENAME [5]
 ##   SITENAME     `27E` `27I` `31E` `31I` `37E` `37I`  `4E`  `4I`  `5E`  `5I`
 ##   &lt;chr&gt;        &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt;
-## 1 I-15/SR-78 ~   NA   NA    NA    NA    8.44  38.2  NA    NA    NA    NA  
-## 2 I-5 / I-605~   NA   NA    NA    NA   NA     NA    19.4  34.6  NA    NA  
-## 3 I-5 / SR-56     8.  20.1  NA    NA   NA     NA    NA    NA    NA    NA  
-## 4 I-5/Manches~   NA   NA    18.3  67.9 NA     NA    NA    NA    NA    NA  
-## 5 I-605 / SR-~   NA   NA    NA    NA   NA     NA    NA    NA    33.0  65.4</code></pre>
+## 1 I-15/SR-78 ~    NA  NA    NA    NA    8.44  38.2  NA    NA    NA    NA  
+## 2 I-5 / I-605~    NA  NA    NA    NA   NA     NA    19.4  34.6  NA    NA  
+## 3 I-5 / SR-56      8  20.1  NA    NA   NA     NA    NA    NA    NA    NA  
+## 4 I-5/Manches~    NA  NA    18.3  67.9 NA     NA    NA    NA    NA    NA  
+## 5 I-605 / SR-~    NA  NA    NA    NA   NA     NA    NA    NA    33.0  65.4</code></pre>
 <p>So this isn’t exactly right. The data are definitely spread but we have unique columns for every influent/effluent sample in our dataset. We’ll need to separate the sample names and the influent/effluent designations in the <code>MSNAME</code> column before we can proceed. If you recall from our past training, these data are not <a href="https://sccwrp.github.io/SCCWRP_R_training/Data_Wrangling_2.html#tidy_data">“tidy”</a>, meaning, among other things, that the <code>MSNAME</code> column contains two pieces of information in one cell. The column includes information on both the sample name and the influent/effluent designation.</p>
 <p>There’s a handy function from base R called <code>gsub()</code> that lets you find patterns in a character string and replace them with values of your choosing. Here, we want to create two new columns from <code>MSNAME</code>, one with only the sample name (numbers) and another with only the influent/effluent designations (letters). This will allow the <code>spread()</code> function to create a single column for influent and a single column for effluent, while retaining the correct sample and site names in the rows. This can be done as follows:</p>
 <pre class="r"><code>dat &lt;- dat %&gt;% 
@@ -580,7 +599,7 @@ dat</code></pre>
 ##  2 I-15/SR-78 EDB        37I    38.2  37         I     
 ##  3 I-5 / I-605 EDB       4E     19.4  4          E     
 ##  4 I-5 / I-605 EDB       4I     34.6  4          I     
-##  5 I-5 / SR-56           27E     8.00 27         E     
+##  5 I-5 / SR-56           27E     8    27         E     
 ##  6 I-5 / SR-56           27I    20.1  27         I     
 ##  7 I-5/Manchester (east) 31E    18.3  31         E     
 ##  8 I-5/Manchester (east) 31I    67.9  31         I     
@@ -598,7 +617,7 @@ dat</code></pre>
 ##   &lt;chr&gt;                 &lt;chr&gt;      &lt;dbl&gt; &lt;dbl&gt;
 ## 1 I-15/SR-78 EDB        37          8.44  38.2
 ## 2 I-5 / I-605 EDB       4          19.4   34.6
-## 3 I-5 / SR-56           27          8.00  20.1
+## 3 I-5 / SR-56           27          8     20.1
 ## 4 I-5/Manchester (east) 31         18.3   67.9
 ## 5 I-605 / SR-91 EDB     5          33.0   65.4</code></pre>
 </div>

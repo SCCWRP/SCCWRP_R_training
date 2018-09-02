@@ -11,11 +11,11 @@
 
 
 
-<title>Viz_and_Graphics.utf8</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -23,8 +23,8 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 <script src="js/google-analytics.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -34,12 +34,10 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
 }
 </script>
 
@@ -366,7 +364,10 @@ div.tocify {
 <div id="todays-goals" class="section level1">
 <h1>Today’s goals</h1>
 <p>Our final workshop will introduce you to concepts of data visualization and graphics in R. The entire workflow of data exploration is enhanced through looking at your data, whether you’re exploring a dataset for the first time or creating publication-ready figures. Viewing your data provides insight into patterns that can help you explore different hypotheses. No analysis is complete without a solid graphic.</p>
-<p><img src="figure/data-science.png" /></p>
+<div class="figure">
+<img src="figure/data-science.png" />
+
+</div>
 <p>Graphics capabilities in R have improved tremendously in the last ten years. The de facto plotting library is <code>ggplot2</code> as part of the <code>tidyverse</code>, but there are many other packages available that enhance or build on existing functionality. The base R installation comes with it’s own set of plotting functions. These are useful for quick and dirty exploration but you’ll quickly find that these methods are tedious. We’ll start the lesson today with a cursory look at some of the base R plotting functions. Most of what we’ll discuss today will focus on ggplot2.</p>
 <p>As before, we only have two hours to cover the basics of graphing in R. It’s an unrealistic expectation that you will be a graphics ninja after this training. As such, the goals are to expose you to fundamentals and to develop an appreciation of what’s possible. I also want to provide resources that you can use for follow-up learning on your own.</p>
 <p>Today you should be able to answer (or be able to find answers to) the following:</p>
@@ -424,14 +425,20 @@ table(chemdat$depth_cat)</code></pre>
 <p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-3-1.png" width="672" /></p>
 <p>Confusing right? Let’s have a look at the help file for <code>plot</code>.</p>
 <pre class="r"><code>?plot</code></pre>
-<p><img src="figure/plot_help.PNG" /></p>
+<div class="figure">
+<img src="figure/plot_help.PNG" />
+
+</div>
 <p>This help file lays out some of the basics of plot formatting. We can change the type of plot using the <code>type</code> argument (here, we can only use points), give it a title with <code>main</code>, and change labels on the x and y axes with <code>xlab</code> and <code>ylab</code>.</p>
 <pre class="r"><code>plot(hwy ~ displ, data = mpg, main = &#39;Highway mileage by engine size&#39;, 
      xlab = &#39;engine size (l)&#39;, ylab = &#39;highway (mpg)&#39;)</code></pre>
 <p><img src="Viz_and_Graphics_files/figure-html/unnamed-chunk-5-1.png" width="672" /></p>
 <p>The help file for the plot function also has this ambiguous <code>...</code> argument. You’ll see this argument for many functions in the help files. This means that the function accepts arguments from other functions. In this case, the plot function accepts arguments from the <code>par</code> function which is used for setting graphical parameters in base R. Let’s look at the help file for <code>par</code>.</p>
 <pre class="r"><code>?par</code></pre>
-<p><img src="figure/par_help.PNG" /></p>
+<div class="figure">
+<img src="figure/par_help.PNG" />
+
+</div>
 <p>The most useful section in this help file is the description of the actual graphical parameters you can set. Some useful ones are the <code>cex</code> family of arguments for sizing, <code>col</code> family of arguments for color, the <code>pch</code> argument for point types, and the <code>family</code> argument for font. All of these arguments can be passed directly to the <code>plot</code> function or separately with the <code>par</code> function.</p>
 <pre class="r"><code>plot(hwy ~ displ, data = mpg, main = &#39;Highway mileage by engine size&#39;, 
      xlab = &#39;engine size (l)&#39;, ylab = &#39;highway (mpg)&#39;, 
@@ -530,10 +537,16 @@ plot(Total_CHL ~ TOC, data = chemdat, main = &#39;Chlorophyll vs TOC for Bight08
 Execution halted</code></pre>
 <p>Oh snap, what happened? This error is telling us that the geom we just tried is missing some required aesthetics in the plot. Here we’ve only used the <code>x</code> and <code>y</code> aesthetics but it looks like it requires <code>ymin</code> and <code>ymax</code>. Lets look at the help file for <code>geom_linerange</code>.</p>
 <pre class="r"><code>?geom_linerange</code></pre>
-<p><img src="figure/aesreq.png" /></p>
+<div class="figure">
+<img src="figure/aesreq.png" />
+
+</div>
 <p>Looks like we don’t have the required aeshetics, nor does it make sense to use this geom because it’s not appropriate for the data. What about the requirements for <code>geom_point</code>?</p>
 <pre class="r"><code>?geom_point</code></pre>
-<p><img src="figure/aesreq2.png" /></p>
+<div class="figure">
+<img src="figure/aesreq2.png" />
+
+</div>
 <p>We’ve got the required aesthetics in our plot. Let’s add some others that we can use with <code>geom_point</code>.</p>
 <p>Changing the color:</p>
 <pre class="r"><code>ggplot(mpg, aes(x = displ, y = hwy, colour = drv)) + 
@@ -655,7 +668,10 @@ Execution halted</code></pre>
 <div id="saving-your-plots" class="section level2">
 <h2>Saving your plots</h2>
 <p>A quality plot deserves to be saved and shared. As you can imagine, there are several ways to save a plot in RStudio. The easiest way (which I don’t recommend) is to use the export feature from the plot viewing pane.</p>
-<p><img src="figure/saveplot.JPG" /></p>
+<div class="figure">
+<img src="figure/saveplot.JPG" />
+
+</div>
 <p>Although this is convenient, you don’t have fine control over many options that can really make your graphic pop. I recommend using either the <code>ggsave</code> function that comes with the tidyverse, or preferably, one of the available graphics devices from base R (<code>bmp</code>, <code>jpeg</code>, <code>png</code>, <code>tiff</code>, <code>eps</code>, <code>ps</code>, <code>tex</code>, <code>svg</code>, <code>wmf</code>, and my favorite, <code>pdf</code>).</p>
 <p>The <code>ggsave</code> function works only with ggplot objects. You can contol where the plot is saved, the file type, plotting dimensions, resolution, and a few other minor options. By default, it will save the last ggplot that you made.</p>
 <pre class="r"><code>ggsave(&#39;lessons/figure/myfig.jpg&#39;, device = &#39;jpeg&#39;, width = 5, height = 4, units = &#39;in&#39;, dpi = 300)</code></pre>

@@ -11,11 +11,11 @@
 
 
 
-<title>setup.utf8</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -23,8 +23,8 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 <script src="js/google-analytics.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -34,12 +34,10 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
 }
 </script>
 
@@ -350,20 +348,35 @@ div.tocify {
 <p>Go to <a href="https://cran.rstudio.com/bin/windows/base/">CRAN and download</a> the R installer for Windows. Make sure to choose the latest stable version (v3.4.3 as of January 2018).</p>
 <p>Once the installer downloads, Right-click on it and select “Run as administrator”.</p>
 <p>Type in your credentials and click yes (or if you don’t have administrator access have your IT rep install with Admin privileges).</p>
-<p><img src="figure/install_open_as_admin.png#inline-img" title="run as admin" /></p>
+<div class="figure">
+<img src="figure/install_open_as_admin.png#inline-img" title="run as admin" />
+
+</div>
 <p>You can click next through the standard dialogs and accept most defaults. But at the destination screen, please verify that it is installing it to C:Files(version number may vary)</p>
-<p><img src="figure/install_destination.png#inline-img" title="install destination screen" /></p>
+<div class="figure">
+<img src="figure/install_destination.png#inline-img" title="install destination screen" />
+
+</div>
 <p>At the “Select Components” screen, you can accept the default and install both 32-bit and 64-bit versions.</p>
-<p><img src="figure/install_arch_window.png#inline-img" title="select architecture" /></p>
+<div class="figure">
+<img src="figure/install_arch_window.png#inline-img" title="select architecture" />
+
+</div>
 <p>At this screen, uncheck ‘Create a desktop icon’ because non-admin users in Windows will be unable to delete it.</p>
-<p><img src="figure/install_tasks.png#inline-img" title="uncheck desktop icon" /></p>
+<div class="figure">
+<img src="figure/install_tasks.png#inline-img" title="uncheck desktop icon" />
+
+</div>
 </div>
 <div id="download-and-install-rstudio" class="section level2">
 <h2>Download and install RStudio</h2>
 <p><a href="https://www.rstudio.com/products/rstudio/download/"></a></p>
 <p>Double-click the installer. It will ask for your administrator credentials to install (you might need to have your IT rep install again).</p>
 <p>Accept all the default options for the RStudio install.</p>
-<p><img src="figure/install_rstudio.png#inline-img" title="RStudio install screen" /></p>
+<div class="figure">
+<img src="figure/install_rstudio.png#inline-img" title="RStudio install screen" />
+
+</div>
 </div>
 </div>
 <div id="check-install" class="section level1">
@@ -371,12 +384,18 @@ div.tocify {
 <div id="open-rstudio" class="section level2">
 <h2>Open RStudio</h2>
 <p>Once installed, RStudio should be accessible from the start menu. Start up RStudio. Once running it should look something like:</p>
-<p><img src="figure/rstudio.png#inline-img" title="RStudio window" /></p>
+<div class="figure">
+<img src="figure/rstudio.png#inline-img" title="RStudio window" />
+
+</div>
 </div>
 <div id="find-console-window" class="section level2">
 <h2>Find “Console” window</h2>
 <p>By default the console window will be on the left side of RStudio. Find that window. It will looking something like:</p>
-<p><img src="figure/rstudio_console.png#inline-img" title="RStudio console" /></p>
+<div class="figure">
+<img src="figure/rstudio_console.png#inline-img" title="RStudio console" />
+
+</div>
 </div>
 <div id="copy-and-paste-the-code" class="section level2">
 <h2>Copy and paste the code</h2>
@@ -395,9 +414,15 @@ div.tocify {
 <p>Install packages available for all R users from <a href="https://cran.r-project.org/">CRAN</a> by pasting the following code and hitting <code>ENTER</code>.</p>
 <pre class="r"><code>install.packages(&quot;tidyverse&quot;)</code></pre>
 <p>If you see</p>
-<p><img src="figure/personal_library_dialog.png#inline-img" title="dialog box behind" /></p>
+<div class="figure">
+<img src="figure/personal_library_dialog.png#inline-img" title="dialog box behind" />
+
+</div>
 <p>That’s OK! There’s a dialog box hiding behind RStudio asking if you want to create a personal folder in your Documents folder. Click <em>Yes</em>. It will look something like this when done:</p>
-<p><img src="figure/general_pkg_output.png#inline-img" title="console output" /></p>
+<div class="figure">
+<img src="figure/general_pkg_output.png#inline-img" title="console output" />
+
+</div>
 </div>
 <div id="grab-the-sample-datasets" class="section level1">
 <h1>Grab the sample datasets</h1>
@@ -414,7 +439,10 @@ div.tocify {
 </ol>
 <pre class="r"><code>&quot;tidyverse&quot; %in% installed.packages()</code></pre>
 <p>The end result should look something like:</p>
-<p><img src="figure/install_success.jpg" /></p>
+<div class="figure">
+<img src="figure/install_success.jpg" />
+
+</div>
 </div>
 
 

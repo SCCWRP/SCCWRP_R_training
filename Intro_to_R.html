@@ -11,11 +11,11 @@
 
 
 
-<title>Intro_to_R.utf8</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -23,8 +23,8 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 <script src="js/google-analytics.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -34,12 +34,10 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
 }
 </script>
 
@@ -376,7 +374,7 @@ div.tocify {
 <ul>
 <li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">Stack Overflow blog</a>, <a href="http://blog.revolutionanalytics.com/2016/07/r-moves-up-to-5th-place-in-ieee-language-rankings.html">IEEE rating</a></li>
 </ul>
-<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-08-31, there are 12951 on CRAN!</p>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-09-02, there are 12897 on CRAN!</p>
 <p>Python is another popular open-source programming language. Many beginners often ask the quesiton, why R vs. Python? This is an interesting debate with no easy answer. Some things to consider:</p>
 <ul>
 <li>R has statistical roots, phython does not</li>
@@ -398,7 +396,10 @@ div.tocify {
 <div id="open-r-and-rstudio" class="section level3">
 <h3>Open R and RStudio</h3>
 <p>Find the RStudio shortcut and fire it up (just watch for now). You should see something like this:</p>
-<p><img src="figure/rstudio.png" /></p>
+<div class="figure">
+<img src="figure/rstudio.png" />
+
+</div>
 <p>There are four panes in RStudio:</p>
 <ul>
 <li>Source</li>
@@ -411,7 +412,10 @@ div.tocify {
 <h3>RStudio projects</h3>
 <p>I strongly encourage you to use RStudio projects when you are working with R. The RStudio project provides a central location for working on a particular task. It helps with file management and is portable if all the files live in the same file tree. RStudio projects also remember history - what commands you used and what data objects are in your enviornment.</p>
 <p>To create a new project, click on the File menu at the top and select ‘New project…’</p>
-<p><img src="figure/rstudio_proj.jpg" /></p>
+<div class="figure">
+<img src="figure/rstudio_proj.jpg" />
+
+</div>
 <p>It’s ofen hard to determine the scope of a project. When should a new project be created Should one project be used for a dissertation? Probably not. What about one project for manipulating one data file? Probably not. To help you determine the scope of each project, think about these questions:</p>
 <ul>
 <li>What is the purpose of using R right now?<br />
@@ -425,12 +429,18 @@ div.tocify {
 <h3>Scripting</h3>
 <p>In most cases, you will not enter and execute code directly in the console. Code can be created in a script and then sent directly to the console when you’re ready to run it. The key difference here is that a script can be saved and shared.</p>
 <p>Open a new script from the File menu…</p>
-<p><img src="figure/rstudio_script.jpg" /></p>
+<div class="figure">
+<img src="figure/rstudio_script.jpg" />
+
+</div>
 </div>
 <div id="executing-code-in-rstudio" class="section level3">
 <h3>Executing code in RStudio</h3>
 <p>After you write your script it can be sent to the Console to run the code in R. Any variables you create in your script will not be available in your working environment until this is done. There are two ways to sent code the console. First, you can hit the <code>Run</code> button at the top right of the scripting window. Second, and preferred, you can use <code>ctrl+enter</code>. Both approaches will send the selected line to the console, then move to the next line. You can also highlight and send an entire block of code.</p>
-<p><img src="figure/rstudio_run.jpg" /></p>
+<div class="figure">
+<img src="figure/rstudio_run.jpg" />
+
+</div>
 </div>
 <div id="what-is-the-environment" class="section level3">
 <h3>What is the environment?</h3>
@@ -453,7 +463,7 @@ div.tocify {
 <div id="r-language-fundamentals" class="section level2">
 <h2>R language fundamentals</h2>
 <p>The basic syntax of a function follows the form: <code>function_name(arg1, arg2, ...)</code>.</p>
-<p>With the base install, you will gain access to many (3389 functions, to be exact). Some examples:</p>
+<p>With the base install, you will gain access to many (3333 functions, to be exact). Some examples:</p>
 <pre class="r"><code># print
 print(&#39;hello world!&#39;)</code></pre>
 <pre><code>## [1] &quot;hello world!&quot;</code></pre>
@@ -462,32 +472,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1]  7.153710 10.187424 11.496319  8.574765 10.111088  8.821676  6.960842
-##   [8] 10.150815 10.616848 10.106606 10.418439  7.243000 10.174538 10.898400
-##  [15] 13.601903 11.131333 11.455854  8.405956  8.862193  5.988786  6.193925
-##  [22] 10.785645 11.042845  6.480845  8.590743 12.731298  8.932773 11.597587
-##  [29]  9.763143  8.176460 10.043413  5.566209 10.610732  8.983370  9.198137
-##  [36] 11.165867  9.792460 12.289067 12.551205  8.916239  9.552687  9.896340
-##  [43] 10.886231 13.803708 10.715148  7.466323  9.806801 10.094455  6.152533
-##  [50] 10.659415  7.450573  7.975243 11.303459 12.406181 11.389829  7.602181
-##  [57]  8.496838  6.904083  7.700936 10.983422  8.748306  9.571069  7.270686
-##  [64]  7.478297  9.488726 12.447036 10.298835 12.799727 10.302574  8.727321
-##  [71] 13.030494 10.861636  7.687607 10.845200  8.610030 10.491530 11.171684
-##  [78]  6.998056  9.558293 14.042980  9.353880  7.914926 12.364292 11.918716
-##  [85]  7.952274 11.238573  8.013686  6.897736 13.747566  9.078897  8.674357
-##  [92] 11.253316 11.628758 11.503118 11.226065 10.277638 12.884830 11.603518
-##  [99] 12.575406  6.517484</code></pre>
+<pre><code>##   [1]  9.039617  9.413922 12.275628  8.791686 11.682976  8.274497  8.827604
+##   [8]  7.046824 12.359379  5.744442 15.516303 12.951794 12.956189  8.890070
+##  [15] 11.919954 11.281881 12.250539  9.148221 11.300206  8.977068  7.799486
+##  [22]  8.874332 11.689417 11.662053  8.848501  9.191557 10.222756  9.702809
+##  [29]  8.472535 11.396533  6.916911  8.104894  9.862146 12.501564  5.915935
+##  [36] 11.863099  6.129499 10.773242  9.553454  8.340832 13.071005 12.186593
+##  [43] 12.543006  7.428404 13.318977  7.592952 10.491267  8.141066 12.622110
+##  [50]  6.730350  9.434026 10.064668  8.979753  9.056206 10.630402  8.952779
+##  [57]  8.356602  8.515313 12.316362 11.998738  7.883667 11.644604 12.984953
+##  [64]  7.756008  9.106206  8.278147 10.918301  8.152827 11.280096  6.275822
+##  [71] 11.166736 12.422223 10.130575 12.028937  8.640584 11.313802 13.642668
+##  [78]  8.834948 12.187221 11.811334 11.027231 10.123037  8.033650 11.226109
+##  [85] 12.173008 11.857822  9.279124 10.726730  6.608774  6.479791  5.909416
+##  [92]  8.661479 13.515129 11.679434 11.806873 12.315792  8.591900 13.288847
+##  [99]  6.726806  9.234288</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] 0.08416587</code></pre>
+<pre><code>## [1] -0.07016876</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] 4.022296</code></pre>
+<pre><code>## [1] -15.69535</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] -4.459794</code></pre>
+<pre><code>## [1] -13.34268</code></pre>
 <p>With this, you have the very basics of how we write R code and save objects that can be used later.</p>
 <div id="a-few-side-notes" class="section level3">
 <h3>A few side notes</h3>
@@ -511,7 +521,7 @@ sum(rnorm(100))</code></pre>
 </div>
 <div id="cran" class="section level3">
 <h3>CRAN</h3>
-<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-08-31, there are 12951 on CRAN!</p>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-09-02, there are 12897 on CRAN!</p>
 </div>
 <div id="installing-packages" class="section level3">
 <h3>Installing packages</h3>
@@ -539,14 +549,13 @@ dplyr::mutate</code></pre>
 ## {
 ##     UseMethod(&quot;mutate&quot;)
 ## }
-## &lt;bytecode: 0x0000000019f29f80&gt;
 ## &lt;environment: namespace:dplyr&gt;</code></pre>
 <p>You will often see people use <code>require()</code> to load a package. It is better form to not do this. For a more detailed explanation of why <code>library()</code> and not <code>require()</code> see <a href="http://yihui.name/en/2014/07/library-vs-require/.">Yihui Xie’s post on the subject</a></p>
 <p>And now for a little pedantry. You will often hear people use the terms “library” and “package” interchangeably. This is not correct. A package is what is submitted to CRAN, it is what contains a group of functions that address a common problem, and it is what has allowed R to expand. A library is, more or less, where you packages are stored. You have a path to that library and this is where R puts new packages that you install (e.g. via <code>install.packages()</code>). These two terms are related, but most certainly different. Apologies up front if I slip and use one when I actually mean the other…</p>
 <p>You can see where your library is located:</p>
 <pre class="r"><code>.libPaths()</code></pre>
-<pre><code>## [1] &quot;C:/Users/Marcus.SCCWRP2K/R/win-library/3.5&quot;
-## [2] &quot;C:/Program Files/R/R-3.5.1/library&quot;</code></pre>
+<pre><code>## [1] &quot;C:/Users/Marcus/R/win-library/3.4&quot; 
+## [2] &quot;C:/Program Files/R/R-3.4.4/library&quot;</code></pre>
 <p>There are a few ways to see if a package is installed, and if installed, if it’s loaded in your environment (i.e, if you’ve forgot). RStudio makes this easy with it’s user interface (<code>Packages</code> tab, <code>Environment</code> tab), but I encourage you to learn the functions that do this for you. Especially…</p>
 <pre class="r"><code># check if a package is installed
 &quot;dplyr&quot; %in% installed.packages()
@@ -686,7 +695,10 @@ myls</code></pre>
 <p>If you’re lucky, your data are already in a flat, rectangular format. In other words, your data are two-dimensional as standard ASCI text. Flat data files present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files. The base installation of R comes with some easy to use functions for importing flat files, such as <code>read.table()</code> and <code>read.csv</code>.</p>
 <p>More often you will probably have an Excel spreadsheet to import. This is not a preferred format but the reality is that most people are using this software for data storage. In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure of Excel. The tools available in R have since matured and it’s now pretty painless to import a spreadsheet. But “painless” comes with some caveats.</p>
 <p>You will save yourself a lot of trouble with data import from Excel if you think like a machine. Consider the example below:</p>
-<p><img src="figure/excel_bad.png" /></p>
+<div class="figure">
+<img src="figure/excel_bad.png" />
+
+</div>
 <p>Computers, although very trainable, are also very dumb. If you have trouble interpreting the information, can you expect a computer to do so? Most issues importing Excel spreadsheets relate to format of the data. Here are few pointers to keep in mind if you are using Excel to store data:</p>
 <ul>
 <li>Use the one spreadsheet, one data frame rule (rectangular)</li>
@@ -709,18 +721,18 @@ myls</code></pre>
 <pre><code>##  [1] &quot;all_pipes&quot;       &quot;alldat&quot;          &quot;bad_ex&quot;         
 ##  [4] &quot;bad_ex2&quot;         &quot;by_make&quot;         &quot;by_yr_drv&quot;      
 ##  [7] &quot;chemdat&quot;         &quot;chr_var&quot;         &quot;dat&quot;            
-## [10] &quot;datchem&quot;         &quot;datlocs&quot;         &quot;dbl_var&quot;        
-## [13] &quot;displ_cat&quot;       &quot;dplyr_arr&quot;       &quot;dplyr_good_fuel&quot;
-## [16] &quot;dplyr_mut&quot;       &quot;dplyr_mut2&quot;      &quot;dplyr_rnm&quot;      
-## [19] &quot;dplyr_sel1&quot;      &quot;dplyr_sel2&quot;      &quot;dplyr_sel3&quot;     
-## [22] &quot;dplyr_six_cyl&quot;   &quot;filt1&quot;           &quot;filt2&quot;          
-## [25] &quot;filt3&quot;           &quot;filt4&quot;           &quot;filt5&quot;          
-## [28] &quot;good_ex&quot;         &quot;int_var&quot;         &quot;log_var&quot;        
-## [31] &quot;logs&quot;            &quot;ltrs&quot;            &quot;metadat&quot;        
-## [34] &quot;more_sums&quot;       &quot;mpg&quot;             &quot;my_random_sum&quot;  
-## [37] &quot;mydf&quot;            &quot;myls&quot;            &quot;mymat&quot;          
-## [40] &quot;nums&quot;            &quot;origin&quot;          &quot;pkgs&quot;           
-## [43] &quot;sumdat&quot;          &quot;tidydat&quot;         &quot;x&quot;</code></pre>
+## [10] &quot;dbl_var&quot;         &quot;displ_cat&quot;       &quot;dplyr_arr&quot;      
+## [13] &quot;dplyr_good_fuel&quot; &quot;dplyr_mut&quot;       &quot;dplyr_mut2&quot;     
+## [16] &quot;dplyr_rnm&quot;       &quot;dplyr_sel1&quot;      &quot;dplyr_sel2&quot;     
+## [19] &quot;dplyr_sel3&quot;      &quot;dplyr_six_cyl&quot;   &quot;filt1&quot;          
+## [22] &quot;filt2&quot;           &quot;filt3&quot;           &quot;filt4&quot;          
+## [25] &quot;filt5&quot;           &quot;good_ex&quot;         &quot;int_var&quot;        
+## [28] &quot;log_var&quot;         &quot;logs&quot;            &quot;ltrs&quot;           
+## [31] &quot;metadat&quot;         &quot;more_sums&quot;       &quot;mpg&quot;            
+## [34] &quot;my_random_sum&quot;   &quot;mydf&quot;            &quot;myls&quot;           
+## [37] &quot;mymat&quot;           &quot;nums&quot;            &quot;origin&quot;         
+## [40] &quot;pkgs&quot;            &quot;sumdat&quot;          &quot;tidydat&quot;        
+## [43] &quot;x&quot;</code></pre>
 <p>Before we go on, let’s look at the data class:</p>
 <pre class="r"><code>class(dat)</code></pre>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
@@ -728,12 +740,12 @@ myls</code></pre>
 <pre><code>## # A tibble: 6 x 11
 ##   manufacturer model displ  year   cyl trans drv     cty   hwy fl    class
 ##   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
-## 1 audi         a4     1.80 1999.    4. auto~ f       18.   29. p     comp~
-## 2 audi         a4     1.80 1999.    4. manu~ f       21.   29. p     comp~
-## 3 audi         a4     2.00 2008.    4. manu~ f       20.   31. p     comp~
-## 4 audi         a4     2.00 2008.    4. auto~ f       21.   30. p     comp~
-## 5 audi         a4     2.80 1999.    6. auto~ f       16.   26. p     comp~
-## 6 audi         a4     2.80 1999.    6. manu~ f       18.   26. p     comp~</code></pre>
+## 1 audi         a4      1.8  1999     4 auto~ f        18    29 p     comp~
+## 2 audi         a4      1.8  1999     4 manu~ f        21    29 p     comp~
+## 3 audi         a4      2    2008     4 manu~ f        20    31 p     comp~
+## 4 audi         a4      2    2008     4 auto~ f        21    30 p     comp~
+## 5 audi         a4      2.8  1999     6 auto~ f        16    26 p     comp~
+## 6 audi         a4      2.8  1999     6 manu~ f        18    26 p     comp~</code></pre>
 <p>The data are in the <code>tibble</code> format. A tibble is basically a data frame with some extra features, mostly related to how the data are printed in the console. You’ll encounter tibbles a lot if you are using the <code>tidyverse</code> family of packages, which we’ll go over next training. There are some very good reasons to use tibbles for data wrangling but they can also cause some headaches when used with other packages. For now, let’s just <code>coerce</code> the tibble to a data frame.</p>
 <pre class="r"><code>dat &lt;- as.data.frame(dat)
 class(dat)</code></pre>
@@ -821,7 +833,10 @@ dat[[10]]</code></pre>
 </div>
 <div id="retention" class="section level2">
 <h2>Retention</h2>
-<p><img src="figure/automation.png" /></p>
+<div class="figure">
+<img src="figure/automation.png" />
+
+</div>
 <p>Today we covered a lot of material but at this point you should have the resources to answer the following:</p>
 <ul>
 <li>What is R and why should I use it?</li>
@@ -840,7 +855,10 @@ dat[[10]]</code></pre>
 <li>Do not give up!!!</li>
 </ul>
 <p>Next time, we’ll talk about data wrangling. This is where the real fun begins…</p>
-<p><img src="figure/learning_crv.png" /></p>
+<div class="figure">
+<img src="figure/learning_crv.png" />
+
+</div>
 </div>
 <div id="attribution" class="section level2">
 <h2>Attribution</h2>

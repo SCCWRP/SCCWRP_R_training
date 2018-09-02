@@ -11,11 +11,11 @@
 
 
 
-<title>R_luncheon_3.utf8</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
-<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<link href="site_libs/bootstrap-3.3.5/css/cerulean.min.css" rel="stylesheet" />
 <script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
 <script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
@@ -23,8 +23,8 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-1.1/highlight.js"></script>
 <script src="js/google-analytics.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -34,12 +34,10 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs) {
-  hljs.configure({languages: []});
-  hljs.initHighlightingOnLoad();
-  if (document.readyState && document.readyState === "complete") {
-    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
-  }
+if (window.hljs && document.readyState && document.readyState === "complete") {
+   window.setTimeout(function() {
+      hljs.initHighlighting();
+   }, 0);
 }
 </script>
 
@@ -343,11 +341,11 @@ div.tocify {
 <h2>Lesson Outline</h2>
 <ul>
 <li><a href="#vector-data">Vector data</a></li>
-<li>[Simple features overview]</li>
+<li><a href="#simple-features">Simple features</a></li>
 <li><a href="#creating-spatial-data-with-simple-features">Creating spatial data with simple features</a></li>
 <li><a href="#basic-geospatial-analysis">Basic geospatial analysis</a></li>
 </ul>
-<p>Welcome to the third R luncheon! By popular demand, the final two luncheons will explore using R for geospatial analsyis and mapping. Today’s session will focus on geospatial analysis using the new <a href="https://r-spatial.github.io/sf/">simple features</a> package and our final session will focus on creating publication ready maps in R. We will focus entirely on working with vector data in these next two lessons, but checkout the <a href="https://cran.r-project.org/web/packages/raster/">raster</a> and <a href="https://cran.r-project.org/web/packages/rgdal/index.html">rgdal</a> packages if you want to work with raster data in R. There are several useful vignettes in the raster link.</p>
+<p>Welcome to the third R luncheon! By popular demand, the final two luncheons will explore using R as a GIS. Today’s session will focus on geospatial analysis using the new <a href="https://r-spatial.github.io/sf/">simple features</a> package and our final session will focus on creating publication ready maps in R. We will focus entirely on working with vector data in these next two lessons, but checkout the <a href="https://cran.r-project.org/web/packages/raster/">raster</a> and <a href="https://cran.r-project.org/web/packages/rgdal/index.html">rgdal</a> packages if you want to work with raster data in R. There are several useful vignettes in the raster link.</p>
 <p>Please note that this is not an introduction to R and you are also expected to have an understanding of basic geospatial concepts for these next two sessions. You can visit any of the other topics on our <a href="index.html">main page</a> for a refresher on some of the R basics. In the mean time, feel free to ask plenty of questions as we go through today’s lesson!</p>
 <p>The goals for today are:</p>
 <ol style="list-style-type: decimal">
@@ -369,7 +367,10 @@ div.tocify {
 <li><p>the CRS is the same when comparing between datasets, and</p></li>
 <li><p>the CRS is appropriate for the region you’re looking at.</p></li>
 </ol>
-<p><img src="figure/crs-comparisons.jpg" /></p>
+<div class="figure">
+<img src="figure/crs-comparisons.jpg" />
+
+</div>
 <p><em>Image <a href="https://nceas.github.io/oss-lessons/spatial-data-gis-law/1-mon-spatial-data-intro.html">source</a></em></p>
 <p>To summarize, vector data include the following:</p>
 <ol style="list-style-type: decimal">
@@ -383,7 +384,10 @@ div.tocify {
 <p>R has a long history of packages for working with spatial data. For many years, the <a href="https://cran.r-project.org/web/packages/sp/index.html">sp</a> package was the standard and most widely used toolset for working with spatial data in R. This package laid the foundation for creating spatial data classes and methods in R, but unfortunately it’s development predated a lot of the newer tools that are built around the <a href="https://www.tidyverse.org/">tidyverse</a>. This makes it incredibly difficult to incorporate sp data objects with the more commonly used data analysis workflows.</p>
 <p>The <a href="https://r-spatial.github.io/sf/">simple features</a> or sf package was developed to streamline the use of spatial data in R and to align its functionality with those provided in the tidyverse. The <code>sf</code> package provides <a href="https://en.wikipedia.org/wiki/Simple_Features">simple features access</a> for R and without a doubt, <code>sf</code> will replace <code>sp</code> as the fundamental spatial model in R for vector data. Packages are already being updated around <code>sf</code>.</p>
 <p>Simple Features is a hierarchical data model that represents a wide range of geometry types - it includes all common vector geometry types (but does not include raster) and even allows geometry collections, which can have multiple geometry types in a single object. From the first sf package vignette we see:</p>
-<p><img src="figure/sf_objects.png" /></p>
+<div class="figure">
+<img src="figure/sf_objects.png" />
+
+</div>
 <p>You’ll notice that these are the same features we described above, but the sf package allows implementation of “multi” features and geometry collections that include more than one type of feature.</p>
 </div>
 <div id="creating-spatial-data-with-simple-features" class="section level2">
@@ -404,28 +408,30 @@ library(sf)</code></pre>
 ##  [4] aggregate             anti_join             arrange              
 ##  [7] as.data.frame         cbind                 coerce               
 ## [10] dbDataType            dbWriteTable          distinct             
-## [13] filter                full_join             group_by             
-## [16] identify              initialize            inner_join           
-## [19] left_join             merge                 mutate               
-## [22] plot                  print                 rbind                
-## [25] rename                right_join            sample_frac          
-## [28] sample_n              select                semi_join            
-## [31] show                  slice                 slotsFromS3          
-## [34] st_agr                st_agr&lt;-              st_as_sf             
-## [37] st_bbox               st_boundary           st_buffer            
-## [40] st_cast               st_centroid           st_collection_extract
-## [43] st_convex_hull        st_coordinates        st_crs               
-## [46] st_crs&lt;-              st_difference         st_geometry          
-## [49] st_geometry&lt;-         st_intersection       st_is                
-## [52] st_line_merge         st_node               st_point_on_surface  
-## [55] st_polygonize         st_precision          st_segmentize        
-## [58] st_set_precision      st_simplify           st_snap              
-## [61] st_sym_difference     st_transform          st_triangulate       
-## [64] st_union              st_voronoi            st_wrap_dateline     
-## [67] st_write              st_zm                 summarise            
-## [70] transmute             ungroup              
+## [13] filter                full_join             gather               
+## [16] group_by              identify              initialize           
+## [19] inner_join            left_join             merge                
+## [22] mutate                nest                  plot                 
+## [25] print                 rbind                 rename               
+## [28] right_join            sample_frac           sample_n             
+## [31] select                semi_join             separate             
+## [34] show                  slice                 slotsFromS3          
+## [37] spread                st_agr                st_agr&lt;-             
+## [40] st_as_sf              st_bbox               st_boundary          
+## [43] st_buffer             st_cast               st_centroid          
+## [46] st_collection_extract st_convex_hull        st_coordinates       
+## [49] st_crs                st_crs&lt;-              st_difference        
+## [52] st_geometry           st_geometry&lt;-         st_intersection      
+## [55] st_is                 st_line_merge         st_node              
+## [58] st_point_on_surface   st_polygonize         st_precision         
+## [61] st_segmentize         st_set_precision      st_simplify          
+## [64] st_snap               st_sym_difference     st_transform         
+## [67] st_triangulate        st_union              st_voronoi           
+## [70] st_wrap_dateline      st_write              st_zm                
+## [73] summarise             transmute             ungroup              
+## [76] unite                 unnest               
 ## see &#39;?methods&#39; for accessing help and source code</code></pre>
-<p>All of the functions and methods in sf are prefixed with st_, which stands for ‘spatial and temporal’. This is kind of confusing but this is in reference to standard methods avialable in <a href="https://en.wikipedia.org/wiki/PostGIS">PostGIS</a>, an open-source backend that is used by many geospatial platforms. An advantage of this prefixing is all commands are easy to find with command-line completion in sf, in addition to naming continuity with existing software.</p>
+<p>All of the functions and methods in sf are prefixed with st_, which stands for ‘spatial and temporal’. This is kind of confusing but this is in reference to standard methods avialable in <a href="https://en.wikipedia.org/wiki/PostGIS">PostGIS</a>, an open-source backend that is used by many geospatial platforms. An advantage of this prefixing is all commands are easy to find with command-line completion in sf, in addition to having naming continuity with existing software.</p>
 <p>There are two ways to create a spatial data object in R, i.e., an <code>sf</code> object, using the sf package.</p>
 <ol style="list-style-type: decimal">
 <li><p>Directly import a shapefile</p></li>
@@ -453,7 +459,10 @@ polys</code></pre>
 ## 9   Laguna Beach  Laguna Beach MULTIPOLYGON (((426176.2 37...
 ## 10  Laguna Beach  Laguna Beach MULTIPOLYGON (((425246.4 37...</code></pre>
 <p>What does this show us? Let’s break it down.</p>
-<p><img src="figure/sf_struct.png" /></p>
+<div class="figure">
+<img src="figure/sf_struct.png" />
+
+</div>
 <ul>
 <li>in green, metadata describing components of the <code>sf</code> object</li>
 <li>in yellow a simple feature: a single record, or data.frame row, consisting of attributes and geometry</li>
@@ -523,11 +532,43 @@ str(stations)</code></pre>
 <p><img src="R_luncheon_3_files/figure-html/unnamed-chunk-11-1.png" width="672" /></p>
 <pre class="r"><code>plot(polys)</code></pre>
 <p><img src="R_luncheon_3_files/figure-html/unnamed-chunk-11-2.png" width="672" /></p>
-<p>So we have lots of stations and not a whole lot of MPAs. You’ll also notice that the default plotting method for <code>sf</code> objects is to create one plot per attribute. This is intended behavior but sometimes is not that useful. Maybe we just want to see where the data are located independent of any of the attributes. We can accomplish by plotting only the geometry of the <code>sf</code> object.</p>
-<pre class="r"><code>plot(st_geometry(stations))</code></pre>
+<p>So we have lots of stations and not a whole lot of MPAs. You’ll also notice that the default plotting method for <code>sf</code> objects is to create one plot per attribute feature. This is intended behavior but sometimes is not that useful. Specifically, maybe we just want to see where the data are located independent of any of the attributes. We can accomplish this by plotting only the geometry of the <code>sf</code> object.</p>
+<pre class="r"><code>plot(stations$geometry)</code></pre>
 <p><img src="R_luncheon_3_files/figure-html/unnamed-chunk-12-1.png" width="672" /></p>
-<pre class="r"><code>plot(st_geometry(polys))</code></pre>
+<pre class="r"><code>plot(polys$geometry)</code></pre>
 <p><img src="R_luncheon_3_files/figure-html/unnamed-chunk-12-2.png" width="672" /></p>
+<p>To emphasize the point that the <code>sf</code> package plays nice with the tidyverse, let’s do a simple feature on the stations data to get only teh stations that were sampled 2013.</p>
+<pre class="r"><code>stations %&gt;% 
+  filter(Bight == 2013) %&gt;% 
+  .$geometry %&gt;% 
+  plot</code></pre>
+<p><img src="R_luncheon_3_files/figure-html/unnamed-chunk-13-1.png" width="672" /></p>
+<p>Now let’s use the stations and MPA polygons to conduct a quick geospatial analysis. Our simple question is as follows:</p>
+<p><strong>How many stations were sampled in each MPA and in which year?</strong></p>
+<p>The first task is to subset the stations data (all years) by locations on the Bight that are MPAs. There are a few ways we can do this. The first is to make simple subset where we filter that stations data based on a spatial overlap. The second and more complicated approach is to intersect the two data objects to combine the attributes of both.</p>
+<pre class="r"><code>stat_sub &lt;- stations[polys, ]
+stat_sub</code></pre>
+<pre><code>## Simple feature collection with 97 features and 3 fields
+## geometry type:  POINT
+## dimension:      XY
+## bbox:           xmin: 185052.3 ymin: 3600023 xmax: 486783 ymax: 3818682
+## epsg (SRID):    26911
+## proj4string:    +proj=utm +zone=11 +datum=NAD83 +units=m +no_defs
+## First 10 features:
+##     FID StationID Bight                 geometry
+## 63   62      1214  1994 POINT (368981.1 3732850)
+## 124 123      1739  1994 POINT (475988.5 3637071)
+## 127 126      1769  1994 POINT (469244.9 3629514)
+## 250 249       988  1994   POINT (333960 3762522)
+## 339 338      2201  1998   POINT (370970 3732041)
+## 406 405      2277  1998 POINT (428939.3 3707890)
+## 407 406      2278  1998 POINT (429085.2 3707523)
+## 408 407      2279  1998 POINT (428852.5 3708723)
+## 409 408      2280  1998 POINT (428586.9 3707971)
+## 423 422      2294  1998 POINT (471527.9 3651705)</code></pre>
+<pre class="r"><code>plot(stat_sub$geometry)</code></pre>
+<p><img src="R_luncheon_3_files/figure-html/unnamed-chunk-14-1.png" width="672" /></p>
+<p>With this first approach we can see which stations were located in an MPA, but we don’t know the name of the MPA for each station.</p>
 </div>
 </div>
 
