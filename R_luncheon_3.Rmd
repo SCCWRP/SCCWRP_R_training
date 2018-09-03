@@ -182,7 +182,7 @@ plot(stations$geometry)
 plot(polys$geometry)
 ```
 
-To emphasize the point that the `sf` package plays nice with the tidyverse, let's do a simple feature on the stations data to get only teh stations that were sampled 2013.
+To emphasize the point that the `sf` package plays nice with the tidyverse, let's do a simple filter on the stations data using the dplyr package to get only the stations that were sampled 2013.
 
 ```{r}
 stations %>% 
@@ -191,19 +191,66 @@ stations %>%
   plot
 ```
 
-Now let's use the stations and MPA polygons to conduct a quick geospatial analysis.  Our simple question is as follows:
+Now let's use the stations (all years) and MPA polygons to conduct a quick geospatial analysis.  Our simple question is as follows:
 
 __How many stations were sampled in each MPA and in which year?__
 
-The first task is to subset the stations data (all years) by locations on the Bight that are MPAs.  There are a few ways we can do this.  The first is to make simple subset where we filter that stations data based on a spatial overlap.  The second and more complicated approach is to intersect the two data objects to combine the attributes of both.
+The first task is to subset the stations data (all years) by locations on the Bight that are MPAs.  There are a few ways we can do this.  The first is to make simple subset where we filter the station locations using a spatial overlap with the MPA polygons.  The second and more complete approach is to intersect the two data objects to subset and combine the attributes.
 
 ```{r}
 stat_sub <- stations[polys, ]
-stat_sub
 plot(stat_sub$geometry)
+stat_sub
 ```
 
-With this first approach we can see which stations were located in an MPA, but we don't know the name of the MPA for each station.
+With this first approach we can see which stations were located in an MPA, but we don't know the name of the MPA for each station. A better approach is to use `st_intersection` to both subset and combine the attribute fields from both data objects.
+
+```{r}
+stat_sub <- st_intersection(stations, polys)
+plot(stat_sub$geometry)
+stat_sub
+```
+
+Now we can easily see which Bight sampling stations and years were in which MPA polygon.  We can use some familiar tools from dplyr to get the aggregate counts from the tabular `sf` object.
+
+```{r}
+stat_cnt <- stat_sub %>% 
+  group_by(MPA_Name, Bight) %>% 
+  summarise(
+    cnt = n()
+  ) 
+stat_cnt
+```
+
+Notice that we've retained the `sf` data structure in the aggregated dataset but the structure is now slightly different in the geometry column.  MPA polygons with more than one station within a year have been aggregated to multipoint objects and our `cnt` column shows the number of stations that make up the aggregation. 
+
+We can also visualize this information with ggplot2. 
+
+```{r, message = F}
+library(ggplot2)
+ggplot(stat_cnt, aes(x = MPA_Name, y = cnt)) + 
+  geom_bar(stat = 'identity')
+```
+
+Let's make it more readable by facetting the plot by sample year and flipping the axes.
+
+```{r}
+ggplot(stat_cnt, aes(x = MPA_Name, y = cnt)) + 
+  geom_bar(stat = 'identity') + 
+  facet_wrap(~Bight) + 
+  coord_flip()
+```
+
+We can see a clear increase in the number of MPAs that were sampled with more recent Bight sampling years.  Keep in mind that these data are still `sf` objects and we can leverage some of the mapping tools in R to spatially view these results.  We'll cover this in more detail next time but here's a teaser using the mapview package.
+
+```{r}
+library(mapview)
+mapview(polys) +
+  mapview(stat_sub, zcol = 'Bight')
+# 
+# mapview(polys) +
+#   mapview(stat_cnt, zcol = 'MPA_Name')
+```
 
 
 
