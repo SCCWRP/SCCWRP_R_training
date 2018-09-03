@@ -1,3 +1,8 @@
+---
+output:
+  html_document:
+    css: css/styles.css
+---
 
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
 options(repos = "http://cran.rstudio.com/")
@@ -5,6 +10,8 @@ pkgs <- c("dplyr", "knitr")
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ```
+
+<script src="js/hideoutput.js"></script>
 
 # R luncheon 3
 
@@ -241,18 +248,57 @@ ggplot(stat_cnt, aes(x = MPA_Name, y = cnt)) +
   coord_flip()
 ```
 
-We can see a clear increase in the number of MPAs that were sampled with more recent Bight sampling years.  Keep in mind that these data are still `sf` objects and we can leverage some of the mapping tools in R to spatially view these results.  We'll cover this in more detail next time but here's a teaser using the mapview package.
+We can see a clear increase in the number of MPAs that were sampled with more recent Bight sampling years.  Keep in mind that these data are still `sf` objects and we can leverage some of the mapping tools in R to spatially view these results.  Using the mapview package, we can easily create an interactive map of the MPA polygons and the intersected data points from `stat_sub`.  We'll cover this in more detail next time but here's a quick teaser.
 
 ```{r}
 library(mapview)
 mapview(polys) +
   mapview(stat_sub, zcol = 'Bight')
-# 
-# mapview(polys) +
-#   mapview(stat_cnt, zcol = 'MPA_Name')
 ```
 
+### Excercise
 
+Let's repeat the above example but instead of spatially aggregating sample locations by MPA we'll aggregate by sediment characteristics. To accomplish this, we'll import the sediment chemistry dataset, join it with our sample locations, and aggregate the chemistry data by MPA.  We'll end up with an average concentration of some sediment data for each MPA.
+
+1) Import the sediment chemistry data into R from the data folder using `read_excel()` from the readxl package.  This file is called `data/B13 Chem data.xlsx`.
+
+1) From the chemistry data, `select()` the `Year`, `StationID`, `Parameter`, and `Result` columns.
+
+1) Use `filter()` to get only the rows in `Year` that are equal to 2013.  Then use `filter()` again to get rows for the `Parameter` column that are equal to `Arsenic` (hint: `filter(chemdat, Year %in% 2013 & Parameter == 'Arsenic'`)
+
+1) Use `rename()` to rename the `Year` column to `Bight`.  This will let you join the chemistry data with our stations data.
+
+1) Using our `stat_sub` dataset created above, use `inner_join()` to join `stat_sub` with the chemistry data.  Then use `select()` to select only the `StationID` and `Result` columns from the joined dataset.
+
+1) Now use `st_join()` to spatially join the MPA polygon dataset to the joined chemistry/stations dataset (hint: `polyjn <- st_join(polys, chemjn)`).
+
+1) Then use the joined polygon dataset for the aggregation of the sediment chemistry data.  Use `group_by(MPA_Name)` to establish a grouping variable, then summarise the `Result` column with `summarise()` to take the average arsenic values by each MPA.
+
+1) Use mapview to plot the polygons and the argument `zcol = 'Result'` to show the average arsenic in each MPA.  
+
+<div class="fold s o">
+```{r results = 'hide'}
+# import and wrangle sediment chemistry
+library(readxl)
+chemdat <- read_excel('data/B13 Chem data.xlsx') %>% 
+  select(Year, StationID, Parameter, Result) %>% 
+  filter(Year %in% 2013 & Parameter == 'Arsenic') %>% 
+  rename(Bight = Year)
+
+# join sediment chemistry with stat_sub from above
+chemjn <- inner_join(stat_sub, chemdat, by = 'StationID') %>% 
+  select(StationID, Result)
+
+# spatially join the MPA polygon data to the joined chemistry/stations data
+# aggregate the results by the average
+polyjn <- st_join(polys, chemjn) %>% 
+  group_by(MPA_Name) %>% 
+  summarise(Result = mean(Result, na.rm = T)) 
+  
+# plot  
+mapview(polyjn, zcol = 'Result')
+```
+</div>
 
 
 

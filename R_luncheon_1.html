@@ -23,8 +23,8 @@
 <link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
 <script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
 <script src="site_libs/navigation-1.1/tabsets.js"></script>
-<link href="site_libs/highlightjs-1.1/textmate.css" rel="stylesheet" />
-<script src="site_libs/highlightjs-1.1/highlight.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
 <script src="js/google-analytics.js"></script>
 
 <style type="text/css">code{white-space: pre;}</style>
@@ -34,10 +34,12 @@
   }
 </style>
 <script type="text/javascript">
-if (window.hljs && document.readyState && document.readyState === "complete") {
-   window.setTimeout(function() {
-      hljs.initHighlighting();
-   }, 0);
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
 }
 </script>
 
@@ -91,6 +93,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -531,12 +536,12 @@ library(readxl)</code></pre>
 <pre><code>## # A tibble: 6 x 5
 ##   SITENAME MSNAME  `Storm #` influent effluent
 ##   &lt;chr&gt;    &lt;chr&gt;       &lt;dbl&gt;    &lt;dbl&gt;    &lt;dbl&gt;
-## 1 site1    sample1         2     9.53     5.86
-## 2 site1    sample2         1     9.16     6.34
-## 3 site1    sample3         1     9.42     6.14
-## 4 site2    sample1         1     9.07     3.62
-## 5 site2    sample2         2     9.13     4.15
-## 6 site2    sample3         1     7.96     3.96</code></pre>
+## 1 site1    sample1         2     6.28     5.22
+## 2 site1    sample2         2     6.98     4.62
+## 3 site1    sample3         2     6.31     4.82
+## 4 site2    sample1         2     6.06     5.56
+## 5 site2    sample2         1     6.82     4.23
+## 6 site2    sample3         1     8.27     4.41</code></pre>
 <p>There are three things about this dataset that differ from our actual data:</p>
 <ol style="list-style-type: decimal">
 <li><p>Consistent naming convention between sites and samples</p></li>
