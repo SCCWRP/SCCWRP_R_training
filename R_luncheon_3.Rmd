@@ -30,7 +30,7 @@ The goals for today are:
 
 1) Understand the vector data structure
 
-1) Understand how to import vector data in R
+1) Understand how to import and structure vector data in R
 
 1) Understand how R stores spatial data using the simple features package
 
@@ -38,20 +38,20 @@ The goals for today are:
 
 ## Vector data
 
-Most of us should be familiar with the basic types of spatial data and their components.  We're going to focus entirely on vector data for this lesson because these data are easily conceptualized as __features__ or discrete objects with spatial information.  More about this later.  Raster data by contrast are stored in a regular grid where the cells of the grid are associated with values.  Raster data are more common for data with continous coverage, such as climate or weather layers.  
+Most of us should already be familiar with the basic types of spatial data and their components.  We're going to focus entirely on vector data for this lesson because these data are easily conceptualized as __features__ or discrete objects with spatial information.  We'll discuss some of the details about this later.  Raster data by contrast are stored in a regular grid where the cells of the grid are associated with values.  Raster data are more common for data with continuous coverage, such as climate or weather layers.  
 
-Vector data come in three flavors.  The simplest of is a __point__, which is a 0-dimensional feature that can be used to represent a specific location on the earth, such as a single tree or an entire city. Linear, 1-dimensional features can be represented with points (or vertices) that are connected by a path to form a __line__ and when many points are connected these form a __polyline__. Finally, when a polyline's path returns to its origin to represent an enclosed space, such as a forest, watershed boundary, or lake, this forms a __polygon__.
+Vector data come in three flavors.  The simplest is a __point__, which is a 0-dimensional feature that can be used to represent a specific location on the earth, such as a single tree or an entire city. Linear, 1-dimensional features can be represented with points (or vertices) that are connected by a path to form a __line__ and when many points are connected these form a __polyline__. Finally, when a polyline's path returns to its origin to represent an enclosed space, such as a forest, watershed boundary, or lake, this forms a __polygon__.
 
 ![https://earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-vector-data-r/](figure/pts-lines-polys.png)
 *Image [source](https://earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-vector-data-r/)*
 
 All vector data are represented similarly, whether they're points, lines or polygons.  Points are defined by a single coordinate location, whereas a line or polygon is several points with a grouping variable that distinguishes one object from another. In all cases, the aggregate dataset is composed of one or more features of the same type (points, lines, or polygons).
 
-There are two other pieces of information that are included with vector data.  The __attributes__ that can be associated with each feature and the __coordinate reference system__ or __CRS__.  The attributes can be any supporting information about a feature, such as a town name or summary data about the features.  You can identify attributes as anything in a spatial dataset that is not explicitly used to define the location of the features.  
+There are two other pieces of information that are included with vector data.  The __attributes__ that can be associated with each feature and the __coordinate reference system__ or __CRS__.  The attributes can be any supporting information about a feature, such as a text description or summary data about the features.  You can identify attributes as anything in a spatial dataset that is not explicitly used to define the location of the features.  
 
-The CRS is used to establish a frame of reference for the locations in your spatial data.  The chosen CRS ensures that all features are correctly referenced relative to each other, especially between different datasets.  As a simple example, imagine comparing length measurements for two objects where one was measured in centimeters and another in inches.  If you didn't know the unit of measurement, you could not compare relative lengths.  The CRS is similar in that it establishes a common frame of reference, but for spatial data.  An added complication with spatial data is that location can be represented in both 2-dimensional or 3-dimensional space. This is beyond the scope of this lesson, but you should be sure that
+The CRS is used to establish a frame of reference for the locations in your spatial data.  The chosen CRS ensures that all features are correctly referenced relative to each other, especially between different datasets.  As a simple example, imagine comparing length measurements for two objects where one was measured in centimeters and another in inches.  If you didn't know the unit of measurement, you could not compare relative lengths.  The CRS is similar in that it establishes a common frame of reference, but for spatial data.  An added complication with spatial data is that location can be represented in both 2-dimensional or 3-dimensional space. This is beyond the scope of this lesson, but for any geospatial analysis you should be sure that:
 
-1) the CRS is the same when comparing between datasets, and 
+1) the CRS is the same when comparing datasets, and 
 
 1) the CRS is appropriate for the region you're looking at.    
 
@@ -67,17 +67,19 @@ To summarize, vector data include the following:
 
 1) a coordinate reference system
 
+These are all the pieces of information you need to recognize in your data when working with features in R.
+
 ## Simple features
 
-R has a long history of packages for working with spatial data.  For many years, the [sp](https://cran.r-project.org/web/packages/sp/index.html) package was the standard and most widely used toolset for working with spatial data in R. This package laid the foundation for creating spatial data classes and methods in R, but unfortunately it's development predated a lot of the newer tools that are built around the [tidyverse](https://www.tidyverse.org/).  This makes it incredibly difficult to incorporate sp data objects with the more commonly used data analysis workflows.  
+R has a long history of packages for working with spatial data.  For many years, the [sp](https://cran.r-project.org/web/packages/sp/index.html) package was the standard and most widely used toolset for working with spatial data in R. This package laid the foundation for creating spatial data classes and methods in R, but unfortunately it's development predated a lot of the newer tools that are built around the [tidyverse](https://www.tidyverse.org/).  This makes it incredibly difficult to incorporate `sp` data objects with these newer data analysis workflows.  
 
-The [simple features](https://r-spatial.github.io/sf/) or sf package was developed to streamline the use of spatial data in R and to align its functionality with those provided in the tidyverse.  The `sf` package provides [simple features access](https://en.wikipedia.org/wiki/Simple_Features) for R and without a doubt, `sf` will replace `sp` as the fundamental spatial model in R for vector data. Packages are already being updated around `sf`. 
+The [simple features](https://r-spatial.github.io/sf/) or sf package was developed to streamline the use of spatial data in R and to align its functionality with those provided in the tidyverse.  The sf package is already beginning to replace sp as the fundamental spatial model in R for vector data.  A major advantage of sf, as you'll see, is its intuitive data structure that retains many familiar components of the `data.frame` (or more accurately, `tibble`).
 
 Simple Features is a hierarchical data model that represents a wide range of geometry types - it includes all common vector geometry types (but does not include raster) and even allows geometry collections, which can have multiple geometry types in a single object. From the first sf package vignette we see:
 
 ![](figure/sf_objects.png)
 
-You'll notice that these are the same features we described above, but the sf package allows implementation of "multi" features and geometry collections that include more than one type of feature.
+You'll notice that these are the same features we described above, with the addition of "multi" features and geometry collections that include more than one type of feature.
 
 ## Creating spatial data with simple features
 
@@ -88,7 +90,7 @@ Let's get setup for today:
 1) In the new project directory, create a folder called "data". 
 
 1) Download  [this](https://sccwrp.github.io/SCCWRP_R_training/data/GIS_data.zip) zipped folder to your computer (anywhere) and copy its contents to the "data" folder in your project.  
-a
+
 1) From the file menu, open a new script within the project. At the top of the script, install the sf package if you haven't done so and load the package after installation.
 
 ```{r, eval = F}
@@ -111,7 +113,7 @@ There are two ways to create a spatial data object in R, i.e., an `sf` object, u
 
 1) Directly import a shapefile
 
-1) Convert an existing R object with latitude/longitude data
+1) Convert an existing R object with latitude/longitude data that represent point features
 
 We'll import a shapefile first and look at its structure so we can better understand the `sf` object. The `st_read()` function can be used for import.  Setting `quiet = T` will keep R from being chatty when it imports the data.
 
@@ -124,23 +126,23 @@ What does this show us? Let's break it down.
 
 ![](figure/sf_struct.png)
 
-* in green, metadata describing components of the `sf` object
-* in yellow a simple feature: a single record, or data.frame row, consisting of attributes and geometry
-* in blue a single simple feature geometry (an object of class `sfg`)
-* in red a simple feature list-column (an object of class `sfc`, which is a column in the data.frame)
+* In green, metadata describing components of the `sf` object
+* In yellow, a simple feature: a single record, or `data.frame` row, consisting of attributes and geometry
+* In blue, a single simple feature geometry (an object of class `sfg`)
+* In red, a simple feature list-column (an object of class `sfc`, which is a column in the data.frame)
 
-We've just imported a multipolygon dataset with 25 features and 2 fields.  The dataset is projected using the UTM Zone 11 CRS.  You'll notice that the actual dataset looks very similar to a regular `data.frame`, with some interesting additions.  The header includes some metadata about the `sf` object and the `geometry` column includes the actual spatial information for each feature.  
+We've just imported a multipolygon dataset with 25 features and 2 fields.  The dataset is projected using the UTM Zone 11 CRS.  You'll notice that the actual dataset looks very similar to a regular `data.frame`, with some interesting additions.  The header includes some metadata about the `sf` object and the `geometry` column includes the actual spatial information for each feature.  Conceptually, you can treat the `sf` object like you would a `data.frame`.   
 
-Easy enough, but what if we have point data that's not a shapefile?  You can create an `sf` object from any existing `data.frame` so long as the data include coordinate information (e.g., lat/lon columns) and you know CRS (or can make an educated guess).  Let's first import a regular dataset with lat/lon columns.
+Easy enough, but what if we have point data that's not a shapefile?  You can create an `sf` object from any existing `data.frame` so long as the data include coordinate information (e.g., columns for longitude and latitude) and you know the CRS (or can make an educated guess).  Let's first import a dataset from a .csv file.
 
 ```{r}
 stations <- read.csv('data/AllBightStationLocations.csv', stringsAsFactors = F)
 str(stations)
 ```
 
-The `st_as_sf()` function can do the trick but we have to tell it which column is the x-coordinates and which is the y-coordinates.  We also have to specify a CRS - this is just a text string or number in a standard format for geospatial data. A big part of working with spatial data is keeping track of reference systems between different datasets.  Remember that valid comparisons between datasets are only possible if the CRS is shared.  
+The `st_as_sf()` function can be used to make this `data.frame` into a `sf` object, but we have to tell it which column is the x-coordinates and which is the y-coordinates.  We also have to specify a CRS - this is just a text string or number (i.e, EPSG)  in a standard format for geospatial data. A big part of working with spatial data is keeping track of reference systems between different datasets.  Remember that meaningful comparisons between datasets are only possible if the CRS is shared.  
 
-There are many, many types of reference systems and plenty of resources online that provide detailed explanations (see [spatialreference.org](http://www.spatialreference.org/) or [this guide](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf) from NCEAS).  For now, just realize that we can use a simple text string to indicate which CRS we want.  For the station locations, it's a safe bet to use the standard geographic projection with the WGS84 datum since the data include lat/lon.
+There are many, many types of reference systems and plenty of resources online that provide detailed explanations of the what and why behind the CRS (see [spatialreference.org](http://www.spatialreference.org/) or [this guide](https://www.nceas.ucsb.edu/~frazier/RSpatialGuides/OverviewCoordinateReferenceSystems.pdf) from NCEAS).  For now, just realize that we can use a simple text string in R to indicate which CRS we want.  Although this may not always be true, we can make an educated guess that the standard geographic projection with the WGS84 datum applies to our dataset.
 
 ```{r}
 stations <- stations %>% 
@@ -153,14 +155,14 @@ Now we can see the data in full `sf` glory.
 stations
 ```
 
-These two datasets describe some relevant information about our Bight sampling program.  The `stations` data includes all locations that have been sampled from 1993 to 2013 and the `polys` data show locations of marine protected areas (MPAs) in the Bight.  We might be interested in knowing which stations occur in MPAs, how many stations, or when they were sampled.  We can address all of these questions in R, but before we proceed we need to make sure the two datasets share a CRS.
+These two datasets describe some relevant information about our Bight sampling program.  The `stations` data includes all locations that have been sampled from 1993 to 2013 and the `polys` data show locations of marine protected areas (MPAs) in the Bight.  We might be interested in knowing which stations occur in MPAs, how many stations, or when they were sampled.  We can address all of these questions in R, but before we proceed we need to make sure the two datasets share a CRS.  We can check this with `st_crs()`.
 
 ```{r}
 st_crs(polys)
 st_crs(stations)
 ```
 
-You'll have to choose one of the reference systems to use as the common format.  Either one will work but sometimes it's better to go with the UTM format since it references location using actual units of measurement, i.e., meters.  This can make spatial analyses simpler, such as as estimating areas or spatial overlap between datasets.  The `st_transform()` function can be used to transform an existing CRS for an `sf` obect to another.  
+You'll have to choose one of the reference systems to use as the common format.  Either one will work but sometimes it's better to go with the UTM format since it references location using actual units of measurement, i.e., meters.  This can make spatial analyses simpler, such as estimating areas or spatial overlap between datasets.  The `st_transform()` function can be used to transform an existing CRS for an `sf` obect to another.  
 
 ```{r}
 stations <- stations %>% 
@@ -182,7 +184,7 @@ plot(stations)
 plot(polys)
 ```
 
-So we have lots of stations and not a whole lot of MPAs.  You'll also notice that the default plotting method for `sf` objects is to create one plot per attribute feature.  This is intended behavior but sometimes is not that useful.  Specifically, maybe we just want to see where the data are located independent of any of the attributes.  We can accomplish this by plotting only the geometry of the `sf` object.
+So we have lots of stations and only a handful of MPAs.  You'll also notice that the default plotting method for `sf` objects is to create one plot per attribute feature.  This is intended behavior but sometimes is not that useful (it can also break R if you have many attributes).  Maybe we just want to see where the data are located independent of any of the attributes.  We can accomplish this by plotting only the geometry of the `sf` object.
 
 ```{r}
 plot(stations$geometry)
@@ -192,17 +194,16 @@ plot(polys$geometry)
 To emphasize the point that the `sf` package plays nice with the tidyverse, let's do a simple filter on the stations data using the dplyr package to get only the stations that were sampled 2013.
 
 ```{r}
-stations %>% 
-  filter(Bight == 2013) %>% 
-  .$geometry %>% 
-  plot
+filt_dat <- stations %>% 
+  filter(Bight == 2013)
+plot(filt_dat$geometry)
 ```
 
-Now let's use the stations (all years) and MPA polygons to conduct a quick geospatial analysis.  Our simple question is as follows:
+Now let's use the stations (all years) and MPA polygons to do a quick geospatial analysis.  Our simple question is:
 
 __How many stations were sampled in each MPA and in which year?__
 
-The first task is to subset the stations data (all years) by locations on the Bight that are MPAs.  There are a few ways we can do this.  The first is to make simple subset where we filter the station locations using a spatial overlap with the MPA polygons.  The second and more complete approach is to intersect the two data objects to subset and combine the attributes.
+The first task is to subset the stations data (all years) by locations on the Bight that are MPAs.  There are a few ways we can do this.  The first is to make simple subset where we filter the station locations using a spatial overlay with the MPA polygons.  The second and more complete approach is to intersect the two data objects to subset and combine the attributes.
 
 ```{r}
 stat_sub <- stations[polys, ]
@@ -210,7 +211,7 @@ plot(stat_sub$geometry)
 stat_sub
 ```
 
-With this first approach we can see which stations were located in an MPA, but we don't know the name of the MPA for each station. A better approach is to use `st_intersection` to both subset and combine the attribute fields from both data objects.
+With this first approach we can see which stations were located in an MPA, but we don't know the name of the MPA for each station. A better approach is to use `st_intersection` to both overlay and combine the attribute fields from the two data objects.
 
 ```{r}
 stat_sub <- st_intersection(stations, polys)
@@ -218,7 +219,7 @@ plot(stat_sub$geometry)
 stat_sub
 ```
 
-Now we can easily see which Bight sampling stations and years were in which MPA polygon.  We can use some familiar tools from dplyr to get the aggregate counts from the tabular `sf` object.
+Now we can easily see which Bight sampling stations and years were in which MPA polygon.  We can use some familiar tools from dplyr to get the aggregate counts of stations by years in each MPA using the `sf` object.
 
 ```{r}
 stat_cnt <- stat_sub %>% 
@@ -229,7 +230,7 @@ stat_cnt <- stat_sub %>%
 stat_cnt
 ```
 
-Notice that we've retained the `sf` data structure in the aggregated dataset but the structure is now slightly different in the geometry column.  MPA polygons with more than one station within a year have been aggregated to multipoint objects and our `cnt` column shows the number of stations that make up the aggregation. 
+Notice that we've retained the `sf` data structure in the aggregated dataset but the structure is now slightly different, both in the attributes and the geometry column.  MPA polygons with more than one station within a year have been aggregated to multipoint objects and our `cnt` column shows the number of stations that make up the aggregation. This is a really powerful feature of `sf`: spatial attributes are retained during the wrangling process.  
 
 We can also visualize this information with ggplot2. 
 
@@ -248,7 +249,7 @@ ggplot(stat_cnt, aes(x = MPA_Name, y = cnt)) +
   coord_flip()
 ```
 
-We can see a clear increase in the number of MPAs that were sampled with more recent Bight sampling years.  Keep in mind that these data are still `sf` objects and we can leverage some of the mapping tools in R to spatially view these results.  Using the mapview package, we can easily create an interactive map of the MPA polygons and the intersected data points from `stat_sub`.  We'll cover this in more detail next time but here's a quick teaser.
+We can see a clear increase in the number of MPAs that were sampled with more recent Bight sampling years.  Keep in mind that these data are still `sf` objects and we can leverage some of the mapping tools in R to spatially view these results.  Using the mapview package, we can easily create an interactive map of the MPA polygons and the intersected stations from `stat_sub`.  We'll cover this in more detail next time but here's a quick teaser.
 
 ```{r}
 library(mapview)
@@ -262,17 +263,19 @@ Let's repeat the above example but instead of spatially aggregating sample locat
 
 1) Import the sediment chemistry data into R from the data folder using `read_excel()` from the readxl package.  This file is called `data/B13 Chem data.xlsx`.
 
-1) From the chemistry data, `select()` the `Year`, `StationID`, `Parameter`, and `Result` columns.
+1) From the chemistry data:
 
-1) Use `filter()` to get only the rows in `Year` that are equal to 2013.  Then use `filter()` again to get rows for the `Parameter` column that are equal to `Arsenic` (hint: `filter(chemdat, Year %in% 2013 & Parameter == 'Arsenic'`)
+     * `select()` the `Year`, `StationID`, `Parameter`, and `Result` columns.
+     
+     * Use `filter()` to get only the rows in `Year` that are equal to 2013.  Then use `filter()` again to get rows for the `Parameter` column that are equal to `Arsenic` (hint: `filter(chemdat, Year == 2013 & Parameter == 'Arsenic'`)
 
-1) Use `rename()` to rename the `Year` column to `Bight`.  This will let you join the chemistry data with our stations data.
+     * Use `rename()` to rename the `Year` column to `Bight`.  This will let you join the chemistry data with our stations data.
 
 1) Using our `stat_sub` dataset created above, use `inner_join()` to join `stat_sub` with the chemistry data.  Then use `select()` to select only the `StationID` and `Result` columns from the joined dataset.
 
 1) Now use `st_join()` to spatially join the MPA polygon dataset to the joined chemistry/stations dataset (hint: `polyjn <- st_join(polys, chemjn)`).
 
-1) Then use the joined polygon dataset for the aggregation of the sediment chemistry data.  Use `group_by(MPA_Name)` to establish a grouping variable, then summarise the `Result` column with `summarise()` to take the average arsenic values by each MPA.
+1) Then use the joined polygon dataset for the aggregation of the sediment chemistry data.  Use `group_by(MPA_Name)` to establish a grouping variable, then summarise the `Result` column with `summarise()` to take the average arsenic values by each MPA (hint: `summarise(Result = mean(Result, na.rm = T))`).
 
 1) Use mapview to plot the polygons and the argument `zcol = 'Result'` to show the average arsenic in each MPA.  
 
@@ -282,7 +285,7 @@ Let's repeat the above example but instead of spatially aggregating sample locat
 library(readxl)
 chemdat <- read_excel('data/B13 Chem data.xlsx') %>% 
   select(Year, StationID, Parameter, Result) %>% 
-  filter(Year %in% 2013 & Parameter == 'Arsenic') %>% 
+  filter(Year == 2013 & Parameter == 'Arsenic') %>% 
   rename(Bight = Year)
 
 # join sediment chemistry with stat_sub from above

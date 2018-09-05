@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Data_Wrangling_1.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -93,9 +93,6 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -388,10 +385,7 @@ div.tocify {
 <div id="the-tidyverse" class="section level2">
 <h2>The tidyverse</h2>
 <p>The <a href="https://www.tidyverse.org/">tidyverse</a> is a set of packages that work in harmony because they share common data representations and design. The tidyverse package is designed to make it easy to install and load core packages from the tidyverse in a single command. With tidyverse, you’ll be able to address all steps of data exploration.</p>
-<div class="figure">
-<img src="figure/data-science.png" />
-
-</div>
+<p><img src="figure/data-science.png" /></p>
 <p>From the excellent book, <a href="http://r4ds.had.co.nz/">R for Data Science</a>, <strong>data exploration</strong> is the art of looking at your data, rapidly generating hypotheses, quickly testing them, then repeating again and again and again. Tools in the tidyverse also have direct application to more formal analyses with many of the other available R packages on <a href="https://cran.r-project.org/">CRAN</a>.</p>
 <p>You should already have the tidyverse installed, but let’s give it a go if you haven’t done this part yet:</p>
 <pre class="r"><code># install 
@@ -401,9 +395,9 @@ install.packages(&#39;tidyverse&#39;)</code></pre>
 library(tidyverse)</code></pre>
 <pre><code>## -- Attaching packages -------------- tidyverse 1.2.1 --</code></pre>
 <pre><code>## v ggplot2 3.0.0     v readr   1.1.1
-## v tibble  1.4.2     v purrr   0.2.4
-## v tidyr   0.8.0     v stringr 1.3.1
-## v ggplot2 3.0.0     v forcats 0.3.0</code></pre>
+## v tibble  1.4.2     v purrr   0.2.5
+## v tidyr   0.8.1     v stringr 1.3.1
+## v ggplot2 3.0.0     v forcats 0.2.0</code></pre>
 <pre><code>## -- Conflicts ----------------- tidyverse_conflicts() --
 ## x dplyr::filter() masks stats::filter()
 ## x dplyr::lag()    masks stats::lag()</code></pre>
@@ -431,10 +425,7 @@ library(tidyverse)</code></pre>
 </div>
 <div id="data-wrangling-with-dplyr" class="section level2">
 <h2>Data wrangling with <code>dplyr</code></h2>
-<div class="figure">
-<img src="figure/data-science-wrangle.png" />
-
-</div>
+<p><img src="figure/data-science-wrangle.png" /></p>
 <p>As the graphic implies, the data wrangling process includes data import, tidying, and transformation. The process directly feeds into, and is not mutually exclusive, with the <em>understanding</em> or modelling side of data exploration. More generally, I consider data wrangling as the manipulation or combination of datasets for the purpose of analysis.</p>
 <p>Wrangling begins with import and ends with an output of some kind, such as a plot or a model. In a perfect world, the wrangling process is linear with no need for back-tracking. In reality, we often uncover more information about a dataset, either through wrangling or modeling, that warrants re-evaluation or even gathering more data. Data also come in many forms and the form you need for analysis is rarely the required form of the input data. For these reasons, data wrangling will consume most of your time in data exploration.</p>
 <p><strong>All wrangling is based on a purpose.</strong> No one wrangles for the sake of wrangling (usually), so the process always begins by answering the following two questions:</p>
@@ -552,10 +543,7 @@ head(dplyr_six_cyl)</code></pre>
 <p>Filtering can take a bit of time to master because there are several ways to tell R what you want. Within the filter function, the working part is a <em>logical selection</em> of <code>TRUE</code> and <code>FALSE</code> values that are used to selected rows (<code>TRUE</code> means I want that row, <code>FALSE</code> means I don’t). Every selection within the filter function, no matter how complicated, will always be a T/F vector. This is similar to running queries on a database if you’re familiar with SQL.</p>
 <p>To use filtering effectively, you have to know how to select the observations that you want using the comparison operators. R provides the standard suite: <code>&gt;</code>, <code>&gt;=</code>, <code>&lt;</code>, <code>&lt;=</code>, <code>!=</code> (not equal), and <code>==</code> (equal). When you’re starting out with R, the easiest mistake to make is to use <code>=</code> instead of <code>==</code> when testing for equality.</p>
 <p>Multiple arguments to <code>filter()</code> are combined with “and”: every expression must be true in order for a row to be included in the output. For other types of combinations, you’ll need to use Boolean operators yourself: <code>&amp;</code> is “and”, <code>|</code> is “or”, and <code>!</code> is “not”. This is the complete set of Boolean operations.</p>
-<div class="figure">
-<img src="figure/transform-logical.png" />
-
-</div>
+<p><img src="figure/transform-logical.png" /></p>
 <p>Let’s start combining filtering operations.</p>
 <pre class="r"><code># get cars with city mileage betwen 18 and 22
 filt1 &lt;- filter(mpg, cty &gt; 18 &amp; cty &lt; 22)

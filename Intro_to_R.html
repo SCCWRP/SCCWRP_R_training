@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Intro_to_R.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -93,9 +93,6 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -379,7 +376,7 @@ div.tocify {
 <ul>
 <li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">Stack Overflow blog</a>, <a href="http://blog.revolutionanalytics.com/2016/07/r-moves-up-to-5th-place-in-ieee-language-rankings.html">IEEE rating</a></li>
 </ul>
-<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-09-03, there are 12988 on CRAN!</p>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-09-05, there are 12985 on CRAN!</p>
 <p>Python is another popular open-source programming language. Many beginners often ask the quesiton, why R vs. Python? This is an interesting debate with no easy answer. Some things to consider:</p>
 <ul>
 <li>R has statistical roots, phython does not</li>
@@ -401,10 +398,7 @@ div.tocify {
 <div id="open-r-and-rstudio" class="section level3">
 <h3>Open R and RStudio</h3>
 <p>Find the RStudio shortcut and fire it up (just watch for now). You should see something like this:</p>
-<div class="figure">
-<img src="figure/rstudio.png" />
-
-</div>
+<p><img src="figure/rstudio.png" /></p>
 <p>There are four panes in RStudio:</p>
 <ul>
 <li>Source</li>
@@ -417,10 +411,7 @@ div.tocify {
 <h3>RStudio projects</h3>
 <p>I strongly encourage you to use RStudio projects when you are working with R. The RStudio project provides a central location for working on a particular task. It helps with file management and is portable if all the files live in the same file tree. RStudio projects also remember history - what commands you used and what data objects are in your enviornment.</p>
 <p>To create a new project, click on the File menu at the top and select ‘New project…’</p>
-<div class="figure">
-<img src="figure/rstudio_proj.jpg" />
-
-</div>
+<p><img src="figure/rstudio_proj.jpg" /></p>
 <p>It’s ofen hard to determine the scope of a project. When should a new project be created Should one project be used for a dissertation? Probably not. What about one project for manipulating one data file? Probably not. To help you determine the scope of each project, think about these questions:</p>
 <ul>
 <li>What is the purpose of using R right now?<br />
@@ -434,18 +425,12 @@ div.tocify {
 <h3>Scripting</h3>
 <p>In most cases, you will not enter and execute code directly in the console. Code can be created in a script and then sent directly to the console when you’re ready to run it. The key difference here is that a script can be saved and shared.</p>
 <p>Open a new script from the File menu…</p>
-<div class="figure">
-<img src="figure/rstudio_script.jpg" />
-
-</div>
+<p><img src="figure/rstudio_script.jpg" /></p>
 </div>
 <div id="executing-code-in-rstudio" class="section level3">
 <h3>Executing code in RStudio</h3>
 <p>After you write your script it can be sent to the Console to run the code in R. Any variables you create in your script will not be available in your working environment until this is done. There are two ways to sent code the console. First, you can hit the <code>Run</code> button at the top right of the scripting window. Second, and preferred, you can use <code>ctrl+enter</code>. Both approaches will send the selected line to the console, then move to the next line. You can also highlight and send an entire block of code.</p>
-<div class="figure">
-<img src="figure/rstudio_run.jpg" />
-
-</div>
+<p><img src="figure/rstudio_run.jpg" /></p>
 </div>
 <div id="what-is-the-environment" class="section level3">
 <h3>What is the environment?</h3>
@@ -468,7 +453,7 @@ div.tocify {
 <div id="r-language-fundamentals" class="section level2">
 <h2>R language fundamentals</h2>
 <p>The basic syntax of a function follows the form: <code>function_name(arg1, arg2, ...)</code>.</p>
-<p>With the base install, you will gain access to many (3382 functions, to be exact). Some examples:</p>
+<p>With the base install, you will gain access to many (3389 functions, to be exact). Some examples:</p>
 <pre class="r"><code># print
 print(&#39;hello world!&#39;)</code></pre>
 <pre><code>## [1] &quot;hello world!&quot;</code></pre>
@@ -477,32 +462,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1] 13.774543  9.122287  7.313795  8.048900  8.022757 11.284713  5.222925
-##   [8]  6.175879  9.427826 11.787985  5.583354  8.532709 11.901757 12.243114
-##  [15] 12.719752  9.964242  8.162275  7.829956  9.127754  7.531688  8.133228
-##  [22]  9.473545  9.232744  9.570489 10.484624  7.746111 13.833595  9.293645
-##  [29] 10.952503  5.180630  9.076434 12.035647  8.599156 10.418691  7.360779
-##  [36] 10.381400  7.918102 14.018897  7.330935 10.269065 10.186049  5.922367
-##  [43] 14.671180 10.401786 10.445764 12.805523 10.890866 11.633882  8.830986
-##  [50]  7.900080  5.701240 12.287470 10.071269  7.809668  9.592975 11.236271
-##  [57] 11.212014 10.022470  5.182955 10.144779  9.038314  8.424634 10.138052
-##  [64]  9.435793 10.602560 12.783840 11.416153 11.507293  9.505844  8.945047
-##  [71] 13.213334 10.959425  7.455845 10.015749  8.022311  5.503608  9.066986
-##  [78] 10.554055 10.774490 10.930128  5.924455 12.307326 11.074925  7.334629
-##  [85] 10.335415  8.886041  8.935424  8.608374  8.853269  9.585470  8.152308
-##  [92] 10.897808  7.276975 10.758919  8.296973  9.232616 10.286024 12.446470
-##  [99]  7.796300 10.563473</code></pre>
+<pre><code>##   [1]  7.042959  9.933440 12.258015 11.182966  9.843290 12.711385 12.127725
+##   [8] 11.159661 12.569209  9.778333 10.144672  8.209252 11.237724 14.428908
+##  [15] 11.128484 12.586606  8.794906 10.268748  9.823678  6.073301 13.725377
+##  [22] 12.981998  9.189805 12.328316 11.626389 10.990130  7.779494  7.617605
+##  [29]  8.509309 14.359957 14.088185 10.373364  8.270794 11.780033  6.572189
+##  [36] 11.468350 12.833394  8.206408  7.768995 11.001018  9.848751 12.341818
+##  [43]  7.577838  9.333131  6.639002 11.674404 11.698163  9.077443 10.255580
+##  [50]  8.319378  6.587000 11.829827 10.128108 11.621755  7.355938 10.303364
+##  [57] 10.529598 10.308222  9.985282 11.389658  8.970391 13.120743  9.054584
+##  [64] 10.559799  8.637167 10.285536  7.351132  4.854041 11.091028  9.550774
+##  [71] 12.500631  8.581921 10.715796  8.384507 11.501371 11.437187 10.736647
+##  [78]  9.518106 13.554270  9.159941 11.665120  5.480187  8.834740  5.727674
+##  [85] 12.858990 10.236094  9.814250 12.364537 12.074122 11.411001 11.569412
+##  [92] 10.824847  8.118050  8.299255  7.368645 10.363676 12.074903  7.699204
+##  [99]  8.898610  8.364116</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] -0.06919179</code></pre>
+<pre><code>## [1] -0.04675068</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] 3.48539</code></pre>
+<pre><code>## [1] 17.78897</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] -3.457092</code></pre>
+<pre><code>## [1] 2.759021</code></pre>
 <p>With this, you have the very basics of how we write R code and save objects that can be used later.</p>
 <div id="a-few-side-notes" class="section level3">
 <h3>A few side notes</h3>
@@ -526,7 +511,7 @@ sum(rnorm(100))</code></pre>
 </div>
 <div id="cran" class="section level3">
 <h3>CRAN</h3>
-<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-09-03, there are 12988 on CRAN!</p>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-09-05, there are 12985 on CRAN!</p>
 </div>
 <div id="installing-packages" class="section level3">
 <h3>Installing packages</h3>
@@ -554,13 +539,13 @@ dplyr::mutate</code></pre>
 ## {
 ##     UseMethod(&quot;mutate&quot;)
 ## }
-## &lt;bytecode: 0x000000001dd4f948&gt;
+## &lt;bytecode: 0x0000000019f4cbb8&gt;
 ## &lt;environment: namespace:dplyr&gt;</code></pre>
 <p>You will often see people use <code>require()</code> to load a package. It is better form to not do this. For a more detailed explanation of why <code>library()</code> and not <code>require()</code> see <a href="http://yihui.name/en/2014/07/library-vs-require/.">Yihui Xie’s post on the subject</a></p>
 <p>And now for a little pedantry. You will often hear people use the terms “library” and “package” interchangeably. This is not correct. A package is what is submitted to CRAN, it is what contains a group of functions that address a common problem, and it is what has allowed R to expand. A library is, more or less, where you packages are stored. You have a path to that library and this is where R puts new packages that you install (e.g. via <code>install.packages()</code>). These two terms are related, but most certainly different. Apologies up front if I slip and use one when I actually mean the other…</p>
 <p>You can see where your library is located:</p>
 <pre class="r"><code>.libPaths()</code></pre>
-<pre><code>## [1] &quot;C:/Users/Marcus/R/win-library/3.5&quot; 
+<pre><code>## [1] &quot;C:/Users/Marcus.SCCWRP2K/R/win-library/3.5&quot;
 ## [2] &quot;C:/Program Files/R/R-3.5.1/library&quot;</code></pre>
 <p>There are a few ways to see if a package is installed, and if installed, if it’s loaded in your environment (i.e, if you’ve forgot). RStudio makes this easy with it’s user interface (<code>Packages</code> tab, <code>Environment</code> tab), but I encourage you to learn the functions that do this for you. Especially…</p>
 <pre class="r"><code># check if a package is installed
@@ -701,10 +686,7 @@ myls</code></pre>
 <p>If you’re lucky, your data are already in a flat, rectangular format. In other words, your data are two-dimensional as standard ASCI text. Flat data files present the least complications on import because there is very little to assume about the structure of the data. On import, R tries to guess the data type for each column and this is fairly unambiguous with flat files. The base installation of R comes with some easy to use functions for importing flat files, such as <code>read.table()</code> and <code>read.csv</code>.</p>
 <p>More often you will probably have an Excel spreadsheet to import. This is not a preferred format but the reality is that most people are using this software for data storage. In the old days, importing spreadsheets into R was almost impossible given the proprietary data structure of Excel. The tools available in R have since matured and it’s now pretty painless to import a spreadsheet. But “painless” comes with some caveats.</p>
 <p>You will save yourself a lot of trouble with data import from Excel if you think like a machine. Consider the example below:</p>
-<div class="figure">
-<img src="figure/excel_bad.png" />
-
-</div>
+<p><img src="figure/excel_bad.png" /></p>
 <p>Computers, although very trainable, are also very dumb. If you have trouble interpreting the information, can you expect a computer to do so? Most issues importing Excel spreadsheets relate to format of the data. Here are few pointers to keep in mind if you are using Excel to store data:</p>
 <ul>
 <li>Use the one spreadsheet, one data frame rule (rectangular)</li>
@@ -737,8 +719,9 @@ myls</code></pre>
 ## [31] &quot;metadat&quot;         &quot;more_sums&quot;       &quot;mpg&quot;            
 ## [34] &quot;my_random_sum&quot;   &quot;mydf&quot;            &quot;myls&quot;           
 ## [37] &quot;mymat&quot;           &quot;nums&quot;            &quot;origin&quot;         
-## [40] &quot;pkgs&quot;            &quot;sumdat&quot;          &quot;tidydat&quot;        
-## [43] &quot;x&quot;</code></pre>
+## [40] &quot;pkgs&quot;            &quot;polys&quot;           &quot;stat_cnt&quot;       
+## [43] &quot;stat_sub&quot;        &quot;stations&quot;        &quot;sumdat&quot;         
+## [46] &quot;tidydat&quot;         &quot;x&quot;</code></pre>
 <p>Before we go on, let’s look at the data class:</p>
 <pre class="r"><code>class(dat)</code></pre>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>
@@ -746,12 +729,12 @@ myls</code></pre>
 <pre><code>## # A tibble: 6 x 11
 ##   manufacturer model displ  year   cyl trans drv     cty   hwy fl    class
 ##   &lt;chr&gt;        &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt; &lt;dbl&gt; &lt;dbl&gt; &lt;chr&gt; &lt;chr&gt;
-## 1 audi         a4      1.8  1999     4 auto~ f        18    29 p     comp~
-## 2 audi         a4      1.8  1999     4 manu~ f        21    29 p     comp~
-## 3 audi         a4      2    2008     4 manu~ f        20    31 p     comp~
-## 4 audi         a4      2    2008     4 auto~ f        21    30 p     comp~
-## 5 audi         a4      2.8  1999     6 auto~ f        16    26 p     comp~
-## 6 audi         a4      2.8  1999     6 manu~ f        18    26 p     comp~</code></pre>
+## 1 audi         a4     1.80 1999.    4. auto~ f       18.   29. p     comp~
+## 2 audi         a4     1.80 1999.    4. manu~ f       21.   29. p     comp~
+## 3 audi         a4     2.00 2008.    4. manu~ f       20.   31. p     comp~
+## 4 audi         a4     2.00 2008.    4. auto~ f       21.   30. p     comp~
+## 5 audi         a4     2.80 1999.    6. auto~ f       16.   26. p     comp~
+## 6 audi         a4     2.80 1999.    6. manu~ f       18.   26. p     comp~</code></pre>
 <p>The data are in the <code>tibble</code> format. A tibble is basically a data frame with some extra features, mostly related to how the data are printed in the console. You’ll encounter tibbles a lot if you are using the <code>tidyverse</code> family of packages, which we’ll go over next training. There are some very good reasons to use tibbles for data wrangling but they can also cause some headaches when used with other packages. For now, let’s just <code>coerce</code> the tibble to a data frame.</p>
 <pre class="r"><code>dat &lt;- as.data.frame(dat)
 class(dat)</code></pre>
@@ -839,10 +822,7 @@ dat[[10]]</code></pre>
 </div>
 <div id="retention" class="section level2">
 <h2>Retention</h2>
-<div class="figure">
-<img src="figure/automation.png" />
-
-</div>
+<p><img src="figure/automation.png" /></p>
 <p>Today we covered a lot of material but at this point you should have the resources to answer the following:</p>
 <ul>
 <li>What is R and why should I use it?</li>
@@ -861,10 +841,7 @@ dat[[10]]</code></pre>
 <li>Do not give up!!!</li>
 </ul>
 <p>Next time, we’ll talk about data wrangling. This is where the real fun begins…</p>
-<div class="figure">
-<img src="figure/learning_crv.png" />
-
-</div>
+<p><img src="figure/learning_crv.png" /></p>
 </div>
 <div id="attribution" class="section level2">
 <h2>Attribution</h2>

@@ -11,7 +11,7 @@
 
 
 
-<title></title>
+<title>Data_Wrangling_2.utf8</title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -94,9 +94,6 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
-}
-.html-widget {
-  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -364,10 +361,7 @@ div.tocify {
 <div id="todays-goals" class="section level2">
 <h2>Today’s goals</h2>
 <p>Today we’ll continue our discussion of data wrangling with the tidyverse. Data wrangling is the manipulation or combination of datasets for the purpose of understanding. It fits within the broader scheme of <strong>data exploration</strong>, described as the art of looking at your data, rapidly generating hypotheses, quickly testing them, then repeating again and again and again (from <a href="http://r4ds.had.co.nz/">R for Data Science</a>, as is most of today’s content).</p>
-<div class="figure">
-<img src="figure/data-science-wrangle.png" />
-
-</div>
+<p><img src="figure/data-science-wrangle.png" /></p>
 <p>Always remember that <strong>wrangling is based on a purpose.</strong> The process always begins by answering the following two questions:</p>
 <ul>
 <li>What do my input data look like?</li>
@@ -431,15 +425,9 @@ chemdat &lt;- read_excel(&#39;data/B13 Chem data.xlsx&#39;) %&gt;%
 <h3>Types of joins</h3>
 <p>The challenge with joins is that the two datasets may not represent the same observations for a given key. For example, you might have one table with all observations for every key, another with only some observations, or two tables with only a few shared keys. What you get back from a join will depend on what’s shared between tables, in addition to the type of join you use.</p>
 <p>We can demonstrate types of joins with simple graphics. The first is an <strong>inner-join</strong>.</p>
-<div class="figure">
-<img src="figure/join-inner.png" />
-
-</div>
+<p><img src="figure/join-inner.png" /></p>
 <p>The second is an <strong>outer-join</strong>, and comes in three flavors: left, right, and full.</p>
-<div class="figure">
-<img src="figure/join-outer.png" />
-
-</div>
+<p><img src="figure/join-outer.png" /></p>
 <p>If all keys are shared between two data objects, then left, right, and full joins will give you the same result. I typically only use left_join just because it’s intuitive to me. This assumes that there is never any more information in the second table - it has the same or less keys as the original table.</p>
 <p>Remember our mpg dataset?</p>
 <pre class="r"><code>head(mpg)</code></pre>
@@ -579,10 +567,7 @@ table4a  # cases</code></pre>
 <li>Each observation must have its own row.</li>
 <li>Each value must have its own cell.</li>
 </ol>
-<div class="figure">
-<img src="figure/tidy-1.png" />
-
-</div>
+<p><img src="figure/tidy-1.png" /></p>
 <p>There are some very real reasons why you would encounter untidy data:</p>
 <ol style="list-style-type: decimal">
 <li><p>Most people aren’t familiar with the principles of tidy data, and it’s hard to derive them yourself unless you spend a <em>lot</em> of time working with data.</p></li>
@@ -623,10 +608,7 @@ table4a  # cases</code></pre>
 ## 5 Brazil      2000   80488
 ## 6 China       2000  213766</code></pre>
 <p>Gathering can be graphically demonstrated:</p>
-<div class="figure">
-<img src="figure/tidy-9.png" />
-
-</div>
+<p><img src="figure/tidy-9.png" /></p>
 </div>
 <div id="spreading" class="section level3">
 <h3>Spreading</h3>
@@ -664,10 +646,7 @@ table4a  # cases</code></pre>
 ## 5 China        1999 212258 1272915272
 ## 6 China        2000 213766 1280428583</code></pre>
 <p>Spreading can be graphically demonstrated:</p>
-<div class="figure">
-<img src="figure/tidy-8.png" />
-
-</div>
+<p><img src="figure/tidy-8.png" /></p>
 </div>
 </div>
 <div id="exercise-3" class="section level2">
@@ -728,16 +707,16 @@ by_make</code></pre>
 ## # Groups:   manufacturer [15]
 ##    manufacturer model    displ  year   cyl trans   drv     cty   hwy fl   
 ##    &lt;chr&gt;        &lt;chr&gt;    &lt;dbl&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;   &lt;chr&gt; &lt;int&gt; &lt;int&gt; &lt;chr&gt;
-##  1 audi         a4         1.8  1999     4 auto(l~ f        18    29 p    
-##  2 audi         a4         1.8  1999     4 manual~ f        21    29 p    
-##  3 audi         a4         2    2008     4 manual~ f        20    31 p    
-##  4 audi         a4         2    2008     4 auto(a~ f        21    30 p    
-##  5 audi         a4         2.8  1999     6 auto(l~ f        16    26 p    
-##  6 audi         a4         2.8  1999     6 manual~ f        18    26 p    
-##  7 audi         a4         3.1  2008     6 auto(a~ f        18    27 p    
-##  8 audi         a4 quat~   1.8  1999     4 manual~ 4        18    26 p    
-##  9 audi         a4 quat~   1.8  1999     4 auto(l~ 4        16    25 p    
-## 10 audi         a4 quat~   2    2008     4 manual~ 4        20    28 p    
+##  1 audi         a4        1.80  1999     4 auto(l~ f        18    29 p    
+##  2 audi         a4        1.80  1999     4 manual~ f        21    29 p    
+##  3 audi         a4        2.00  2008     4 manual~ f        20    31 p    
+##  4 audi         a4        2.00  2008     4 auto(a~ f        21    30 p    
+##  5 audi         a4        2.80  1999     6 auto(l~ f        16    26 p    
+##  6 audi         a4        2.80  1999     6 manual~ f        18    26 p    
+##  7 audi         a4        3.10  2008     6 auto(a~ f        18    27 p    
+##  8 audi         a4 quat~  1.80  1999     4 manual~ 4        18    26 p    
+##  9 audi         a4 quat~  1.80  1999     4 auto(l~ 4        16    25 p    
+## 10 audi         a4 quat~  2.00  2008     4 manual~ 4        20    28 p    
 ## # ... with 224 more rows, and 2 more variables: class &lt;chr&gt;, origin &lt;chr&gt;</code></pre>
 <p>We can then <code>summarize</code> to get the average mileage by group.</p>
 <pre class="r"><code>by_make &lt;- summarize(by_make, ave_hwy = mean(hwy))
@@ -753,8 +732,8 @@ by_make</code></pre>
 ##  6 hyundai         26.9
 ##  7 jeep            17.6
 ##  8 land rover      16.5
-##  9 lincoln         17  
-## 10 mercury         18  
+##  9 lincoln         17.0
+## 10 mercury         18.0
 ## 11 nissan          24.6
 ## 12 pontiac         26.4
 ## 13 subaru          25.6
@@ -776,8 +755,8 @@ by_make</code></pre>
 ##  6 hyundai         26.9
 ##  7 jeep            17.6
 ##  8 land rover      16.5
-##  9 lincoln         17  
-## 10 mercury         18  
+##  9 lincoln         17.0
+## 10 mercury         18.0
 ## 11 nissan          24.6
 ## 12 pontiac         26.4
 ## 13 subaru          25.6
@@ -811,21 +790,21 @@ more_sums</code></pre>
 <pre><code>## # A tibble: 15 x 5
 ##    manufacturer     n min_hwy max_hwy ave_hwy
 ##    &lt;chr&gt;        &lt;int&gt;   &lt;dbl&gt;   &lt;dbl&gt;   &lt;dbl&gt;
-##  1 audi            18      23      31    26.4
-##  2 chevrolet       19      14      30    21.9
-##  3 dodge           37      12      24    17.9
-##  4 ford            25      15      26    19.4
-##  5 honda            9      29      36    32.6
-##  6 hyundai         14      24      31    26.9
-##  7 jeep             8      12      22    17.6
-##  8 land rover       4      15      18    16.5
-##  9 lincoln          3      16      18    17  
-## 10 mercury          4      17      19    18  
-## 11 nissan          13      17      32    24.6
-## 12 pontiac          5      25      28    26.4
-## 13 subaru          14      23      27    25.6
-## 14 toyota          34      15      37    24.9
-## 15 volkswagen      27      23      44    29.2</code></pre>
+##  1 audi            18     23.     31.    26.4
+##  2 chevrolet       19     14.     30.    21.9
+##  3 dodge           37     12.     24.    17.9
+##  4 ford            25     15.     26.    19.4
+##  5 honda            9     29.     36.    32.6
+##  6 hyundai         14     24.     31.    26.9
+##  7 jeep             8     12.     22.    17.6
+##  8 land rover       4     15.     18.    16.5
+##  9 lincoln          3     16.     18.    17.0
+## 10 mercury          4     17.     19.    18.0
+## 11 nissan          13     17.     32.    24.6
+## 12 pontiac          5     25.     28.    26.4
+## 13 subaru          14     23.     27.    25.6
+## 14 toyota          34     15.     37.    24.9
+## 15 volkswagen      27     23.     44.    29.2</code></pre>
 <p>The <code>group_by</code> function can work with both categorical and numeric variables. In most cases, summarizing by a numeric variable will not be very informative because of many unique observations that define a “group”. We can categorize a continuous variable to make the summary more informative. For example, maybe we want to summarize some data based on observations that are “low” or “high” for a continuous variable. We can make a new categorical variable and use the tricks we just learned to summarize by the new grouping.</p>
 <p>Let’s look at the displacement variable in the mpg dataset. This is a measure of engine size.</p>
 <pre class="r"><code>mean(mpg$displ)</code></pre>
