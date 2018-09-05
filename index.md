@@ -38,7 +38,7 @@ R luncheons are a more informal approach to teaching you about R.  The intent is
       * [content](R_luncheon_2.html)
 3) **9/5** R luncheon 3
       * [content](R_luncheon_3.html)
-      * [data](https://sccwrp.github.io/SCCWRP_R_training/data/GIS_data.zip)
+      * [data](https://sccwrp.github.io/SCCWRP_R_training/data/GISdata.zip)
 4) **10/3** R luncheon 4
       * [content](R_luncheon_4.html)
 

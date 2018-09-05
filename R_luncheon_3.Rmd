@@ -43,9 +43,10 @@ Most of us should already be familiar with the basic types of spatial data and t
 Vector data come in three flavors.  The simplest is a __point__, which is a 0-dimensional feature that can be used to represent a specific location on the earth, such as a single tree or an entire city. Linear, 1-dimensional features can be represented with points (or vertices) that are connected by a path to form a __line__ and when many points are connected these form a __polyline__. Finally, when a polyline's path returns to its origin to represent an enclosed space, such as a forest, watershed boundary, or lake, this forms a __polygon__.
 
 ![https://earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-vector-data-r/](figure/pts-lines-polys.png)
+
 *Image [source](https://earthdatascience.org/courses/earth-analytics/spatial-data-r/intro-vector-data-r/)*
 
-All vector data are represented similarly, whether they're points, lines or polygons.  Points are defined by a single coordinate location, whereas a line or polygon is several points with a grouping variable that distinguishes one object from another. In all cases, the aggregate dataset is composed of one or more features of the same type (points, lines, or polygons).
+All vector data are represented similarly, whether they're points, lines or polygons.  Points are defined by a single coordinate location, whereas a line or polygon is several points with a grouping variable that distinguishes one object from another. In all cases, thishe aggregate dataset is composed of one or more features of the same type (points, lines, or polygons).
 
 There are two other pieces of information that are included with vector data.  The __attributes__ that can be associated with each feature and the __coordinate reference system__ or __CRS__.  The attributes can be any supporting information about a feature, such as a text description or summary data about the features.  You can identify attributes as anything in a spatial dataset that is not explicitly used to define the location of the features.  
 
@@ -89,7 +90,7 @@ Let's get setup for today:
 
 1) In the new project directory, create a folder called "data". 
 
-1) Download  [this](https://sccwrp.github.io/SCCWRP_R_training/data/GIS_data.zip) zipped folder to your computer (anywhere) and copy its contents to the "data" folder in your project.  
+1) Download  [this](https://sccwrp.github.io/SCCWRP_R_training/data/GISdata.zip) zipped folder to your computer (anywhere) and copy its contents to the "data" folder in your project.  
 
 1) From the file menu, open a new script within the project. At the top of the script, install the sf package if you haven't done so and load the package after installation.
 

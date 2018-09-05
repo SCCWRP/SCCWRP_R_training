@@ -539,7 +539,7 @@ dplyr::mutate</code></pre>
 ## {
 ##     UseMethod(&quot;mutate&quot;)
 ## }
-## &lt;bytecode: 0x0000000019f4cbb8&gt;
+## &lt;bytecode: 0x0000000019f4e918&gt;
 ## &lt;environment: namespace:dplyr&gt;</code></pre>
 <p>You will often see people use <code>require()</code> to load a package. It is better form to not do this. For a more detailed explanation of why <code>library()</code> and not <code>require()</code> see <a href="http://yihui.name/en/2014/07/library-vs-require/.">Yihui Xie’s post on the subject</a></p>
 <p>And now for a little pedantry. You will often hear people use the terms “library” and “package” interchangeably. This is not correct. A package is what is submitted to CRAN, it is what contains a group of functions that address a common problem, and it is what has allowed R to expand. A library is, more or less, where you packages are stored. You have a path to that library and this is where R puts new packages that you install (e.g. via <code>install.packages()</code>). These two terms are related, but most certainly different. Apologies up front if I slip and use one when I actually mean the other…</p>
