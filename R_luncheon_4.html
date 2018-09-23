@@ -11,7 +11,7 @@
 
 
 
-<title>R_luncheon_4.utf8</title>
+<title></title>
 
 <script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
 <meta name="viewport" content="width=device-width, initial-scale=1" />
@@ -72,6 +72,7 @@ h6 {
 }
 </style>
 
+<link rel="stylesheet" href="css\styles.css" type="text/css" />
 
 </head>
 
@@ -93,6 +94,9 @@ img {
 }
 .tabbed-pane {
   padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
 }
 button.code-folding-btn:focus {
   outline: none;
@@ -337,9 +341,39 @@ div.tocify {
 </div>
 
 
+<script src="js/hideoutput.js"></script>
 <div id="r-luncheon-4" class="section level1">
 <h1>R luncheon 4</h1>
-<p>Content TBD</p>
+<div id="lesson-outline" class="section level2">
+<h2>Lesson Outline</h2>
+<ul>
+<li>[Vector data]</li>
+</ul>
+<p>Welcome to the fourth and final R luncheon! In the last session we talked about how to use R for geospatial analysis using the <a href="https://r-spatial.github.io/sf/">sf</a> package. In this session we’ll extend these analyses by demonstrating how R can be used to create publication-ready maps. Several of the packages in the tidyverse that we’ve already covered can be used for plotting. We’ll cover how to use <a href="http://ggplot2.tidyverse.org/">ggplot2</a> for mapping and we’ll also cover some new packages that are not part of the tidyverse, in particular the <a href="https://r-spatial.github.io/mapview/">mapview</a> package. You’ll find that the <code>sf</code> data object works out-of-the-box with most of these packages.</p>
+<p>The goals for today are:</p>
+<ol style="list-style-type: decimal">
+<li><p>Understand how to make basic maps in ggplot2 using lat/lon</p></li>
+<li><p>Understand how to make basic maps in ggplot2 and ggmap using sf objects</p></li>
+<li><p>Understand how to make interactive maps with the mapview package</p></li>
+<li><p>Understand how to make maps with the tmap package</p></li>
+</ol>
+</div>
+<div id="a-philosophy-of-mapping" class="section level2">
+<h2>A philosophy of mapping</h2>
+<div id="a-primer-on-mapping" class="section level3">
+<h3>A primer on mapping</h3>
+<p>Mapping spatial data falls under the broad category of data vizualization. The same motivation for creating a simple scatterplot can apply to creating a map. The overall goal is to develop insight into your data by visualizing patterns that cannot be seen in tabular format. Of course the added complication with spatial data is the inclusion of a location. How you handle this spatial component is up to you and depends on whether location is relevant for the plot or map.</p>
+<p>Spatial data by definition always includes location information for each observation (i.e., the geometry attribute of a <code>sf</code> object). More often than not, additional variables not related to space may be collected for each observation. For example, multiple measurements of water quality taken at different locations in a lake can be indexed by latitude, longitude, and whatever water quality data were taken at a sample site. The only piece of information that makes the water quality data spatial is the location. Whatever your data look like, you have to choose if space is an important variable to consider given your question. For mapping spatial data, consider the following:</p>
+<ul>
+<li>Do I care about the spatial arrangement of my data?</li>
+<li>Would I expect my non-spatial data to vary by space?<br />
+</li>
+<li>Are there other spatial units for aggregating my data that can help understand patterns?</li>
+</ul>
+<p>The answer to these questions can help you decide what type of visualization is important for the data. On the other hand, mapping the data can also give you answers to these questions. We’ll explore different mapping approaches in this lesson that will help us address these questions.</p>
+<p>Before we proceed, it’s useful to make a distinction between <strong>geospatial analysis</strong> and <strong>cartography</strong>. Both deal with spatial information to identify patterns or relationships in the data and both contain elements of mapping. The distinction between the two is that the former is often a means to achieving the latter. A map in the cartographic sense is a final product that is created through analysis that combines and summarizes data to understand patterns. Conversely, a map used for geospatial analysis is an intermediate, unrefined tool to gain insight through visual interpreation. Today we’ll focus on how R can be used for cartography. Geospatial analysis will be a necessary part of this process.</p>
+</div>
+</div>
 </div>
 
 
