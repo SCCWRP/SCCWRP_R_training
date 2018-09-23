@@ -6,7 +6,7 @@ output:
 
 ```{r setup, echo=FALSE, warning=FALSE, purl=FALSE, message=FALSE}
 options(repos = "http://cran.rstudio.com/")
-pkgs <- c("dplyr", "knitr")
+pkgs <- c('tidyverse', 'readxl', 'knitr', 'sf', 'ggsn', 'ggmap', 'mapview')
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ```
@@ -18,18 +18,19 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 ## Lesson Outline
 
 * [A primer on mapping]
+* [Using RMarkdown]
+* [Using ggplot2 and geom_sf]
+* [Using ggmap for base layers]
 
-Welcome to the fourth and final R luncheon!  In the last session we talked about how to use R for geospatial analysis using the [sf](https://r-spatial.github.io/sf/) package.  In this session we'll extend these analyses by demonstrating how R can be used to create publication-ready maps. Several of the packages in the tidyverse that we've already covered can be used for plotting.  We'll cover how to use [ggplot2](http://ggplot2.tidyverse.org/) for mapping and we'll also cover some new packages that are not part of the tidyverse, in particular the [mapview](https://r-spatial.github.io/mapview/) package. You'll find that the `sf` data object works out-of-the-box with most of these packages. 
+Welcome to the fourth and final R luncheon!  In the last session we talked about how to use R for geospatial analysis using the [sf](https://r-spatial.github.io/sf/) package.  In this session we'll extend these analyses by demonstrating how R can be used to create publication-ready maps. Several of the packages in the tidyverse that we've already covered can be used for plotting.  We'll cover how to use [ggplot2](http://ggplot2.tidyverse.org/) for mapping and we'll also cover some new packages that are not part of the tidyverse, in particular the [ggmap](https://github.com/dkahle/ggmap) and [mapview](https://r-spatial.github.io/mapview/) package. You'll find that the `sf` data object works out-of-the-box with most of these packages. 
 
 The goals for today are:
 
-1) Understand how to make basic maps in ggplot2 using lat/lon
+1) Understand how to use RMarkdown for reproducible and portable documents that include text, code, and output
 
 1) Understand how to make basic maps in ggplot2 and ggmap using sf objects
 
 1) Understand how to make interactive maps with the mapview package
-
-1) Understand how to make maps with the tmap package
 
 ## A primer on mapping
 
@@ -44,3 +45,227 @@ Spatial data by definition always includes location information for each observa
 The answer to these questions can help you decide what type of visualization is important for the data.  On the other hand, mapping the data can also give you answers to these questions.  We'll explore different mapping approaches in this lesson that will help us address these questions.
 
 Before we proceed, it's useful to make a distinction between __geospatial analysis__ and __cartography__.  Both deal with spatial information to identify patterns or relationships in the data and both contain elements of mapping.  The distinction between the two is that the former is often a means to achieving the latter.  A map in the cartographic sense is a final product that is created through analysis that combines and summarizes data to understand patterns.  Conversely, a map used for geospatial analysis is an intermediate, unrefined tool to gain insight through visual interpreation.  Today we'll focus on how R can be used for cartography.  Geospatial analysis will be a necessary part of this process.   
+
+## Using RMarkdown
+
+Let's get setup for today:
+
+1) Open RStudio and create a new project.  
+
+1) In the new project directory, create a folder called "data". 
+
+1) Download  [this](https://sccwrp.github.io/SCCWRP_R_training/data/GISdata.zip) zipped folder to your computer (anywhere) and copy its contents to the "data" folder in your project.  
+
+1) From the file menu, open a new R Markdown file within the project. Enter a title and your name for the file. 
+
+We haven't used R Markdown yet but we'll be using it for this luncheon because the compiled file is easy to share and works well with some of the more advanced mappping tools we'll cover (e.g., mapview).  The R Markdown file lets you run R code within the markdown document to integrate your descriptions of the analysis, R code, and R output into a single HTML file. You can think of this type of documentation as adding code to your comments rather than comments to your code.  A more thorough introduction to R Markdown can be found [here](https://ryan-hill.github.io/sfs-r-gis-2018/modules/getting%20started/r-markdown/). 
+
+Your template should look like this: 
+
+````
+---
+title: "Mapping luncheon"
+author: "Marcus"
+date: "October 3, 2018"
+output: html_document
+---
+
+```{r setup, include=FALSE}`r ''`
+knitr::opts_chunk$set(echo = TRUE)
+```
+
+## R Markdown
+
+This is an R Markdown document. Markdown is a simple formatting syntax for authoring HTML, PDF, and MS Word documents. For more details on using R Markdown see <http://rmarkdown.rstudio.com>.
+
+When you click the **Knit** button a document will be generated that includes both content as well as the output of any embedded R code chunks within the document. You can embed an R code chunk like this:
+
+```{r cars}`r ''`
+summary(cars)
+```
+
+## Including Plots
+
+You can also embed plots, for example:
+
+```{r pressure, echo=FALSE}`r ''`
+plot(pressure)
+```
+
+Note that the `echo = FALSE` parameter was added to the code chunk to prevent printing of the R code that generated the plot.
+````
+
+You can click the knit button at the top of the source window in RStudio to compile the document.  
+
+![](figure/knitbutton.png)
+
+Let's edit our RMarkdown file for today's luncheon.  Let's remove everything except the header material (this tells RStudio how to compile the file) and add an empty code chunk.  We'll set the options for the code chunk to `warning = FALSE` and `message = FALSE`.  This keeps extra text from being included in the compiled document.
+
+````
+---
+title: "Mapping luncheon"
+author: "Marcus"
+date: "October 3, 2018"
+output: html_document
+---
+
+```{r, warning = FALSE, message = FALSE}`r ''`
+```
+````
+
+Now we can put any R code for the lesson in this code chunk.  It's always a good idea to put the package dependencies and the data imports at the top so you know everything that is required to compile the file.  We'll be using the tidyverse, readxl, sf, ggsn, ggmap, and mapview packages for today. 
+````
+---
+title: "Mapping luncheon"
+author: "Marcus"
+date: "October 3, 2018"
+output: html_document
+---
+
+```{r, warning = FALSE, message = FALSE}`r ''`
+library(tidyverse)
+library(readxl)
+library(sf)
+library(ggsn)
+library(ggmap)
+library(mapview)
+```
+````
+
+## Using ggplot2 and geom_sf
+
+We'll use the same Bight sampling data from last time with the addition of sediment chemistry data.  We'll also be using the polygon data for the Marine Protected Areas (MPAs) to characterize the sediment conditions from the point samples.
+
+In the code chunk, import the station location data, MPA shapefile, and sediment chemistry data.
+
+```{r}
+# station locations
+stations <- read.csv('data/AllBightStationLocations.csv')
+
+# MPA polygons
+polys <- st_read('data/Bight13_MPAs_Offshore.shp', quiet = T)
+
+# sediment chemistry
+sedchem <- read_excel('data/B13 Chem data.xlsx')
+```
+
+We'll need to format the data a bit before we combine and ultimately create a map. If you remember from last time, one of the most important elements of working with geospatial data is a shared coordinate reference system or CRS.  We'll use the CRS from the `polys` data object but first we need to convert the `stations` data into a `sf` object.
+
+```{r}
+stations <- stations %>% 
+  st_as_sf(coords = c('Longitude', 'Latitude'), crs = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+```
+
+Now we can use a spatial transformation to convert the `polys` object to the same CRS as `stations`. We can verify that both are in the same coordinate system when we're done.
+
+```{r}
+polys <- polys %>% 
+  st_transform(crs = st_crs(stations))
+polys
+st_crs(polys) == st_crs(stations)
+```
+
+The next step is to join the sediment chemistry data with the station data.  We'll have to wrangle the chemistry data first to remove some extra columns and filter by a parameter of interest.
+
+```{r}
+sedchem
+sedchem <- sedchem %>% 
+  select(Year, StationID, Parameter, Result_Units, Result) %>% 
+  filter(Parameter %in% 'Arsenic')
+sedchem
+```
+
+Now we can join the two datasets.  We'll join by `StationID` and `Year` using `inner_join()` to get only the records that are shared between the two.  Note that the `stations` data includes all Bight years and we can use an inner join to save us an extra step of filtering the stations by 2013.
+
+```{r}
+stations <- stations %>% 
+  rename(Year = Bight) %>% 
+  inner_join(sedchem, by = c('StationID', 'Year'))
+stations
+```
+```{r, echo = F}
+prm <- stations$Parameter %>% unique %>% tolower
+```
+
+The combined data includes `r nrow(stations)` records of `r prm` at the 2013 Bight monitoring sites.  Let's use ggplot2 and the `geom_sf` geometry to plot these points and map the relative values of `r prm` across the Bight.
+
+```{r}
+ggplot(stations) + 
+  geom_sf(aes(colour = Result))
+```
+
+Up to this point we've wrangled the data using some pretty simple tools for limited geospatial analysis.  Now we're ready to start thinking about cartography or how we want to show these data to demonstrate variation in sediment chemistry across the Bight.  First you'll notice how simple it was to plot these data with `geom_sf`.  This geometry is a new addition to a recent release of ggplot2 that takes care of a lot of the headaches of plotting spatial data, including axis formatting and correct scaling for the CRS.  The other real advantage of this geometry is that it uses many of the existing ggplot2 aesthetics, such as mapping a variable to colour.  Using ggplot2 with `sf` objects is a breeze if you're already comfortable using ggplot2 with other geometries. 
+
+However, this simple map is still lacking some features that make it a finished product. Let's change some of the mapping aesthetics to make it more appealing.  All of these additions are standard components of ggplot2 and are not unique to `sf` objects. 
+
+```{r}
+p <- ggplot(stations) + 
+  geom_sf(aes(colour = Result), size = 3, alpha = 0.7) + 
+  scale_colour_gradient('Arsenic (ug/g)', low = 'lightgreen', high = 'tomato1') + 
+  theme_minimal() +
+  theme(legend.position = 'top') +
+  ggtitle('Sediment concentrations at Bight 2013 sampling stations')
+p
+```
+
+We can also easily add our MPA polygons to see where they are relative to the sampling stations.  We have to do a bit hacking to get the legend right, but it's easy enough.
+```{r}
+p <- p + 
+  geom_sf(data = polys, fill = NA, aes(shape = 'x'), show.legend = "polygon") + 
+  guides(shape = guide_legend('MPA locations', label = F))
+p
+```
+
+We also might want to add a scale bar and north arrow (as if you couldn't tell which way was up).  This has never been easy in R but there are some newer tools that make this "easier", although it's still a bit of a challenge.  The [ggsn](http://oswaldosantos.github.io/ggsn/) package has made this process a litte simpler, but you'll need to download the development version from GitHub.
+
+```{r, eval = F}
+install.packages('devtools')
+devtools::install_github('oswaldosantos/ggsn')
+```
+```{r}
+library(ggsn)
+p <- p + 
+  north(stations, scale = 0.2) +
+  scalebar(stations, dist = 50, dd2km = T, location = 'bottomleft', st.dist = 0.05, st.size = 3) +
+  theme(axis.title = element_blank())
+p
+```
+
+This map now includes all standard cartographic objects that most would consider appropriate for a publication ready map. We also have some idea about where arsenic concentrations are highest and if the marine protected areas correspond to these areas.  
+
+## Using ggmap for base layers
+
+The last thing we want to do is add a base layer to this map to provide some visual references for the sampling stations.  We know that these data were sampled along the coast line of southern California but we also want to show this on the map as a reference for others.  We can use the [ggmap](https://github.com/dkahle/ggmap) package to download some base layers from popular online mapping services like popular online mapping services like [Google Maps](https://developers.google.com/maps/documentation/static-maps/?hl=en), [OpenStreetMap](https://www.openstreetmap.org), and [Stamen Maps](http://maps.stamen.com).  You'll need an internet connection to do this.
+
+To use `ggmap`, you have to first download the image with the `get_map` function based on the extent of the plotting area.  This requires pulling the extent from our existing data object that we want to plot.  For this example we'll download a satellite image of our area.  One thing to keep in mind is the `zoom` argument.  This is used to specify the level of detail in your downloaded image and can take some time to download depending on the area and level of specificity.  We'll follow these steps to download the basemap:
+
+* Get the extent from our `stations` object using `st_bbox` and `unname` to remove the name attributes (ggmap will fuss otherwise)
+* Download a satellite image using the `get_map` function in the ggmap package with the extent, pick the right `zoom` level and specify `maptype = "satellite"`
+* plot the base map with the `ggmap` function
+
+```{r ggmap1}
+# get the extent
+dat_ext <- unname(st_bbox(stations))
+
+# get the base map using the extent
+bsmap <-  get_map(location = dat_ext, maptype = 'satellite', zoom = 8)
+
+# plot the basemap
+ggmap(bsmap)
+```
+
+Now that we've got the base map in order, we can just add the plot content from above to create the final plot.  We'll have to tell ggplot to ignore the aesthetics from ggmap for the plot to work correctly (`inherit.aes = F`).
+```{r, fig.height = 6, fig.width = 6}
+p <- ggmap(bsmap) +
+  geom_sf(data = stations, aes(colour = Result), size = 3, alpha = 0.7, inherit.aes = F) + 
+  scale_colour_gradient('Arsenic (ug/g)', low = 'lightgreen', high = 'tomato1') + 
+  theme_minimal() +
+  theme(legend.position = 'top') +
+  ggtitle('Sediment concentrations at Bight 2013 sampling stations') +
+  geom_sf(data = polys, fill = NA, aes(shape = 'x'), show.legend = "polygon", inherit.aes = F) + 
+  guides(shape = guide_legend('MPA locations', label = F)) +
+  north(stations, scale = 0.2) +
+  scalebar(stations, dist = 50, dd2km = T, location = 'bottomleft', st.dist = 0.05, st.size = 3) +
+  theme(axis.title = element_blank())
+p
+```
