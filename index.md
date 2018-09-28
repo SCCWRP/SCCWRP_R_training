@@ -41,6 +41,7 @@ R luncheons are a more informal approach to teaching you about R.  The intent is
       * [data](https://sccwrp.github.io/SCCWRP_R_training/data/GISdata.zip)
 4) **10/3** R luncheon 4
       * [content](R_luncheon_4.html)
+      * [data](https://sccwrp.github.io/SCCWRP_R_training/data/GISdata.zip)
 
 ## Software requirements
 

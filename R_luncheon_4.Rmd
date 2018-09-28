@@ -9,6 +9,13 @@ options(repos = "http://cran.rstudio.com/")
 pkgs <- c('tidyverse', 'readxl', 'knitr', 'sf', 'ggsn', 'ggmap', 'mapview')
 x<-lapply(pkgs, library, character.only = TRUE)
 opts_chunk$set(tidy = FALSE, message = F, warning = F)
+
+# # get the extent
+# stations <- read.csv('data/AllBightStationLocations.csv') %>% 
+#   st_as_sf(coords = c('Longitude', 'Latitude'), crs = '+proj=longlat +ellps=WGS84 +datum=WGS84 +no_defs')
+# dat_ext <- unname(st_bbox(stations))
+# bsmap <-  get_map(location = dat_ext, maptype = 'satellite', zoom = 8)
+data(bsmap)
 ```
 
 <script src="js/hideoutput.js"></script>
@@ -21,28 +28,31 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 * [Using RMarkdown]
 * [Using ggplot2 and geom_sf]
 * [Using ggmap for base layers]
+* [Using mapview for interactive maps]
 
-Welcome to the fourth and final R luncheon!  In the last session we talked about how to use R for geospatial analysis using the [sf](https://r-spatial.github.io/sf/) package.  In this session we'll extend these analyses by demonstrating how R can be used to create publication-ready maps. Several of the packages in the tidyverse that we've already covered can be used for plotting.  We'll cover how to use [ggplot2](http://ggplot2.tidyverse.org/) for mapping and we'll also cover some new packages that are not part of the tidyverse, in particular the [ggmap](https://github.com/dkahle/ggmap) and [mapview](https://r-spatial.github.io/mapview/) package. You'll find that the `sf` data object works out-of-the-box with most of these packages. 
+Welcome to the fourth and final R luncheon!  In the last session we talked about how to use R for geospatial analysis using the [sf](https://r-spatial.github.io/sf/) package.  In this session we'll extend these analyses by demonstrating how R can be used to create publication-ready maps. Several of the packages in the tidyverse that we've already covered can be used to prepare and plot data for mapping.  We'll cover how to use [ggplot2](http://ggplot2.tidyverse.org/) for mapping and we'll also cover some new packages that are not part of the tidyverse, in particular the [ggsn](http://oswaldosantos.github.io/ggsn/), [ggmap](https://github.com/dkahle/ggmap), and [mapview](https://r-spatial.github.io/mapview/) packages. You'll find that the `sf` data object works out-of-the-box with most of these packages. We'll talk about how to use RMarkdown to create reproducible and portable documents to easily share your maps.  
 
 The goals for today are:
 
 1) Understand how to use RMarkdown for reproducible and portable documents that include text, code, and output
 
-1) Understand how to make basic maps in ggplot2 and ggmap using sf objects
+1) Understand how to make basic maps with ggplot2, ggsn, and ggmap using `sf` objects
 
 1) Understand how to make interactive maps with the mapview package
 
 ## A primer on mapping
 
-Mapping spatial data falls under the broad category of data vizualization.  The same motivation for creating a simple scatterplot can apply to creating a map.  The overall goal is to develop insight into your data by visualizing patterns that cannot be seen in tabular format.  Of course the added complication with spatial data is the inclusion of a location.  How you handle this spatial component is up to you and depends on whether location is relevant for the plot or map.  
+Mapping spatial data falls under the broad category of data vizualization.  The same motivation for creating a simple scatterplot can apply to creating a map.  The overall goal is to develop insight into your data by visualizing patterns that cannot be seen in tabular format.  Of course the added complication with spatial data is the inclusion of location.  How you handle this spatial component is up to you and depends on whether location is relevant for the plot or map.  
 
-Spatial data by definition always includes location information for each observation (i.e., the geometry attribute of a `sf` object).  More often than not, additional variables not related to space may be collected for each observation.  For example, multiple measurements of water quality taken at different locations in a lake can be indexed by latitude, longitude, and whatever water quality data were taken at a sample site.  The only piece of information that makes the water quality data spatial is the location. Whatever your data look like, you have to choose if space is an important variable to consider given your question.  For mapping spatial data, consider the following:
+Spatial data by definition always includes location information for each observation (i.e., the geometry attribute of a `sf` object).  More often than not, additional variables not related to space may be collected for each observation.  For example, multiple measurements of water quality taken at different locations on the coast can be indexed by latitude, longitude, and whatever water quality data were taken at a sample site.  The only piece of information that makes the water quality data spatial is the location. Whatever your data look like, you have to choose if space is an important variable to consider given your question.  For mapping spatial data, consider the following:
 
 * Do I care about the spatial arrangement of my data?
 * Would I expect my non-spatial data to vary by space?  
 * Are there other spatial units for aggregating my data that can help understand patterns?
 
 The answer to these questions can help you decide what type of visualization is important for the data.  On the other hand, mapping the data can also give you answers to these questions.  We'll explore different mapping approaches in this lesson that will help us address these questions.
+
+### Geospatial analysis vs cartography
 
 Before we proceed, it's useful to make a distinction between __geospatial analysis__ and __cartography__.  Both deal with spatial information to identify patterns or relationships in the data and both contain elements of mapping.  The distinction between the two is that the former is often a means to achieving the latter.  A map in the cartographic sense is a final product that is created through analysis that combines and summarizes data to understand patterns.  Conversely, a map used for geospatial analysis is an intermediate, unrefined tool to gain insight through visual interpreation.  Today we'll focus on how R can be used for cartography.  Geospatial analysis will be a necessary part of this process.   
 
@@ -54,11 +64,11 @@ Let's get setup for today:
 
 1) In the new project directory, create a folder called "data". 
 
-1) Download  [this](https://sccwrp.github.io/SCCWRP_R_training/data/GISdata.zip) zipped folder to your computer (anywhere) and copy its contents to the "data" folder in your project.  
+1) Download  [this](https://sccwrp.github.io/SCCWRP_R_training/data/GISdata.zip) zipped folder to your computer (anywhere) and copy its unzipped contents to the "data" folder in your project.  
 
-1) From the file menu, open a new R Markdown file within the project. Enter a title and your name for the file. 
+1) From the file menu, open a new R Markdown file within the project. Enter a title and your name for the file at the prompt. 
 
-We haven't used R Markdown yet but we'll be using it for this luncheon because the compiled file is easy to share and works well with some of the more advanced mappping tools we'll cover (e.g., mapview).  The R Markdown file lets you run R code within the markdown document to integrate your descriptions of the analysis, R code, and R output into a single HTML file. You can think of this type of documentation as adding code to your comments rather than comments to your code.  A more thorough introduction to R Markdown can be found [here](https://ryan-hill.github.io/sfs-r-gis-2018/modules/getting%20started/r-markdown/). 
+We haven't used R Markdown yet but we'll be using it for this luncheon because the compiled file is easy to share and works well with some of the more advanced mappping tools we'll cover (e.g., mapview).  The R Markdown file lets you run R code within the markdown document to integrate your descriptions of the analysis, R code, and R output into a single HTML file. You can think of this type of documentation as adding code to your comments rather than comments to your code.  In general, RMarkdown is a simple means of generating dynamic documents as a core concept of reproducible research.  A more thorough introduction to R Markdown can be found [here](https://ryan-hill.github.io/sfs-r-gis-2018/modules/getting%20started/r-markdown/).
 
 Your template should look like this: 
 
@@ -113,7 +123,7 @@ output: html_document
 ```
 ````
 
-Now we can put any R code for the lesson in this code chunk.  It's always a good idea to put the package dependencies and the data imports at the top so you know everything that is required to compile the file.  We'll be using the tidyverse, readxl, sf, ggsn, ggmap, and mapview packages for today. 
+Now we can put any R code for the lesson in this code chunk.  It's always a good idea to put the package dependencies and the data imports at the top so you know everything that is required to compile the file.  We'll be using the tidyverse, readxl, sf, ggsn, ggmap, and mapview packages for today.  All packages can be installed from CRAN using `install.packages()`, except the ggsn package which we need to install from GitHub (instructions [here](https://github.com/oswaldosantos/ggsn)).
 ````
 ---
 title: "Mapping luncheon"
@@ -149,7 +159,7 @@ polys <- st_read('data/Bight13_MPAs_Offshore.shp', quiet = T)
 sedchem <- read_excel('data/B13 Chem data.xlsx')
 ```
 
-We'll need to format the data a bit before we combine and ultimately create a map. If you remember from last time, one of the most important elements of working with geospatial data is a shared coordinate reference system or CRS.  We'll use the CRS from the `polys` data object but first we need to convert the `stations` data into a `sf` object.
+We'll need to format the data a bit before we combine and ultimately create a map. If you remember from last time, one of the most important elements of working with geospatial data is a shared coordinate reference system or CRS.  First we need to convert the `stations` data into a `sf` object, then use that CRS for both the `stations` and `polys` object.
 
 ```{r}
 stations <- stations %>% 
@@ -165,7 +175,7 @@ polys
 st_crs(polys) == st_crs(stations)
 ```
 
-The next step is to join the sediment chemistry data with the station data.  We'll have to wrangle the chemistry data first to remove some extra columns and filter by a parameter of interest.
+The next step is to join the sediment chemistry data with the station data.  We'll have to wrangle the chemistry data first to remove some extra columns and filter by a parameter of interest.  We'll filter the arsenic samples, but you could filter the chemistry data by any of the other parameters.
 
 ```{r}
 sedchem
@@ -194,7 +204,7 @@ ggplot(stations) +
   geom_sf(aes(colour = Result))
 ```
 
-Up to this point we've wrangled the data using some pretty simple tools for limited geospatial analysis.  Now we're ready to start thinking about cartography or how we want to show these data to demonstrate variation in sediment chemistry across the Bight.  First you'll notice how simple it was to plot these data with `geom_sf`.  This geometry is a new addition to a recent release of ggplot2 that takes care of a lot of the headaches of plotting spatial data, including axis formatting and correct scaling for the CRS.  The other real advantage of this geometry is that it uses many of the existing ggplot2 aesthetics, such as mapping a variable to colour.  Using ggplot2 with `sf` objects is a breeze if you're already comfortable using ggplot2 with other geometries. 
+Up to this point we've wrangled the data using some pretty simple tools for limited geospatial analysis.  Now we're ready to start thinking about cartography or how we want to show these data to demonstrate variation in sediment chemistry across the Bight.  First you'll notice how simple it was to plot these data with `geom_sf`.  This geometry is a new addition to a recent release of ggplot2 that takes care of a lot of the headaches of plotting spatial data, including axis formatting and correct scaling for the CRS.  The other real advantage of this geometry is that it uses many of the existing ggplot2 aesthetics, such as mapping a variable to colour.  Using ggplot2 with `sf` objects is a breeze if you're already comfortable using ggplot2. 
 
 However, this simple map is still lacking some features that make it a finished product. Let's change some of the mapping aesthetics to make it more appealing.  All of these additions are standard components of ggplot2 and are not unique to `sf` objects. 
 
@@ -216,7 +226,7 @@ p <- p +
 p
 ```
 
-We also might want to add a scale bar and north arrow (as if you couldn't tell which way was up).  This has never been easy in R but there are some newer tools that make this "easier", although it's still a bit of a challenge.  The [ggsn](http://oswaldosantos.github.io/ggsn/) package has made this process a litte simpler, but you'll need to download the development version from GitHub.
+We also might want to add a scale bar and north arrow (as if you couldn't tell which way was up).  This has never been easy in R but there are some newer tools that make this "easier", although it's still requiers a bit of hacking to get the locations right.  The [ggsn](http://oswaldosantos.github.io/ggsn/) package has made this process a litte simpler.  You'll need to download the development version from GitHub.
 
 ```{r, eval = F}
 install.packages('devtools')
@@ -231,19 +241,19 @@ p <- p +
 p
 ```
 
-This map now includes all standard cartographic objects that most would consider appropriate for a publication ready map. We also have some idea about where arsenic concentrations are highest and if the marine protected areas correspond to these areas.  
+This map now includes all standard cartographic objects that are appropriate for a publication ready map. We also have some idea about where arsenic concentrations are highest and if the marine protected areas correspond to these areas.  
 
 ## Using ggmap for base layers
 
-The last thing we want to do is add a base layer to this map to provide some visual references for the sampling stations.  We know that these data were sampled along the coast line of southern California but we also want to show this on the map as a reference for others.  We can use the [ggmap](https://github.com/dkahle/ggmap) package to download some base layers from popular online mapping services like popular online mapping services like [Google Maps](https://developers.google.com/maps/documentation/static-maps/?hl=en), [OpenStreetMap](https://www.openstreetmap.org), and [Stamen Maps](http://maps.stamen.com).  You'll need an internet connection to do this.
+The last thing we want to do is add a base layer to this map to provide some visual references for the sampling stations.  We know that these data were sampled along the coast line of southern California but we also want to show this on the map as a reference for others.  We can use the [ggmap](https://github.com/dkahle/ggmap) package to download some base layers from popular online mapping services like [Google Maps](https://developers.google.com/maps/documentation/static-maps/?hl=en), [OpenStreetMap](https://www.openstreetmap.org), and [Stamen Maps](http://maps.stamen.com).  You'll need an internet connection to do this.
 
-To use `ggmap`, you have to first download the image with the `get_map` function based on the extent of the plotting area.  This requires pulling the extent from our existing data object that we want to plot.  For this example we'll download a satellite image of our area.  One thing to keep in mind is the `zoom` argument.  This is used to specify the level of detail in your downloaded image and can take some time to download depending on the area and level of specificity.  We'll follow these steps to download the basemap:
+To use `ggmap`, you have to first download the image with the `get_map` function based on the extent of the plotting area.  This requires pulling the extent (max/min coordinates) from our existing data object.  For this example we'll download a satellite image of our area.  One thing to keep in mind is the `zoom` argument for `get_map`.  This is used to specify the level of detail in your downloaded image and can take some time to download depending on the area and level of specificity.  We'll follow these steps to download the basemap:
 
 * Get the extent from our `stations` object using `st_bbox` and `unname` to remove the name attributes (ggmap will fuss otherwise)
 * Download a satellite image using the `get_map` function in the ggmap package with the extent, pick the right `zoom` level and specify `maptype = "satellite"`
 * plot the base map with the `ggmap` function
 
-```{r ggmap1}
+```{r eval = F}
 # get the extent
 dat_ext <- unname(st_bbox(stations))
 
@@ -251,6 +261,9 @@ dat_ext <- unname(st_bbox(stations))
 bsmap <-  get_map(location = dat_ext, maptype = 'satellite', zoom = 8)
 
 # plot the basemap
+ggmap(bsmap)
+```
+```{r ggmap1, echo = F}
 ggmap(bsmap)
 ```
 
@@ -269,3 +282,63 @@ p <- ggmap(bsmap) +
   theme(axis.title = element_blank())
 p
 ```
+
+We can make a few minor tweaks to the map for the final format for readability, including some color changes: polygon outlines as white, scale bar with white text, different north arrow, and shortening the y-axis limits.
+
+```{r, fig.height = 6, fig.width = 6}
+p <- ggmap(bsmap) +
+  geom_sf(data = stations, aes(colour = Result), size = 3, alpha = 0.7, inherit.aes = F) + 
+  scale_colour_gradient('Arsenic (ug/g)', low = 'lightgreen', high = 'tomato1') + 
+  theme_minimal() +
+  theme(legend.position = 'top') +
+  ggtitle('Sediment concentrations at Bight 2013 sampling stations') +
+  geom_sf(data = polys, fill = NA, aes(shape = 'x'), show.legend = "polygon", inherit.aes = F, colour = 'red') + 
+  guides(shape = guide_legend('MPA locations', label = F)) +
+  north(stations, scale = 0.2, symbol = 4) +
+  scalebar(stations, dist = 50, dd2km = T, location = 'bottomleft', st.dist = 0.05, st.size = 3, st.color = 'white') +
+  theme(axis.title = element_blank()) +
+  scale_y_continuous(limits = c(32.3, 34.6))
+p
+```
+
+## Using mapview for interactive maps
+
+The above approach works well for creating static maps as stand-alone products. However, there are a few drawbacks that limit it's functionality.  First, the amount of coding to the get the final product is a bit excessive.  The final product was created with several packages and the default aesthetics required a lot of tweaking to make them presentable.  Second and more importantly, this map is not interactive and only provides a snapshot of conditions.  We can address both of these issues with the [mapview](https://r-spatial.github.io/mapview/) package.
+
+Mapview works out of the box with `sf` objects.
+```{r}
+mapview(stations)
+```
+
+You'll notice a couple features on the map that are worth pointing out.
+
+* Mouseover information at the top showing the coordinate system, projection, mouse location, and zoom level.
+* Zoom button on the top left, but you can also zoom with the mouse.
+* An option for choosing the basemap, which I think is the coolest option.
+* A scale bar on the bottom left that changes with zoom. 
+* A button on the bottom-right that will snap zoom to the plotted layer.
+* Clicking on a feature brings up a table with detailed information.
+
+Mapview objects can also be stiched together to plot multiple spatial objects.
+```{r}
+mapview(stations) + 
+  mapview(polys)
+```
+
+With some minor changes, we can recreate our static map above with mapview. We can also change the labels that popup on mouseover for each point and polygon.
+
+```{r}
+# color ramp
+cols <- colorRampPalette(c('lightgreen', 'tomato1'))(256)
+
+# mapview
+mapview(stations, zcol = 'Result', layer.name = 'Arsenic (ug/g)', lwd = 0, col.regions = cols, label = paste(stations$Station, stations$Year, stations$Result)) + 
+  mapview(polys, layer.name = 'MPA', color = 'red', alpha.regions = 0, label = polys$MPA_Name)
+```
+
+There's a lot more we can do with mapview but the point is that these maps are incredibly easy to make with `sf` objects and they offer a lot more functionality.  Now that we've created these maps with RMarkown, we can also compile the document into a single file that we can share with anybody.  This can go a long way for making the data accessible to new audiences. 
+
+This concludes our four-part luncheon series.  I hope you've enjoyed the material and found the content useful.  Please continue to use this website as a resource for developing your R skills.  
+
+
+

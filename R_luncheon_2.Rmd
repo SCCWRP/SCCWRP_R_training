@@ -197,11 +197,11 @@ datlocs <- datlocs %>%
   mutate(station = as.numeric(station))
 ```
 
-Finally, let's remove the `FID` and `Bight` columns that we don't need. 
+Finally, let's remove the `Bight` column that we don't need. 
 
 ```{r}
 datlocs <- datlocs %>% 
-  select(-FID, -Bight)
+  select(-Bight)
 ```
 
 Here's what our cleaned up chemistry and location datasets look like.
