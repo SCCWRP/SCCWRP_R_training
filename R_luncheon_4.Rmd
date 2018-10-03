@@ -30,7 +30,7 @@ data(bsmap)
 * [Using ggmap for base layers]
 * [Using mapview for interactive maps]
 
-Welcome to the fourth and final R luncheon!  In the last session we talked about how to use R for geospatial analysis using the [sf](https://r-spatial.github.io/sf/) package.  In this session we'll extend these analyses by demonstrating how R can be used to create publication-ready maps. Several of the packages in the tidyverse that we've already covered can be used to prepare and plot data for mapping.  We'll cover how to use [ggplot2](http://ggplot2.tidyverse.org/) for mapping and we'll also cover some new packages that are not part of the tidyverse, in particular the [ggsn](http://oswaldosantos.github.io/ggsn/), [ggmap](https://github.com/dkahle/ggmap), and [mapview](https://r-spatial.github.io/mapview/) packages. You'll find that the `sf` data object works out-of-the-box with most of these packages. We'll talk about how to use RMarkdown to create reproducible and portable documents to easily share your maps.  
+Welcome to the fourth and final R luncheon!  In the last session we talked about how to use R for geospatial analysis using the [sf](https://r-spatial.github.io/sf/) package.  In this session we'll extend these analyses by demonstrating how R can be used to create publication-ready maps. Several of the packages in the tidyverse that we've already covered can be used to prepare and plot data for mapping.  We'll cover how to use [ggplot2](http://ggplot2.tidyverse.org/) for mapping and we'll also cover some new packages that are not part of the tidyverse, in particular the [ggsn](http://oswaldosantos.github.io/ggsn/), [ggmap](https://github.com/dkahle/ggmap), and [mapview](https://r-spatial.github.io/mapview/) packages. You'll find that the `sf` data object works out-of-the-box with most of these packages. We'll also talk about how to use RMarkdown to create reproducible and portable documents to easily share your maps.  
 
 The goals for today are:
 
@@ -50,11 +50,11 @@ Spatial data by definition always includes location information for each observa
 * Would I expect my non-spatial data to vary by space?  
 * Are there other spatial units for aggregating my data that can help understand patterns?
 
-The answer to these questions can help you decide what type of visualization is important for the data.  On the other hand, mapping the data can also give you answers to these questions.  We'll explore different mapping approaches in this lesson that will help us address these questions.
+The answer to these questions can help you decide what type of visualization is important for the data.  On the other hand, mapping the data can also give you answers to these questions.  
 
 ### Geospatial analysis vs cartography
 
-Before we proceed, it's useful to make a distinction between __geospatial analysis__ and __cartography__.  Both deal with spatial information to identify patterns or relationships in the data and both contain elements of mapping.  The distinction between the two is that the former is often a means to achieving the latter.  A map in the cartographic sense is a final product that is created through analysis that combines and summarizes data to understand patterns.  Conversely, a map used for geospatial analysis is an intermediate, unrefined tool to gain insight through visual interpreation.  Today we'll focus on how R can be used for cartography.  Geospatial analysis will be a necessary part of this process.   
+Before we proceed, it's useful to make a distinction between __geospatial analysis__ and __cartography__.  Both deal with spatial information to identify patterns or relationships in the data and both contain elements of mapping.  The distinction between the two is that the former is often a means to achieving the latter.  A map in the cartographic sense is a final product that is created through analysis that combines and summarizes data to understand patterns.  Conversely, a map used for geospatial analysis is an intermediate, unrefined tool to gain insight through visual interpretation.  Today we'll focus on how R can be used for cartography.  Geospatial analysis will be a necessary part of this process.   
 
 ## Using RMarkdown
 
@@ -107,7 +107,7 @@ Note that the `echo = FALSE` parameter was added to the code chunk to prevent pr
 
 You can click the knit button at the top of the source window in RStudio to compile the document.  
 
-![](figure/knitbutton.png)
+![](figure/knitbutton.PNG)
 
 Let's edit our RMarkdown file for today's luncheon.  Let's remove everything except the header material (this tells RStudio how to compile the file) and add an empty code chunk.  We'll set the options for the code chunk to `warning = FALSE` and `message = FALSE`.  This keeps extra text from being included in the compiled document.
 
