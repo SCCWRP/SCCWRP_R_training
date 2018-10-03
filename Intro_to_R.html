@@ -363,7 +363,7 @@ div.tocify {
 <div id="goals-and-motivation" class="section level2">
 <h2>Goals and Motivation</h2>
 <p><a href="https://www.r-project.org/">R</a> is a language for statistical computing as well as a general purpose programming language. Increasingly, it has become one of the primary languages used in data science and for data analysis across many of the natural sciences.</p>
-<p>We only have two hours to introduce basic concepts in R. I’s an unrealistic expectation that you will be competent after only two hours. As such, the goals of this training are to expose you to fundementals and to develop an appreciation of what’s possible with this software. I also want to provide resources that you can use for follow-up learning on your own.</p>
+<p>We only have two hours to introduce basic concepts in R. I’s an unrealistic expectation that you will be competent after only two hours. As such, the goals of this training are to expose you to fundamentals and to develop an appreciation of what’s possible with this software. I also want to provide resources that you can use for follow-up learning on your own.</p>
 <p>You should be able to answer these questions at the end of this session:</p>
 <ul>
 <li>What is R and why should I use it?</li>
@@ -379,7 +379,7 @@ div.tocify {
 <ul>
 <li>The growth of R as explained in the <a href="https://stackoverflow.blog/2017/10/10/impressive-growth-r/">Stack Overflow blog</a>, <a href="http://blog.revolutionanalytics.com/2016/07/r-moves-up-to-5th-place-in-ieee-language-rankings.html">IEEE rating</a></li>
 </ul>
-<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-09-28, there are 13056 on CRAN!</p>
+<p>R is also an open-source programming language - not only is it free, but this means anybody can contribute to it’s development. As of 2018-10-03, there are 13085 on CRAN!</p>
 <p>Python is another popular open-source programming language. Many beginners often ask the quesiton, why R vs. Python? This is an interesting debate with no easy answer. Some things to consider:</p>
 <ul>
 <li>R has statistical roots, phython does not</li>
@@ -465,32 +465,32 @@ seq(1, 10)</code></pre>
 <pre><code>##  [1]  1  2  3  4  5  6  7  8  9 10</code></pre>
 <pre class="r"><code># random numbers
 rnorm(100, mean = 10, sd = 2)</code></pre>
-<pre><code>##   [1] 12.988608 10.109658 11.946522  9.491736 11.273560  7.006079  6.086728
-##   [8] 10.090220 10.758949  9.872030 12.130974 12.481683  8.061291  4.645675
-##  [15]  9.734325 12.662584  9.325548 11.277351 14.855514  8.747519  6.392953
-##  [22] 10.186020  8.021755 12.698401 10.273401  8.159099 10.398530 12.368476
-##  [29]  9.872022 13.243559  9.349974 11.734128  8.403838  9.061647  5.969229
-##  [36] 13.530545  7.688191 11.411008 13.792859  7.465475 12.267937  8.631503
-##  [43] 12.610650  9.472006  9.960351  7.429465 13.005979  6.401861 14.598817
-##  [50]  7.679716  6.046452  7.917921  8.870213 12.764714  9.697702  9.891076
-##  [57] 11.733842 10.614376 14.375085 10.275358 13.317597  8.550172 14.379021
-##  [64]  8.877740 12.196321  9.114542 11.576989 10.576568  9.044629 14.839611
-##  [71] 10.738150  9.393490 13.667279  8.453433  8.113236 12.736962  6.358201
-##  [78]  7.971304  9.873042 14.396021 10.428283  8.223731  9.304507 15.166446
-##  [85]  9.281753 13.066784  8.999668 10.863134  8.368771 10.220441 10.324242
-##  [92]  9.349834  8.517087 11.462996  8.635849  7.917084 11.326883  8.319927
-##  [99] 10.396186 10.700538</code></pre>
+<pre><code>##   [1]  8.531921 11.905716 11.251795  8.438629  9.450414  8.486819 10.243004
+##   [8] 12.274041 10.197025  9.520608 10.810758  9.679102  9.111759  6.899313
+##  [15] 10.932673 10.462370  6.201299 10.577593  6.452287  8.660075 12.135389
+##  [22]  8.532985  9.595898 11.824422 10.982700  8.463049 10.586093 13.374349
+##  [29] 10.224231  8.950736 10.206238  8.819724 10.955189 11.149782 10.684488
+##  [36] 10.969980  9.696980 11.157332 12.117536  9.367518 12.061794  9.272101
+##  [43]  9.030856 11.227226 10.945037  8.741399 10.144285 11.247540 11.113333
+##  [50]  9.996750 10.336736 11.890317 10.467867 10.887259 13.292540  8.956129
+##  [57] 12.559586  9.987806  9.995999 10.420017 11.839114 13.113262 13.162324
+##  [64] 12.080590  8.458970 10.615528  6.484628 11.538441  5.998108 11.641810
+##  [71]  7.355314 12.231942 13.406046  8.572844  6.931587  9.148484 10.668048
+##  [78] 10.992527  9.660655  8.273125  9.018200  8.453254 10.173665 10.900872
+##  [85]  8.383527 14.767823  6.640291  9.962048 12.812723  6.779957 12.000798
+##  [92] 11.496873 11.315262 10.184519 10.602588  9.054141 10.566485  7.039364
+##  [99]  8.111413  9.423223</code></pre>
 <pre class="r"><code># average 
 mean(rnorm(100))</code></pre>
-<pre><code>## [1] 0.1353701</code></pre>
+<pre><code>## [1] -0.04246624</code></pre>
 <pre class="r"><code># sum
 sum(rnorm(100))</code></pre>
-<pre><code>## [1] 4.636004</code></pre>
+<pre><code>## [1] -2.929205</code></pre>
 <p>Very often you will see functions used like this:</p>
 <pre class="r"><code>my_random_sum &lt;- sum(rnorm(100))</code></pre>
 <p>In this case the first part of the line is the name of an object. You make this up. Ideally it should have some meaning, but the only rules are that it can’t start with a number and must not have any spaces. The second bit, <code>&lt;-</code>, is the assignment operator. This tells R to take the result of <code>sum(rnorm(100))</code> and store it an object named, <code>my_random_sum</code>. It is stored in the environment and can be used by just executing it’s name in the console.</p>
 <pre class="r"><code>my_random_sum</code></pre>
-<pre><code>## [1] -2.902937</code></pre>
+<pre><code>## [1] 6.390332</code></pre>
 <p>With this, you have the very basics of how we write R code and save objects that can be used later.</p>
 <div id="a-few-side-notes" class="section level3">
 <h3>A few side notes</h3>
@@ -514,7 +514,7 @@ sum(rnorm(100))</code></pre>
 </div>
 <div id="cran" class="section level3">
 <h3>CRAN</h3>
-<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-09-28, there are 13056 on CRAN!</p>
+<p>One of the reasons for R’s popularity is CRAN, <a href="http://cran.r-project.org/">The Comprehensive R Archive Network</a>. This is where you download R and also where most will gain access to packages (there are other places, but that is for later). Not much else to say about this now other than to be aware of it. As of 2018-10-03, there are 13085 on CRAN!</p>
 </div>
 <div id="installing-packages" class="section level3">
 <h3>Installing packages</h3>
@@ -542,7 +542,7 @@ dplyr::mutate</code></pre>
 ## {
 ##     UseMethod(&quot;mutate&quot;)
 ## }
-## &lt;bytecode: 0x000000001d909e60&gt;
+## &lt;bytecode: 0x00000000182037a0&gt;
 ## &lt;environment: namespace:dplyr&gt;</code></pre>
 <p>You will often see people use <code>require()</code> to load a package. It is better form to not do this. For a more detailed explanation of why <code>library()</code> and not <code>require()</code> see <a href="http://yihui.name/en/2014/07/library-vs-require/.">Yihui Xie’s post on the subject</a></p>
 <p>And now for a little pedantry. You will often hear people use the terms “library” and “package” interchangeably. This is not correct. A package is what is submitted to CRAN, it is what contains a group of functions that address a common problem, and it is what has allowed R to expand. A library is, more or less, where you packages are stored. You have a path to that library and this is where R puts new packages that you install (e.g. via <code>install.packages()</code>). These two terms are related, but most certainly different. Apologies up front if I slip and use one when I actually mean the other…</p>
@@ -710,21 +710,23 @@ myls</code></pre>
 <p>If you didn’t get any errors or warnings, the file is now stored in your environment.</p>
 <pre class="r"><code>ls()</code></pre>
 <pre><code>##  [1] &quot;all_pipes&quot;       &quot;alldat&quot;          &quot;bad_ex&quot;         
-##  [4] &quot;bad_ex2&quot;         &quot;by_make&quot;         &quot;by_yr_drv&quot;      
-##  [7] &quot;chemdat&quot;         &quot;chr_var&quot;         &quot;dat&quot;            
-## [10] &quot;dbl_var&quot;         &quot;displ_cat&quot;       &quot;dplyr_arr&quot;      
-## [13] &quot;dplyr_good_fuel&quot; &quot;dplyr_mut&quot;       &quot;dplyr_mut2&quot;     
-## [16] &quot;dplyr_rnm&quot;       &quot;dplyr_sel1&quot;      &quot;dplyr_sel2&quot;     
-## [19] &quot;dplyr_sel3&quot;      &quot;dplyr_six_cyl&quot;   &quot;filt_dat&quot;       
-## [22] &quot;filt1&quot;           &quot;filt2&quot;           &quot;filt3&quot;          
-## [25] &quot;filt4&quot;           &quot;filt5&quot;           &quot;good_ex&quot;        
-## [28] &quot;int_var&quot;         &quot;log_var&quot;         &quot;logs&quot;           
-## [31] &quot;ltrs&quot;            &quot;metadat&quot;         &quot;more_sums&quot;      
-## [34] &quot;mpg&quot;             &quot;my_random_sum&quot;   &quot;mydf&quot;           
-## [37] &quot;myls&quot;            &quot;mymat&quot;           &quot;nums&quot;           
-## [40] &quot;origin&quot;          &quot;pkgs&quot;            &quot;polys&quot;          
-## [43] &quot;stat_cnt&quot;        &quot;stat_sub&quot;        &quot;stations&quot;       
-## [46] &quot;sumdat&quot;          &quot;tidydat&quot;         &quot;x&quot;</code></pre>
+##  [4] &quot;bad_ex2&quot;         &quot;bsmap&quot;           &quot;by_make&quot;        
+##  [7] &quot;by_yr_drv&quot;       &quot;chemdat&quot;         &quot;chr_var&quot;        
+## [10] &quot;cols&quot;            &quot;dat&quot;             &quot;dat_ext&quot;        
+## [13] &quot;datchem&quot;         &quot;datlocs&quot;         &quot;dbl_var&quot;        
+## [16] &quot;displ_cat&quot;       &quot;dplyr_arr&quot;       &quot;dplyr_good_fuel&quot;
+## [19] &quot;dplyr_mut&quot;       &quot;dplyr_mut2&quot;      &quot;dplyr_rnm&quot;      
+## [22] &quot;dplyr_sel1&quot;      &quot;dplyr_sel2&quot;      &quot;dplyr_sel3&quot;     
+## [25] &quot;dplyr_six_cyl&quot;   &quot;filt1&quot;           &quot;filt2&quot;          
+## [28] &quot;filt3&quot;           &quot;filt4&quot;           &quot;filt5&quot;          
+## [31] &quot;good_ex&quot;         &quot;int_var&quot;         &quot;log_var&quot;        
+## [34] &quot;logs&quot;            &quot;ltrs&quot;            &quot;metadat&quot;        
+## [37] &quot;more_sums&quot;       &quot;mpg&quot;             &quot;my_random_sum&quot;  
+## [40] &quot;mydf&quot;            &quot;myls&quot;            &quot;mymat&quot;          
+## [43] &quot;nums&quot;            &quot;origin&quot;          &quot;p&quot;              
+## [46] &quot;pkgs&quot;            &quot;polys&quot;           &quot;prm&quot;            
+## [49] &quot;sedchem&quot;         &quot;stations&quot;        &quot;sumdat&quot;         
+## [52] &quot;tidydat&quot;         &quot;x&quot;</code></pre>
 <p>Before we go on, let’s look at the data class:</p>
 <pre class="r"><code>class(dat)</code></pre>
 <pre><code>## [1] &quot;tbl_df&quot;     &quot;tbl&quot;        &quot;data.frame&quot;</code></pre>

@@ -25,7 +25,7 @@ opts_chunk$set(tidy = FALSE, message = F, warning = F)
 
 [R](https://www.r-project.org/) is a language for statistical computing as well as a general purpose programming language. Increasingly, it has become one of the primary languages used in data science and for data analysis across many of the natural sciences. 
 
-We only have two hours to introduce basic concepts in R. I's an unrealistic expectation that you will be competent after only two hours.  As such, the goals of this training are to expose you to fundementals and to develop an appreciation of what's possible with this software.  I also want to provide resources that you can use for follow-up learning on your own. 
+We only have two hours to introduce basic concepts in R. I's an unrealistic expectation that you will be competent after only two hours.  As such, the goals of this training are to expose you to fundamentals and to develop an appreciation of what's possible with this software.  I also want to provide resources that you can use for follow-up learning on your own. 
 
 You should be able to answer these questions at the end of this session:
 
