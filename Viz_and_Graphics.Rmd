@@ -51,7 +51,7 @@ Today you should be able to answer (or be able to find answers to) the following
 
 ## Exercise 1
 
-We're going to start the workshop by setting up a script in a new or existing RStudio project. We're going to work with the fully wrangled dataset we created at the end of the last training.  In the interest of time, you can download the formatted data [here](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx).  This dataset is the joined sediment chemistry and station data for Bight08. We've already selected and renamed the columns we need from the chemistry data, filtered to get the parameters we want, and joined it with the station data to include latitude, longitude, and depth.  As a final step, we'll create a new categorical column for depth using the `cut` function.  
+We're going to start the workshop by setting up a script in a new or existing RStudio project. We're going to work with the fully wrangled dataset we created at the end of the last training.  In the interest of time, you can download the formatted data [here](https://github.com/SCCWRP/R_training_2018/raw/master/data/formatted_data.xlsx).  This dataset is the joined sediment chemistry and station data for Bight08. We've already selected and renamed the columns we need from the chemistry data, filtered to get the parameters we want, and joined it with the station data to include latitude, longitude, and depth.  As a final step, we'll create a new categorical column for depth using the `cut` function.  
 
 1. Create a new project in RStudio or use an existing project from last time. If creating a new project, name it "viz_workshop" or something similar.
 
@@ -59,7 +59,7 @@ We're going to start the workshop by setting up a script in a new or existing RS
 
 1. Add in a comment line at the top stating the purpose. It should look something like: `# Graphics and vizualization in R`.  At the top of this script, add some code to load the `tidyverse` and `readxl` packages.
 
-1. Make a folder in your project called `data` if you don't have one already. Place the formatted data ([download](https://github.com/SCCWRP/R_training_2018/raw/master/lessons/data/formatted_data.xlsx)) into this folder.
+1. Make a folder in your project called `data` if you don't have one already. Place the formatted data ([download](https://github.com/SCCWRP/R_training_2018/raw/master/data/formatted_data.xlsx)) into this folder.
 
 1. Add some lines to your script to import and store the formatted data in your Enviroment. Use the `read_excel` function to import `"data/formatted_data.csv"`.  Assign it to a variable named "chemdat". 
 
